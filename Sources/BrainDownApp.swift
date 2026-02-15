@@ -10,6 +10,7 @@ struct BrainDownApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("Open Folder…") {
@@ -70,6 +71,18 @@ struct BrainDownApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
+    }
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Configure all windows for transparent titlebar
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            for window in NSApp.windows {
+                window.titlebarAppearsTransparent = true
+                window.titleVisibility = .hidden
+                window.styleMask.insert(.fullSizeContentView)
+                window.isMovableByWindowBackground = true
+            }
+        }
     }
 }
 
