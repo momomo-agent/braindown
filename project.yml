@@ -34,6 +34,7 @@ targets:
       - path: Sources
         excludes:
           - "BDVerify.swift"
+      - path: Sources/BlockViews
       - path: Resources/Assets.xcassets
         buildPhase: resources
     dependencies:
