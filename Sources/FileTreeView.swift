@@ -113,33 +113,21 @@ struct FileTreeNodeView: View {
     
     private var iconName: String {
         if item.isDirectory {
-            return isExpanded ? "folder.fill" : "folder"
+            return "folder"
         }
         let ext = item.url.pathExtension.lowercased()
         switch ext {
-        case "md": return "doc.richtext"
-        case "txt": return "doc.plaintext"
-        case "json": return "curlybraces"
-        case "yml", "yaml": return "slider.horizontal.3"
+        case "md": return "doc.text"
+        case "txt": return "doc"
+        case "json", "yml", "yaml": return "doc"
         case "png", "jpg", "jpeg", "gif", "svg", "webp": return "photo"
-        case "swift": return "swift"
-        case "py", "js", "ts", "rb", "go", "rs": return "chevron.left.forwardslash.chevron.right"
-        case "html", "css": return "globe"
+        case "swift", "py", "js", "ts", "rb", "go", "rs", "html", "css": return "doc"
         default: return "doc"
         }
     }
     
     private var iconColor: Color {
-        if item.isDirectory {
-            return .accentColor.opacity(0.7)
-        }
-        let ext = item.url.pathExtension.lowercased()
-        switch ext {
-        case "md": return .secondary
-        case "swift": return .orange.opacity(0.7)
-        case "png", "jpg", "jpeg", "gif", "svg", "webp": return .purple.opacity(0.6)
-        default: return .secondary.opacity(0.6)
-        }
+        return .secondary
     }
 }
 

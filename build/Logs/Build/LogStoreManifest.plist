@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>986DB831-1541-4C9F-824E-B0CFAD8E0871</key>
+		<key>9D67DFC2-8524-4784-BAA2-CBF2F5D7D6E8</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>986DB831-1541-4C9F-824E-B0CFAD8E0871.xcactivitylog</string>
+			<string>9D67DFC2-8524-4784-BAA2-CBF2F5D7D6E8.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -40,13 +40,13 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792852903.13319302</real>
+			<real>792853062.92399001</real>
 			<key>timeStoppedRecording</key>
-			<real>792852910.79374003</real>
+			<real>792853066.68445396</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>986DB831-1541-4C9F-824E-B0CFAD8E0871</string>
+			<string>9D67DFC2-8524-4784-BAA2-CBF2F5D7D6E8</string>
 		</dict>
 		<key>DF40C0E9-9952-4A89-BC6A-D3A37872BB31</key>
 		<dict>
