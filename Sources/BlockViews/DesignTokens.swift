@@ -128,6 +128,25 @@ enum DesignTokens {
     // MARK: - Helpers
     
     /// Build NSAttributedString from InlineElements with proper styling
+    /// Build NSAttributedString from a single plain string
+    static func attributedString(
+        text: String,
+        font: NSFont,
+        color: NSColor,
+        lineHeightMultiple: CGFloat = DesignTokens.lineHeightMultiple,
+        alignment: NSTextAlignment = .left
+    ) -> NSAttributedString {
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineHeightMultiple = lineHeightMultiple
+        paraStyle.alignment = alignment
+        return NSAttributedString(string: text, attributes: [
+            .font: font,
+            .foregroundColor: color,
+            .paragraphStyle: paraStyle
+        ])
+    }
+    
+    /// Build NSAttributedString from InlineElements with proper styling
     static func attributedString(
         from elements: [InlineElement],
         font: NSFont,
@@ -171,5 +190,15 @@ enum DesignTokens {
         }
         
         return result
+    }
+}
+
+// MARK: - NSFont Extension
+
+extension NSFont {
+    func withTraits(_ traits: NSFontTraitMask) -> NSFont {
+        let descriptor = fontDescriptor
+        let newDescriptor = descriptor.withSymbolicTraits(NSFontDescriptor.SymbolicTraits(rawValue: UInt32(traits.rawValue)))
+        return NSFont(descriptor: newDescriptor, size: pointSize) ?? self
     }
 }
