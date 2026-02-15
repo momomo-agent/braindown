@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>17DE8B31-B774-4386-B49F-D5CF6BB36FE8</key>
+		<key>D091F083-BB4C-42B7-8C58-E382AB087F06</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,13 +15,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>17DE8B31-B774-4386-B49F-D5CF6BB36FE8.xcactivitylog</string>
+			<string>D091F083-BB4C-42B7-8C58-E382AB087F06.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>W</string>
+				<string>S</string>
 				<key>totalNumberOfAnalyzerIssues</key>
 				<integer>0</integer>
 				<key>totalNumberOfErrors</key>
@@ -29,7 +29,7 @@
 				<key>totalNumberOfTestFailures</key>
 				<integer>0</integer>
 				<key>totalNumberOfWarnings</key>
-				<integer>1</integer>
+				<integer>0</integer>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>BrainDown project</string>
@@ -40,15 +40,15 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792846609.67638695</real>
+			<real>792850689.01237094</real>
 			<key>timeStoppedRecording</key>
-			<real>792846621.96270895</real>
+			<real>792850696.00618804</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>17DE8B31-B774-4386-B49F-D5CF6BB36FE8</string>
+			<string>D091F083-BB4C-42B7-8C58-E382AB087F06</string>
 		</dict>
-		<key>95761E47-4DC3-4348-8035-4B07C782E2E4</key>
+		<key>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,13 +57,13 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>95761E47-4DC3-4348-8035-4B07C782E2E4.xcactivitylog</string>
+			<string>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>W</string>
+				<string>S</string>
 				<key>totalNumberOfAnalyzerIssues</key>
 				<integer>0</integer>
 				<key>totalNumberOfErrors</key>
@@ -71,7 +71,7 @@
 				<key>totalNumberOfTestFailures</key>
 				<integer>0</integer>
 				<key>totalNumberOfWarnings</key>
-				<integer>1</integer>
+				<integer>0</integer>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>BrainDown project</string>
@@ -82,13 +82,13 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792850407.46301901</real>
+			<real>792851007.98995602</real>
 			<key>timeStoppedRecording</key>
-			<real>792850416.848809</real>
+			<real>792851027.21042395</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>95761E47-4DC3-4348-8035-4B07C782E2E4</string>
+			<string>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA</string>
 		</dict>
 	</dict>
 </dict>

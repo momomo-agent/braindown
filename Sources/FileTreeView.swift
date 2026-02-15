@@ -7,14 +7,14 @@ struct FileTreeView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: 0) {
                 ForEach(items) { item in
                     FileTreeNodeView(item: item, selectedFile: $selectedFile, isModified: isModified, depth: 0)
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 12)
             .padding(.bottom, 16)
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 12)
         }
     }
 }
@@ -33,51 +33,50 @@ struct FileTreeNodeView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 0) {
-                // 缩进
+            HStack(spacing: 6) {
+                // Indent
                 if depth > 0 {
-                    Color.clear.frame(width: CGFloat(depth) * 14)
+                    Color.clear.frame(width: CGFloat(depth) * 16)
                 }
                 
-                // 展开箭头（文件夹）
+                // Expand arrow (folders)
                 if item.isDirectory {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(.tertiary)
                         .rotationEffect(isExpanded ? .degrees(90) : .zero)
-                        .frame(width: 16, height: 16)
+                        .frame(width: 14, height: 14)
                         .animation(.easeOut(duration: 0.15), value: isExpanded)
                 } else {
-                    Color.clear.frame(width: 16)
+                    Color.clear.frame(width: 14)
                 }
                 
-                // 图标
-                Image(systemName: iconName)
-                    .font(.system(size: 12))
-                    .foregroundStyle(iconColor)
+                // Icon — simple, Notion-style
+                Text(iconEmoji)
+                    .font(.system(size: 13))
                     .frame(width: 18)
                 
-                // 文件名
+                // Filename
                 Text(item.displayName)
-                    .font(.system(size: 12.5, weight: item.isDirectory ? .medium : .regular))
+                    .font(.system(size: 13, weight: item.isDirectory ? .medium : .regular))
                     .foregroundStyle(isSelected ? .primary : .secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
                 
                 Spacer(minLength: 4)
                 
-                // 未保存标记
+                // Unsaved indicator
                 if !item.isDirectory && isSelected && isModified {
                     Circle()
                         .fill(.orange)
                         .frame(width: 6, height: 6)
-                        .padding(.trailing, 2)
+                        .padding(.trailing, 4)
                 }
             }
-            .padding(.vertical, 3.5)
-            .padding(.horizontal, 6)
+            .padding(.vertical, 5)
+            .padding(.horizontal, 8)
             .background(
-                RoundedRectangle(cornerRadius: 5)
+                RoundedRectangle(cornerRadius: 6)
                     .fill(backgroundColor)
             )
             .contentShape(Rectangle())
@@ -94,7 +93,7 @@ struct FileTreeNodeView: View {
                 isHovering = hovering
             }
             
-            // 子项
+            // Children
             if item.isDirectory && isExpanded {
                 ForEach(item.children) { child in
                     FileTreeNodeView(item: child, selectedFile: $selectedFile, isModified: isModified, depth: depth + 1)
@@ -112,30 +111,21 @@ struct FileTreeNodeView: View {
         return .clear
     }
     
-    private var iconName: String {
+    private var iconEmoji: String {
         if item.isDirectory {
-            return isExpanded ? "folder.fill" : "folder"
+            return isExpanded ? "📂" : "📁"
         }
         let ext = item.url.pathExtension.lowercased()
         switch ext {
-        case "md": return "doc.text"
-        case "txt": return "doc.plaintext"
-        case "json": return "curlybraces"
-        case "yml", "yaml": return "list.bullet.indent"
-        case "png", "jpg", "jpeg", "gif", "svg", "webp": return "photo"
-        default: return "doc"
-        }
-    }
-    
-    private var iconColor: Color {
-        if item.isDirectory {
-            return Color.accentColor.opacity(0.8)
-        }
-        let ext = item.url.pathExtension.lowercased()
-        switch ext {
-        case "md": return .secondary
-        case "png", "jpg", "jpeg", "gif", "svg", "webp": return .purple.opacity(0.7)
-        default: return Color.secondary.opacity(0.6)
+        case "md": return "📝"
+        case "txt": return "📄"
+        case "json": return "{ }"
+        case "yml", "yaml": return "⚙️"
+        case "png", "jpg", "jpeg", "gif", "svg", "webp": return "🖼"
+        case "swift": return "🔶"
+        case "py": return "🐍"
+        case "js", "ts": return "📜"
+        default: return "📄"
         }
     }
 }

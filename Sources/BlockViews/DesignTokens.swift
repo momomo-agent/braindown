@@ -99,14 +99,8 @@ enum DesignTokens {
     static func headingFont(level: Int) -> NSFont {
         let size = headingSize(level: level)
         switch level {
-        case 1:
-            return NSFontManager.shared.font(
-                withFamily: "Georgia", traits: .boldFontMask, weight: 9, size: size
-            ) ?? NSFont.systemFont(ofSize: size, weight: .bold)
-        case 2:
-            return NSFontManager.shared.font(
-                withFamily: "Georgia", traits: .boldFontMask, weight: 8, size: size
-            ) ?? NSFont.systemFont(ofSize: size, weight: .semibold)
+        case 1: return NSFont.systemFont(ofSize: size, weight: .bold)
+        case 2: return NSFont.systemFont(ofSize: size, weight: .bold)
         case 3: return NSFont.systemFont(ofSize: size, weight: .semibold)
         case 4: return NSFont.systemFont(ofSize: size, weight: .semibold)
         default: return NSFont.systemFont(ofSize: size, weight: .medium)
