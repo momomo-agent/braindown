@@ -17,6 +17,7 @@ class ImageBlockView: NSView {
     private func setupView(alt: String, urlString: String) {
         imageView.imageScaling = .scaleProportionallyUpOrDown
         imageView.imageAlignment = .alignCenter
+        imageView.animates = true  // Enable GIF animation
         addSubview(imageView)
         
         captionField.isEditable = false

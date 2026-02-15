@@ -26,6 +26,23 @@ struct BrainDownApp: App {
             }
             
             CommandMenu("View") {
+                // Mode toggle
+                Menu("Mode") {
+                    ForEach(EditorMode.allCases, id: \.rawValue) { mode in
+                        Toggle(mode.label, isOn: Binding(
+                            get: { appSettings.editorMode == mode },
+                            set: { if $0 { appSettings.editorMode = mode } }
+                        ))
+                    }
+                }
+                
+                Button(appSettings.editorMode == .read ? "Switch to Write" : "Switch to Read") {
+                    appSettings.editorMode = appSettings.editorMode == .read ? .write : .read
+                }
+                .keyboardShortcut("e", modifiers: .command)
+                
+                Divider()
+                
                 Menu("Theme") {
                     ForEach(AppTheme.allCases, id: \.rawValue) { theme in
                         Toggle(theme.label, isOn: Binding(

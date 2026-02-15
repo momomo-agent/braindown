@@ -23,6 +23,18 @@ enum AppTheme: String, CaseIterable {
     }
 }
 
+enum EditorMode: String, CaseIterable {
+    case read = "read"
+    case write = "write"
+    
+    var label: String {
+        switch self {
+        case .read: return "Read"
+        case .write: return "Write"
+        }
+    }
+}
+
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
     
@@ -33,11 +45,17 @@ class AppSettings: ObservableObject {
         }
     }
     
+    @Published var editorMode: EditorMode {
+        didSet {
+            UserDefaults.standard.set(editorMode.rawValue, forKey: "BrainDown.editorMode")
+        }
+    }
+    
     private init() {
         let saved = UserDefaults.standard.string(forKey: "BrainDown.theme") ?? "system"
         self.theme = AppTheme(rawValue: saved) ?? .system
-        // 不在 init 里调 applyTheme，NSApp 还没准备好
-        // 延迟到 runloop 空闲时执行
+        let savedMode = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
+        self.editorMode = EditorMode(rawValue: savedMode) ?? .read
         DispatchQueue.main.async { [weak self] in
             self?.applyTheme()
         }

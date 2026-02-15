@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var isModified: Bool = false
     @State private var sidebarWidth: CGFloat = 240
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
+    @ObservedObject private var appSettings = AppSettings.shared
     
     private let lastFolderKey = "BrainDown.lastOpenedFolder"
     
@@ -36,11 +37,16 @@ struct ContentView: View {
             }
             .frame(minWidth: 180, idealWidth: 240, maxWidth: 360)
             
-            // Right: Editor
+            // Right: Editor / Reader
             VStack(spacing: 0) {
                 if selectedFile != nil {
-                    MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    if appSettings.editorMode == .read {
+                        MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        RawEditorView(text: $markdownText, isModified: $isModified)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 } else {
                     VStack(spacing: 12) {
                         Spacer()

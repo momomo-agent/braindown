@@ -242,6 +242,7 @@ class MarkdownParser {
             if stripped.allSatisfy({ $0 == "-" }) { return true }
             if stripped.allSatisfy({ $0 == "*" }) { return true }
             if stripped.allSatisfy({ $0 == "_" }) { return true }
+            if stripped.allSatisfy({ $0 == "=" }) { return true }
         }
         return false
     }
