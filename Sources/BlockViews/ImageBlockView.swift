@@ -2,11 +2,11 @@ import AppKit
 
 /// Renders an image block with optional alt text caption.
 class ImageBlockView: NSView {
-    private let imageView = NSImageView()
+    private let imageLayer = CALayer()
     private let captionField = NSTextField(wrappingLabelWithString: "")
     private var currentFileDirectory: URL?
-    private var heightConstraint: NSLayoutConstraint?
-    private var placeholderLabel: NSTextField?
+    private var displayHeight: CGFloat = 24  // minimum height for placeholder
+    private var displayWidth: CGFloat = 200
     
     init(alt: String, urlString: String, currentFileDirectory: URL?) {
         self.currentFileDirectory = currentFileDirectory
@@ -16,12 +16,15 @@ class ImageBlockView: NSView {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    override var intrinsicContentSize: NSSize {
+        let captionH = captionField.isHidden ? 0 : captionField.intrinsicContentSize.height + 4
+        return NSSize(width: NSView.noIntrinsicMetric, height: displayHeight + captionH)
+    }
+    
     private func setupView(alt: String, urlString: String) {
-        imageView.imageScaling = .scaleProportionallyUpOrDown
-        imageView.imageAlignment = .alignCenter
-        imageView.animates = true
-        addSubview(imageView)
+        wantsLayer = true
         
+        // Caption
         captionField.isEditable = false
         captionField.isSelectable = true
         captionField.drawsBackground = false
@@ -33,33 +36,20 @@ class ImageBlockView: NSView {
         captionField.cell?.wraps = true
         captionField.cell?.isScrollable = false
         captionField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        addSubview(captionField)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        captionField.translatesAutoresizingMaskIntoConstraints = false
-        
-        let maxWidth = DesignTokens.maxContentWidth - DesignTokens.sp32
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageView.widthAnchor.constraint(lessThanOrEqualToConstant: maxWidth),
-            imageView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-        ])
         
         if alt.isEmpty {
             captionField.isHidden = true
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         } else {
             captionField.stringValue = alt
-            NSLayoutConstraint.activate([
-                captionField.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: DesignTokens.sp4),
-                captionField.leadingAnchor.constraint(equalTo: leadingAnchor),
-                captionField.trailingAnchor.constraint(equalTo: trailingAnchor),
-                captionField.bottomAnchor.constraint(equalTo: bottomAnchor),
-            ])
         }
+        
+        addSubview(captionField)
+        captionField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            captionField.leadingAnchor.constraint(equalTo: leadingAnchor),
+            captionField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            captionField.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
         
         loadImage(alt: alt, urlString: urlString)
     }
@@ -80,73 +70,73 @@ class ImageBlockView: NSView {
         
         if url.isFileURL {
             if let image = NSImage(contentsOf: url) {
-                setImage(image)
+                applyImage(image)
             } else {
                 showPlaceholder(alt: alt)
             }
         } else {
-            // Show placeholder while loading
             showPlaceholder(alt: "⏳ Loading...")
-            
-            // Use URLSession for proper redirect handling and timeout
             let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 15)
-            URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-                guard let self = self,
-                      let data = data,
-                      error == nil,
+            URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+                guard let self = self, let data = data, error == nil,
                       let image = NSImage(data: data) else {
-                    DispatchQueue.main.async {
-                        self?.removePlaceholder()
-                        self?.showPlaceholder(alt: alt)
-                    }
+                    DispatchQueue.main.async { self?.showPlaceholder(alt: alt) }
                     return
                 }
-                DispatchQueue.main.async {
-                    self.removePlaceholder()
-                    self.setImage(image)
-                }
+                DispatchQueue.main.async { self.applyImage(image) }
             }.resume()
         }
     }
     
-    private func setImage(_ image: NSImage) {
-        imageView.isHidden = false
-        imageView.image = image
-        let maxWidth = DesignTokens.maxContentWidth - DesignTokens.sp32
-        let scale = image.size.width > maxWidth ? maxWidth / image.size.width : 1.0
-        let height = image.size.height * scale
-        
-        // Remove old height constraint if any
-        if let old = heightConstraint {
-            old.isActive = false
+    private func applyImage(_ image: NSImage) {
+        // Use pixel dimensions for accurate sizing
+        let pixelSize: NSSize
+        if let rep = image.representations.first, rep.pixelsWide > 0 {
+            pixelSize = NSSize(width: rep.pixelsWide, height: rep.pixelsHigh)
+        } else {
+            pixelSize = image.size
         }
-        heightConstraint = imageView.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint?.isActive = true
         
-        // Force layout update
+        let maxW = min(DesignTokens.maxContentWidth - DesignTokens.sp32, bounds.width > 0 ? bounds.width : 700)
+        let scale = pixelSize.width > maxW ? maxW / pixelSize.width : 1.0
+        displayWidth = pixelSize.width * scale
+        displayHeight = pixelSize.height * scale
+        
+        // Use NSImageView directly as subview (simplest approach)
+        let iv = NSImageView()
+        iv.image = image
+        iv.imageScaling = .scaleProportionallyUpOrDown
+        iv.animates = true
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(iv)
+        
+        NSLayoutConstraint.activate([
+            iv.topAnchor.constraint(equalTo: topAnchor),
+            iv.centerXAnchor.constraint(equalTo: centerXAnchor),
+            iv.widthAnchor.constraint(equalToConstant: displayWidth),
+            iv.heightAnchor.constraint(equalToConstant: displayHeight),
+        ])
+        
+        if !captionField.isHidden {
+            captionField.topAnchor.constraint(equalTo: iv.bottomAnchor, constant: 4).isActive = true
+        }
+        
+        // Update intrinsic size
         invalidateIntrinsicContentSize()
-        superview?.needsLayout = true
+        
+        // Force the stack view to re-layout
+        if let stack = superview as? NSStackView {
+            stack.needsLayout = true
+            stack.needsUpdateConstraints = true
+        }
     }
     
     private func showPlaceholder(alt: String) {
-        let placeholder = alt.isEmpty ? "🖼 [Image]" : "🖼 \(alt)"
-        let label = NSTextField(labelWithString: placeholder)
-        label.font = DesignTokens.bodyFont
-        label.textColor = NSColor.secondaryLabelColor
-        label.alignment = .center
-        
-        imageView.isHidden = true
-        addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.centerXAnchor.constraint(equalTo: centerXAnchor),
-        ])
-        placeholderLabel = label
-    }
-    
-    private func removePlaceholder() {
-        placeholderLabel?.removeFromSuperview()
-        placeholderLabel = nil
+        let text = alt.isEmpty ? "🖼 [Image]" : "🖼 \(alt)"
+        captionField.stringValue = text
+        captionField.isHidden = false
+        captionField.alignment = .center
+        displayHeight = 24
+        invalidateIntrinsicContentSize()
     }
 }
