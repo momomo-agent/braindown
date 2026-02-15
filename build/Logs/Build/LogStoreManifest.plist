@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>0E8734BE-1261-4E98-AA29-711FAE660984</key>
+		<key>DDD47D48-0108-41EC-A78C-45B53AC3E3E6</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,49 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>0E8734BE-1261-4E98-AA29-711FAE660984.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>E</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>3</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>1</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>BrainDown project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>BrainDown</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>792852501.89005601</real>
-			<key>timeStoppedRecording</key>
-			<real>792852528.16160202</real>
-			<key>title</key>
-			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>0E8734BE-1261-4E98-AA29-711FAE660984</string>
-		</dict>
-		<key>28F37234-7199-4DBD-A031-17CD707889ED</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>28F37234-7199-4DBD-A031-17CD707889ED.xcactivitylog</string>
+			<string>DDD47D48-0108-41EC-A78C-45B53AC3E3E6.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,13 +40,55 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792852553.914518</real>
+			<real>792852614.31952298</real>
 			<key>timeStoppedRecording</key>
-			<real>792852564.05470002</real>
+			<real>792852623.31789196</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>28F37234-7199-4DBD-A031-17CD707889ED</string>
+			<string>DDD47D48-0108-41EC-A78C-45B53AC3E3E6</string>
+		</dict>
+		<key>E5094553-79F9-4193-BF79-16FA7DB4168A</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E5094553-79F9-4193-BF79-16FA7DB4168A.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>1</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>BrainDown project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>BrainDown</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>792852762.83604205</real>
+			<key>timeStoppedRecording</key>
+			<real>792852765.87947798</real>
+			<key>title</key>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>E5094553-79F9-4193-BF79-16FA7DB4168A</string>
 		</dict>
 	</dict>
 </dict>
