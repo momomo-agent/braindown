@@ -18,6 +18,7 @@ class CodeBlockView: NSView {
     // MARK: - State
     private var copyResetTimer: Timer?
     private var trackingArea: NSTrackingArea?
+    private var codeHeightConstraint: NSLayoutConstraint?
     
     // Shared Highlightr
     private static let highlightr: Highlightr? = {
@@ -109,6 +110,9 @@ class CodeBlockView: NSView {
         populateCode(node.content, language: language)
         
         layoutSubviews(hasLanguage: !(language ?? "").isEmpty)
+        
+        // Calculate code text height for Auto Layout
+        updateCodeHeight()
         
         // Tracking area for hover
         updateTrackingAreas()
@@ -223,6 +227,25 @@ class CodeBlockView: NSView {
     }
     
     // MARK: - Colors
+    
+    private func updateCodeHeight() {
+        // NSTextView needs explicit height in Auto Layout — calculate from text content
+        guard let layoutManager = codeTextView.layoutManager,
+              let textContainer = codeTextView.textContainer else { return }
+        
+        // Ensure layout is computed
+        layoutManager.ensureLayout(for: textContainer)
+        let usedRect = layoutManager.usedRect(for: textContainer)
+        let height = max(usedRect.height, 20) // minimum 20pt
+        
+        if let existing = codeHeightConstraint {
+            existing.constant = height
+        } else {
+            codeHeightConstraint = codeTextView.heightAnchor.constraint(equalToConstant: height)
+            codeHeightConstraint?.priority = .defaultHigh
+            codeHeightConstraint?.isActive = true
+        }
+    }
     
     private func applyContainerColors() {
         containerView.layer?.backgroundColor = DesignTokens.codeBackground.cgColor

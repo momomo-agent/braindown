@@ -1,8 +1,13 @@
-// BrainDown 验证工具：用真实的 MarkdownTextStorage 离屏渲染 → PNG
+// BrainDown 验证工具：用 block-based 架构离屏渲染 → PNG
 // 用法: bd-verify <input.md> <output.png> [width]
 
 import AppKit
 import Foundation
+import UniformTypeIdentifiers
+
+private class VerifyFlippedView: NSView {
+    override var isFlipped: Bool { true }
+}
 
 @main
 struct BDVerify {
@@ -15,7 +20,7 @@ struct BDVerify {
         
         let inputPath = args[1]
         let outputPath = args[2]
-        let width: CGFloat = args.count >= 4 ? CGFloat(Double(args[3]) ?? 680) : 680
+        let contentWidth: CGFloat = args.count >= 4 ? CGFloat(Double(args[3]) ?? 680) : 680
         
         guard let markdown = try? String(contentsOfFile: inputPath, encoding: .utf8) else {
             print("Error: Cannot read \(inputPath)")
@@ -25,49 +30,59 @@ struct BDVerify {
         let app = NSApplication.shared
         app.setActivationPolicy(.prohibited)
         
-        let textStorage = MarkdownTextStorage()
-        textStorage.currentFileDirectory = URL(fileURLWithPath: inputPath).deletingLastPathComponent()
+        // Parse markdown
+        let nodes = MarkdownParser.parse(markdown)
         
-        let layoutManager = BlockBackgroundLayoutManager()
-        textStorage.addLayoutManager(layoutManager)
+        // Build block views in a stack
+        let stackView = NSStackView()
+        stackView.orientation = .vertical
+        stackView.alignment = .leading
+        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        let textContainer = NSTextContainer(size: NSSize(width: width, height: .greatestFiniteMagnitude))
-        textContainer.widthTracksTextView = false
-        layoutManager.addTextContainer(textContainer)
+        let fileDir = URL(fileURLWithPath: inputPath).deletingLastPathComponent()
+        BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: fileDir)
         
-        let totalWidth = width + 80
-        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: totalWidth, height: 800), textContainer: textContainer)
-        textView.textContainerInset = NSSize(width: 40, height: 40)
-        textView.isEditable = false
-        textView.drawsBackground = true
-        textView.backgroundColor = .white
+        // Wrap in a container with padding
+        let padding: CGFloat = 40
+        let totalWidth = contentWidth + padding * 2
         
-        textStorage.loadMarkdown(markdown)
+        let container = VerifyFlippedView()
+        container.wantsLayer = true
+        container.layer?.backgroundColor = NSColor.white.cgColor
+        container.addSubview(stackView)
         
-        layoutManager.ensureLayout(for: textContainer)
-        let usedRect = layoutManager.usedRect(for: textContainer)
-        let totalHeight = usedRect.height + 80
-        textView.frame = NSRect(x: 0, y: 0, width: totalWidth, height: totalHeight)
+        // Layout
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: padding),
+            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: padding),
+            stackView.widthAnchor.constraint(equalToConstant: contentWidth),
+        ])
         
-        guard let bitmapRep = textView.bitmapImageRepForCachingDisplay(in: textView.bounds) else {
+        // Force layout
+        container.frame = NSRect(x: 0, y: 0, width: totalWidth, height: 10000)
+        container.layoutSubtreeIfNeeded()
+        
+        let fittingHeight = stackView.fittingSize.height + padding * 2
+        container.frame = NSRect(x: 0, y: 0, width: totalWidth, height: fittingHeight)
+        container.layoutSubtreeIfNeeded()
+        
+        // Render to bitmap
+        guard let bitmapRep = container.bitmapImageRepForCachingDisplay(in: container.bounds) else {
             print("Error: bitmapImageRepForCachingDisplay failed")
             exit(1)
         }
-        textView.cacheDisplay(in: textView.bounds, to: bitmapRep)
+        container.cacheDisplay(in: container.bounds, to: bitmapRep)
         
-        let image = NSImage(size: textView.bounds.size)
-        image.addRepresentation(bitmapRep)
-        
-        guard let tiffData = image.tiffRepresentation,
-              let rep = NSBitmapImageRep(data: tiffData),
-              let pngData = rep.representation(using: .png, properties: [:]) else {
+        guard let pngData = bitmapRep.representation(using: NSBitmapImageRep.FileType.png, properties: [:]) else {
             print("Error: PNG conversion failed")
             exit(1)
         }
         
         do {
             try pngData.write(to: URL(fileURLWithPath: outputPath))
-            print("OK: \(outputPath) (\(Int(totalWidth))x\(Int(totalHeight)))")
+            print("OK: \(outputPath) (\(Int(totalWidth))x\(Int(fittingHeight)))")
         } catch {
             print("Error: \(error)")
             exit(1)

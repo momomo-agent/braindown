@@ -44,4 +44,23 @@ targets:
         PRODUCT_NAME: BrainDown
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
-  # BDVerify: removed during block-based migration (old MarkdownTextStorage deleted)
+  bd-verify:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Sources
+        excludes:
+          - "BrainDownApp.swift"
+          - "ContentView.swift"
+          - "FileTreeView.swift"
+          - "FileTypeSettings.swift"
+          - "AppSettings.swift"
+          - "MarkdownEditorView.swift"
+          - "SyntaxHighlighter.swift"
+          - "FileManager+Extensions.swift"
+      - path: Sources/BlockViews
+    dependencies:
+      - package: Highlightr
+    settings:
+      base:
+        PRODUCT_NAME: bd-verify
