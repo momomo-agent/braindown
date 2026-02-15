@@ -1,0 +1,9 @@
+{
+  "version": "0.4.0",
+  "lastUpdated": "2026-02-15",
+  "currentFocus": "Block-based 架构迁移",
+  "phase": "一期：阅读器",
+  "completedRounds": 2,
+  "nextFeature": "A001",
+  "notes": "架构升级：从 NSAttributedString 流式渲染迁移到 block-based 独立 NSView。一期纯阅读，二期加编辑。"
+}

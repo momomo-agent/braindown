@@ -1,0 +1,9 @@
+Target dependency graph (4 targets)
+Target 'BrainDown' in project 'BrainDown'
+➜ Explicit dependency on target 'Highlightr' in project 'Highlightr'
+Target 'Highlightr' in project 'Highlightr'
+➜ Explicit dependency on target 'Highlightr' in project 'Highlightr'
+➜ Explicit dependency on target 'Highlightr_Highlightr' in project 'Highlightr'
+Target 'Highlightr' in project 'Highlightr'
+➜ Explicit dependency on target 'Highlightr_Highlightr' in project 'Highlightr'
+Target 'Highlightr_Highlightr' in project 'Highlightr' (no dependencies)

@@ -1,0 +1,153 @@
+[
+  {
+    "id": "F001",
+    "category": "core",
+    "description": "打开文件夹，显示文件树",
+    "passes": true
+  },
+  {
+    "id": "F002",
+    "category": "core",
+    "description": "点击 md 文件，渲染富文本",
+    "passes": true
+  },
+  {
+    "id": "F003",
+    "category": "core",
+    "description": "文件类型过滤（View → Visible File Types）",
+    "passes": true
+  },
+  {
+    "id": "F004",
+    "category": "core",
+    "description": "主题切换（Dark/Light/System）",
+    "passes": true
+  },
+  {
+    "id": "F005",
+    "category": "typography",
+    "description": "标题层次清晰（H1-H6 视觉可辨）",
+    "passes": false,
+    "note": "H4/H5 跟正文区分度不够"
+  },
+  {
+    "id": "F006",
+    "category": "typography",
+    "description": "间距系统化（所有值在 4/8/12/16/24/32 中）",
+    "passes": true
+  },
+  {
+    "id": "F007",
+    "category": "typography",
+    "description": "接近性节奏（标题前留白 ≥ 后留白 × 3）",
+    "passes": true
+  },
+  {
+    "id": "F008",
+    "category": "typography",
+    "description": "正文颜色非纯黑（light 0.15, dark 0.85）",
+    "passes": true
+  },
+  {
+    "id": "F009",
+    "category": "typography",
+    "description": "H1/H2 衬线体（Georgia）",
+    "passes": true
+  },
+  {
+    "id": "F010",
+    "category": "experience",
+    "description": "窗口 resize 内容居中",
+    "passes": true
+  },
+  {
+    "id": "A001",
+    "category": "architecture",
+    "description": "NSScrollView + NSStackView 容器搭建",
+    "passes": false
+  },
+  {
+    "id": "A002",
+    "category": "architecture",
+    "description": "BlockRenderer 中间层（MarkdownNode → NSView）",
+    "passes": false
+  },
+  {
+    "id": "A003",
+    "category": "architecture",
+    "description": "ParagraphBlockView（段落渲染）",
+    "passes": false
+  },
+  {
+    "id": "A004",
+    "category": "architecture",
+    "description": "HeadingBlockView（标题渲染）",
+    "passes": false
+  },
+  {
+    "id": "A005",
+    "category": "architecture",
+    "description": "CodeBlockView — 圆角容器 + 语言标签 + 复制按钮 + 行号 + 语法高亮",
+    "passes": false
+  },
+  {
+    "id": "A006",
+    "category": "architecture",
+    "description": "TableBlockView — 圆角容器 + 表头区分 + hover 高亮 + 列宽自适应",
+    "passes": false
+  },
+  {
+    "id": "A007",
+    "category": "architecture",
+    "description": "BlockquoteBlockView（引用块渲染）",
+    "passes": false
+  },
+  {
+    "id": "A008",
+    "category": "architecture",
+    "description": "ListBlockView（列表渲染）",
+    "passes": false
+  },
+  {
+    "id": "A009",
+    "category": "architecture",
+    "description": "ImageBlockView（图片渲染）",
+    "passes": false
+  },
+  {
+    "id": "A010",
+    "category": "architecture",
+    "description": "HorizontalRuleView（分隔线）",
+    "passes": false
+  },
+  {
+    "id": "A011",
+    "category": "architecture",
+    "description": "删除旧的 MarkdownTextStorage + BlockBackgroundLayoutManager",
+    "passes": false
+  },
+  {
+    "id": "T001",
+    "category": "taste",
+    "description": "代码块截图跟 Notion 对比差距可接受",
+    "passes": false
+  },
+  {
+    "id": "T002",
+    "category": "taste",
+    "description": "表格截图跟 Notion 对比差距可接受",
+    "passes": false
+  },
+  {
+    "id": "T003",
+    "category": "taste",
+    "description": "整体截图跟 Craft 对比差距可接受",
+    "passes": false
+  },
+  {
+    "id": "T004",
+    "category": "taste",
+    "description": "暗色模式无刺眼元素",
+    "passes": false
+  }
+]

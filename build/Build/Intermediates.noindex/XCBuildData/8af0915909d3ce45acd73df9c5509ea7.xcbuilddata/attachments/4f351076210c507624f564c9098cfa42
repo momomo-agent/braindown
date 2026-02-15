@@ -1,0 +1,41 @@
+{
+  "" : {
+    "const-values" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master.swiftconstvalues",
+    "dependencies" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master.d",
+    "diagnostics" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master.dia",
+    "emit-module-dependencies" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master-emit-module.dia",
+    "pch" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master-Bridging-header.pch",
+    "swift-dependencies" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify-master.swiftdeps"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/AppSettings.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/AppSettings.o"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/BDVerify.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BDVerify.o"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/BlockBackgroundLayoutManager.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BlockBackgroundLayoutManager.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BlockBackgroundLayoutManager.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/BlockBackgroundLayoutManager.o"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/MarkdownParser.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownParser.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownParser.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownParser.o"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/MarkdownTextStorage.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownTextStorage.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownTextStorage.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/MarkdownTextStorage.o"
+  },
+  "/Users/kenefe/LOCAL/momo-agent/BrainDown/Sources/SyntaxHighlighter.swift" : {
+    "index-unit-output-path" : "/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/SyntaxHighlighter.o",
+    "llvm-bc" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/SyntaxHighlighter.bc",
+    "object" : "/Users/kenefe/LOCAL/momo-agent/BrainDown/build/Build/Intermediates.noindex/BrainDown.build/Release/BDVerify.build/Objects-normal/arm64/SyntaxHighlighter.o"
+  }
+}

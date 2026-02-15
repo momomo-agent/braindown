@@ -1,0 +1,495 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0675549E408261B5A47C44F8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D6D09C761D729714CD674 /* ContentView.swift */; };
+		18662173700245054A85DDDB /* BrainDownApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023333D8A764B43150E75FBC /* BrainDownApp.swift */; };
+		263ABA04B9471405622EE41D /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */; };
+		36B106422B8145E2FD45F19D /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */; };
+		391861ACAF4D93C6E452C3AA /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26808E5FF70377296A6B1D7 /* AppSettings.swift */; };
+		3AC20818F07C64A4B98DE666 /* MarkdownTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4355EAFF27B05D7805506FA /* MarkdownTextStorage.swift */; };
+		40CDB5D273BFD3B236B3FF08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1BBB999FF3441390E05ED41 /* Assets.xcassets */; };
+		4DBA5F5EEC60BAF78E818EB8 /* FileTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FACBE816195E715C5C881E /* FileTypeSettings.swift */; };
+		59F23D16306E2E069301C71B /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */; };
+		77B58B530D4554B7AFC73257 /* MarkdownTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4355EAFF27B05D7805506FA /* MarkdownTextStorage.swift */; };
+		7A16F2B83FD9AD0B93A50E58 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26808E5FF70377296A6B1D7 /* AppSettings.swift */; };
+		878C9E770296369ADA13212F /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = FF901CE81D544D6869CC687A /* Highlightr */; };
+		879459ABB4AA77A01EC467DC /* FileTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C1A29A53721B2F8172624 /* FileTreeView.swift */; };
+		8A9BB92015872C9619FEB1F3 /* BlockBackgroundLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE26E5BE0553D094698656E /* BlockBackgroundLayoutManager.swift */; };
+		90D9EB1C687386D91EF8557E /* BDVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */; };
+		91FB59B8A2AE9BADECD20370 /* BlockBackgroundLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE26E5BE0553D094698656E /* BlockBackgroundLayoutManager.swift */; };
+		A35E235C1113C17406CCF5C1 /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F00F5F8B33B85D06204058 /* MarkdownParser.swift */; };
+		ABE9353C13229E9335C9EF7E /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F00F5F8B33B85D06204058 /* MarkdownParser.swift */; };
+		AD868C61EF3F6DE03F8264D4 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */; };
+		E42D9EF898C3E32D350C778C /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 0974DCC4EE4C8377414160FC /* Highlightr */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		023333D8A764B43150E75FBC /* BrainDownApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrainDownApp.swift; sourceTree = "<group>"; };
+		129C1A29A53721B2F8172624 /* FileTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTreeView.swift; sourceTree = "<group>"; };
+		16F00F5F8B33B85D06204058 /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
+		54FACBE816195E715C5C881E /* FileTypeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeSettings.swift; sourceTree = "<group>"; };
+		7812A3CC123141DD86C607C9 /* BDVerify */ = {isa = PBXFileReference; includeInIndex = 0; path = BDVerify; sourceTree = BUILT_PRODUCTS_DIR; };
+		857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
+		A18D6D09C761D729714CD674 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A26808E5FF70377296A6B1D7 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
+		BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDVerify.swift; sourceTree = "<group>"; };
+		BD79746409FF6D84CE10F519 /* BrainDown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrainDown.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDE26E5BE0553D094698656E /* BlockBackgroundLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBackgroundLayoutManager.swift; sourceTree = "<group>"; };
+		E4355EAFF27B05D7805506FA /* MarkdownTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownTextStorage.swift; sourceTree = "<group>"; };
+		F1BBB999FF3441390E05ED41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3DFFE76C3DFA592D403A877A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E42D9EF898C3E32D350C778C /* Highlightr in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B149E04A529E223F0609124F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				878C9E770296369ADA13212F /* Highlightr in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2F7890804EAD3619BF17BC5D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A26808E5FF70377296A6B1D7 /* AppSettings.swift */,
+				BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */,
+				DDE26E5BE0553D094698656E /* BlockBackgroundLayoutManager.swift */,
+				023333D8A764B43150E75FBC /* BrainDownApp.swift */,
+				A18D6D09C761D729714CD674 /* ContentView.swift */,
+				AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */,
+				129C1A29A53721B2F8172624 /* FileTreeView.swift */,
+				54FACBE816195E715C5C881E /* FileTypeSettings.swift */,
+				857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */,
+				16F00F5F8B33B85D06204058 /* MarkdownParser.swift */,
+				E4355EAFF27B05D7805506FA /* MarkdownTextStorage.swift */,
+				F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		52290F9FD9EE8486F112590C = {
+			isa = PBXGroup;
+			children = (
+				DF08678298441D995B23CD81 /* Resources */,
+				2F7890804EAD3619BF17BC5D /* Sources */,
+				7C35B9828C8DD6E6E2887A29 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7C35B9828C8DD6E6E2887A29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7812A3CC123141DD86C607C9 /* BDVerify */,
+				BD79746409FF6D84CE10F519 /* BrainDown.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DF08678298441D995B23CD81 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F1BBB999FF3441390E05ED41 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		68DB0FB0574CB623D4EFA597 /* BDVerify */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 760F3F51DCC2B229A435D804 /* Build configuration list for PBXNativeTarget "BDVerify" */;
+			buildPhases = (
+				4BEB3EF549EF2FD2FAFB1D72 /* Sources */,
+				B149E04A529E223F0609124F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BDVerify;
+			packageProductDependencies = (
+				FF901CE81D544D6869CC687A /* Highlightr */,
+			);
+			productName = BDVerify;
+			productReference = 7812A3CC123141DD86C607C9 /* BDVerify */;
+			productType = "com.apple.product-type.tool";
+		};
+		9195CB0D4B1E6921066F36E6 /* BrainDown */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84C168F7F3205554C7F47D4D /* Build configuration list for PBXNativeTarget "BrainDown" */;
+			buildPhases = (
+				A99BDAFE434A6CFCD4023303 /* Sources */,
+				FBE437BB0A4DEF1E74711AE1 /* Resources */,
+				3DFFE76C3DFA592D403A877A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrainDown;
+			packageProductDependencies = (
+				0974DCC4EE4C8377414160FC /* Highlightr */,
+			);
+			productName = BrainDown;
+			productReference = BD79746409FF6D84CE10F519 /* BrainDown.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		90F88B6F46429C7D8B9FA380 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					68DB0FB0574CB623D4EFA597 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+					9195CB0D4B1E6921066F36E6 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 5C17FD601EE711E524956A95 /* Build configuration list for PBXProject "BrainDown" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 52290F9FD9EE8486F112590C;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				68DB0FB0574CB623D4EFA597 /* BDVerify */,
+				9195CB0D4B1E6921066F36E6 /* BrainDown */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FBE437BB0A4DEF1E74711AE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40CDB5D273BFD3B236B3FF08 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BEB3EF549EF2FD2FAFB1D72 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				391861ACAF4D93C6E452C3AA /* AppSettings.swift in Sources */,
+				90D9EB1C687386D91EF8557E /* BDVerify.swift in Sources */,
+				8A9BB92015872C9619FEB1F3 /* BlockBackgroundLayoutManager.swift in Sources */,
+				A35E235C1113C17406CCF5C1 /* MarkdownParser.swift in Sources */,
+				3AC20818F07C64A4B98DE666 /* MarkdownTextStorage.swift in Sources */,
+				59F23D16306E2E069301C71B /* SyntaxHighlighter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A99BDAFE434A6CFCD4023303 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A16F2B83FD9AD0B93A50E58 /* AppSettings.swift in Sources */,
+				91FB59B8A2AE9BADECD20370 /* BlockBackgroundLayoutManager.swift in Sources */,
+				18662173700245054A85DDDB /* BrainDownApp.swift in Sources */,
+				0675549E408261B5A47C44F8 /* ContentView.swift in Sources */,
+				AD868C61EF3F6DE03F8264D4 /* FileManager+Extensions.swift in Sources */,
+				879459ABB4AA77A01EC467DC /* FileTreeView.swift in Sources */,
+				4DBA5F5EEC60BAF78E818EB8 /* FileTypeSettings.swift in Sources */,
+				36B106422B8145E2FD45F19D /* MarkdownEditorView.swift in Sources */,
+				ABE9353C13229E9335C9EF7E /* MarkdownParser.swift in Sources */,
+				77B58B530D4554B7AFC73257 /* MarkdownTextStorage.swift in Sources */,
+				263ABA04B9471405622EE41D /* SyntaxHighlighter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0286EF7D238A4A0853CF76A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/BrainDown.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kenefe.BrainDown;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		310BC455C22EEC6C243C93F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = BrainDown;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4CA53565AE370D3F55D29131 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/BrainDown.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kenefe.BrainDown;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		4E20C3E8165268643E76FE44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = "bd-verify";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8D3A48973FE694245D03A6B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = "bd-verify";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DE39440BBC8E2B7DD693AE95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = BrainDown;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5C17FD601EE711E524956A95 /* Build configuration list for PBXProject "BrainDown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0286EF7D238A4A0853CF76A5 /* Debug */,
+				4CA53565AE370D3F55D29131 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		760F3F51DCC2B229A435D804 /* Build configuration list for PBXNativeTarget "BDVerify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D3A48973FE694245D03A6B5 /* Debug */,
+				4E20C3E8165268643E76FE44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		84C168F7F3205554C7F47D4D /* Build configuration list for PBXNativeTarget "BrainDown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE39440BBC8E2B7DD693AE95 /* Debug */,
+				310BC455C22EEC6C243C93F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raspu/Highlightr";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0974DCC4EE4C8377414160FC /* Highlightr */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */;
+			productName = Highlightr;
+		};
+		FF901CE81D544D6869CC687A /* Highlightr */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */;
+			productName = Highlightr;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 90F88B6F46429C7D8B9FA380 /* Project object */;
+}
