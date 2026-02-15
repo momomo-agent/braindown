@@ -11,14 +11,13 @@ class CodeBlockView: NSView {
     private let languageLabel = NSTextField(labelWithString: "")
     private let copyButton = NSButton()
     private let separatorLine = NSView()
-    private let lineNumberColumn = NSTextField(labelWithString: "")
-    private let codeTextView = NSTextView()
-    private let codeScrollView = NSScrollView()
+    private let lineNumberLabel = NSTextField(wrappingLabelWithString: "")
+    private let codeLabel = NSTextField(wrappingLabelWithString: "")
     
     // MARK: - State
     private var copyResetTimer: Timer?
     private var trackingArea: NSTrackingArea?
-    private var codeHeightConstraint: NSLayoutConstraint?
+    private var codeContent: String = ""
     
     // Shared Highlightr
     private static let highlightr: Highlightr? = {
@@ -28,6 +27,7 @@ class CodeBlockView: NSView {
     
     init(node: MarkdownNode, language: String?) {
         super.init(frame: .zero)
+        codeContent = node.content
         setupView(node: node, language: language)
     }
     
@@ -78,41 +78,31 @@ class CodeBlockView: NSView {
         separatorLine.isHidden = (language ?? "").isEmpty
         containerView.addSubview(separatorLine)
         
-        // Line numbers
-        lineNumberColumn.isEditable = false
-        lineNumberColumn.isSelectable = false
-        lineNumberColumn.drawsBackground = false
-        lineNumberColumn.isBordered = false
-        lineNumberColumn.alignment = .right
-        lineNumberColumn.setContentHuggingPriority(.required, for: .horizontal)
-        lineNumberColumn.setContentCompressionResistancePriority(.required, for: .horizontal)
-        containerView.addSubview(lineNumberColumn)
+        // Line numbers — NSTextField wrapping label
+        lineNumberLabel.isEditable = false
+        lineNumberLabel.isSelectable = false
+        lineNumberLabel.drawsBackground = false
+        lineNumberLabel.isBordered = false
+        lineNumberLabel.maximumNumberOfLines = 0
+        lineNumberLabel.lineBreakMode = .byClipping
+        lineNumberLabel.setContentHuggingPriority(.required, for: .horizontal)
+        lineNumberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        containerView.addSubview(lineNumberLabel)
         
-        // Code text view (read-only, no scroll — we let the outer stack handle scrolling)
-        codeScrollView.hasVerticalScroller = false
-        codeScrollView.hasHorizontalScroller = false
-        codeScrollView.drawsBackground = false
-        codeScrollView.borderType = .noBorder
-        
-        codeTextView.isEditable = false
-        codeTextView.isSelectable = true
-        codeTextView.drawsBackground = false
-        codeTextView.isRichText = true
-        codeTextView.usesFontPanel = false
-        codeTextView.isVerticallyResizable = true
-        codeTextView.isHorizontallyResizable = false
-        codeTextView.textContainerInset = .zero
-        codeTextView.textContainer?.lineFragmentPadding = 0
-        codeTextView.textContainer?.widthTracksTextView = true
-        containerView.addSubview(codeTextView)
+        // Code content — NSTextField wrapping label (supports attributed string + Auto Layout)
+        codeLabel.isEditable = false
+        codeLabel.isSelectable = true
+        codeLabel.drawsBackground = false
+        codeLabel.isBordered = false
+        codeLabel.maximumNumberOfLines = 0
+        codeLabel.lineBreakMode = .byClipping
+        codeLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        containerView.addSubview(codeLabel)
         
         // Populate content
         populateCode(node.content, language: language)
         
         layoutSubviews(hasLanguage: !(language ?? "").isEmpty)
-        
-        // Calculate code text height for Auto Layout
-        updateCodeHeight()
         
         // Tracking area for hover
         updateTrackingAreas()
@@ -140,13 +130,15 @@ class CodeBlockView: NSView {
             ])
         }
         
-        // Apply line height to highlighted text
+        // Strip Highlightr background color — we use our own container background
         let mutable = NSMutableAttributedString(attributedString: highlighted)
+        mutable.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: mutable.length))
+        
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.lineHeightMultiple = DesignTokens.codeLineHeight
         mutable.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: 0, length: mutable.length))
         
-        codeTextView.textStorage?.setAttributedString(mutable)
+        codeLabel.attributedStringValue = mutable
         
         // Line numbers
         let lines = code.components(separatedBy: "\n")
@@ -161,7 +153,7 @@ class CodeBlockView: NSView {
             .foregroundColor: DesignTokens.secondaryColor.withAlphaComponent(0.5),
             .paragraphStyle: lineNumStyle
         ])
-        lineNumberColumn.attributedStringValue = lineNumAttr
+        lineNumberLabel.attributedStringValue = lineNumAttr
     }
     
     // MARK: - Layout
@@ -172,8 +164,8 @@ class CodeBlockView: NSView {
         languageLabel.translatesAutoresizingMaskIntoConstraints = false
         copyButton.translatesAutoresizingMaskIntoConstraints = false
         separatorLine.translatesAutoresizingMaskIntoConstraints = false
-        lineNumberColumn.translatesAutoresizingMaskIntoConstraints = false
-        codeTextView.translatesAutoresizingMaskIntoConstraints = false
+        lineNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        codeLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
@@ -200,52 +192,33 @@ class CodeBlockView: NSView {
                 separatorLine.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
                 
-                lineNumberColumn.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: DesignTokens.sp12),
-                lineNumberColumn.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: DesignTokens.sp12),
-                lineNumberColumn.widthAnchor.constraint(greaterThanOrEqualToConstant: 24),
+                lineNumberLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: DesignTokens.sp12),
+                lineNumberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: DesignTokens.sp12),
+                lineNumberLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 24),
                 
-                codeTextView.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: DesignTokens.sp12),
-                codeTextView.leadingAnchor.constraint(equalTo: lineNumberColumn.trailingAnchor, constant: DesignTokens.sp12),
-                codeTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -DesignTokens.sp16),
-                codeTextView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -DesignTokens.sp12),
+                codeLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: DesignTokens.sp12),
+                codeLabel.leadingAnchor.constraint(equalTo: lineNumberLabel.trailingAnchor, constant: DesignTokens.sp12),
+                codeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -DesignTokens.sp16),
+                codeLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -DesignTokens.sp12),
             ])
         } else {
             topBar.isHidden = true
             separatorLine.isHidden = true
             
             NSLayoutConstraint.activate([
-                lineNumberColumn.topAnchor.constraint(equalTo: containerView.topAnchor, constant: DesignTokens.sp16),
-                lineNumberColumn.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: DesignTokens.sp12),
-                lineNumberColumn.widthAnchor.constraint(greaterThanOrEqualToConstant: 24),
+                lineNumberLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: DesignTokens.sp16),
+                lineNumberLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: DesignTokens.sp12),
+                lineNumberLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 24),
                 
-                codeTextView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: DesignTokens.sp16),
-                codeTextView.leadingAnchor.constraint(equalTo: lineNumberColumn.trailingAnchor, constant: DesignTokens.sp12),
-                codeTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -DesignTokens.sp16),
-                codeTextView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -DesignTokens.sp16),
+                codeLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: DesignTokens.sp16),
+                codeLabel.leadingAnchor.constraint(equalTo: lineNumberLabel.trailingAnchor, constant: DesignTokens.sp12),
+                codeLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -DesignTokens.sp16),
+                codeLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -DesignTokens.sp16),
             ])
         }
     }
     
     // MARK: - Colors
-    
-    private func updateCodeHeight() {
-        // NSTextView needs explicit height in Auto Layout — calculate from text content
-        guard let layoutManager = codeTextView.layoutManager,
-              let textContainer = codeTextView.textContainer else { return }
-        
-        // Ensure layout is computed
-        layoutManager.ensureLayout(for: textContainer)
-        let usedRect = layoutManager.usedRect(for: textContainer)
-        let height = max(usedRect.height, 20) // minimum 20pt
-        
-        if let existing = codeHeightConstraint {
-            existing.constant = height
-        } else {
-            codeHeightConstraint = codeTextView.heightAnchor.constraint(equalToConstant: height)
-            codeHeightConstraint?.priority = .defaultHigh
-            codeHeightConstraint?.isActive = true
-        }
-    }
     
     private func applyContainerColors() {
         containerView.layer?.backgroundColor = DesignTokens.codeBackground.cgColor
@@ -262,14 +235,11 @@ class CodeBlockView: NSView {
     
     override func updateTrackingAreas() {
         super.updateTrackingAreas()
-        if let existing = trackingArea {
-            removeTrackingArea(existing)
-        }
+        if let existing = trackingArea { removeTrackingArea(existing) }
         trackingArea = NSTrackingArea(
             rect: bounds,
             options: [.mouseEnteredAndExited, .activeInActiveApp, .inVisibleRect],
-            owner: self,
-            userInfo: nil
+            owner: self, userInfo: nil
         )
         addTrackingArea(trackingArea!)
     }
@@ -291,11 +261,8 @@ class CodeBlockView: NSView {
     // MARK: - Copy
     
     @objc private func copyCode() {
-        let code = codeTextView.string
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(code, forType: .string)
-        
-        // Show checkmark feedback
+        NSPasteboard.general.setString(codeContent, forType: .string)
         copyButton.title = "✓"
         copyResetTimer?.invalidate()
         copyResetTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in

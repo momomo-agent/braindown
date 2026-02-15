@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>3596CE5F-5080-4FC4-91D4-7ECFB41FE67B</key>
+		<key>17DE8B31-B774-4386-B49F-D5CF6BB36FE8</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>3596CE5F-5080-4FC4-91D4-7ECFB41FE67B.xcactivitylog</string>
+			<string>17DE8B31-B774-4386-B49F-D5CF6BB36FE8.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -34,21 +34,21 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>BrainDown project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>bd-verify</string>
+			<string>BrainDown</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>1</integer>
 			<key>signature</key>
-			<string>Building project BrainDown with scheme bd-verify and configuration Debug</string>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792845669.11607599</real>
+			<real>792846609.67638695</real>
 			<key>timeStoppedRecording</key>
-			<real>792845675.24814904</real>
+			<real>792846621.96270895</real>
 			<key>title</key>
-			<string>Building project BrainDown with scheme bd-verify and configuration Debug</string>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>3596CE5F-5080-4FC4-91D4-7ECFB41FE67B</string>
+			<string>17DE8B31-B774-4386-B49F-D5CF6BB36FE8</string>
 		</dict>
-		<key>B5695545-6EB1-4943-BE4B-ACC860024B97</key>
+		<key>95761E47-4DC3-4348-8035-4B07C782E2E4</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,7 +57,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>B5695545-6EB1-4943-BE4B-ACC860024B97.xcactivitylog</string>
+			<string>95761E47-4DC3-4348-8035-4B07C782E2E4.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -76,19 +76,19 @@
 			<key>schemeIdentifier-containerName</key>
 			<string>BrainDown project</string>
 			<key>schemeIdentifier-schemeName</key>
-			<string>bd-verify</string>
+			<string>BrainDown</string>
 			<key>schemeIdentifier-sharedScheme</key>
 			<integer>1</integer>
 			<key>signature</key>
-			<string>Building project BrainDown with scheme bd-verify and configuration Debug</string>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792845513.05878305</real>
+			<real>792850407.46301901</real>
 			<key>timeStoppedRecording</key>
-			<real>792845524.63827598</real>
+			<real>792850416.848809</real>
 			<key>title</key>
-			<string>Building project BrainDown with scheme bd-verify and configuration Debug</string>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>B5695545-6EB1-4943-BE4B-ACC860024B97</string>
+			<string>95761E47-4DC3-4348-8035-4B07C782E2E4</string>
 		</dict>
 	</dict>
 </dict>
