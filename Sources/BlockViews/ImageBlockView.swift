@@ -5,6 +5,8 @@ class ImageBlockView: NSView {
     private let imageView = NSImageView()
     private let captionField = NSTextField(wrappingLabelWithString: "")
     private var currentFileDirectory: URL?
+    private var heightConstraint: NSLayoutConstraint?
+    private var placeholderLabel: NSTextField?
     
     init(alt: String, urlString: String, currentFileDirectory: URL?) {
         self.currentFileDirectory = currentFileDirectory
@@ -17,7 +19,7 @@ class ImageBlockView: NSView {
     private func setupView(alt: String, urlString: String) {
         imageView.imageScaling = .scaleProportionallyUpOrDown
         imageView.imageAlignment = .alignCenter
-        imageView.animates = true  // Enable GIF animation
+        imageView.animates = true
         addSubview(imageView)
         
         captionField.isEditable = false
@@ -83,24 +85,47 @@ class ImageBlockView: NSView {
                 showPlaceholder(alt: alt)
             }
         } else {
-            // Async load for remote images
-            showPlaceholder(alt: alt)
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                if let data = try? Data(contentsOf: url), let image = NSImage(data: data) {
+            // Show placeholder while loading
+            showPlaceholder(alt: "⏳ Loading...")
+            
+            // Use URLSession for proper redirect handling and timeout
+            let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 15)
+            URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+                guard let self = self,
+                      let data = data,
+                      error == nil,
+                      let image = NSImage(data: data) else {
                     DispatchQueue.main.async {
-                        self?.setImage(image)
+                        self?.removePlaceholder()
+                        self?.showPlaceholder(alt: alt)
                     }
+                    return
                 }
-            }
+                DispatchQueue.main.async {
+                    self.removePlaceholder()
+                    self.setImage(image)
+                }
+            }.resume()
         }
     }
     
     private func setImage(_ image: NSImage) {
+        imageView.isHidden = false
         imageView.image = image
         let maxWidth = DesignTokens.maxContentWidth - DesignTokens.sp32
         let scale = image.size.width > maxWidth ? maxWidth / image.size.width : 1.0
         let height = image.size.height * scale
-        imageView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        
+        // Remove old height constraint if any
+        if let old = heightConstraint {
+            old.isActive = false
+        }
+        heightConstraint = imageView.heightAnchor.constraint(equalToConstant: height)
+        heightConstraint?.isActive = true
+        
+        // Force layout update
+        invalidateIntrinsicContentSize()
+        superview?.needsLayout = true
     }
     
     private func showPlaceholder(alt: String) {
@@ -117,5 +142,11 @@ class ImageBlockView: NSView {
             label.topAnchor.constraint(equalTo: topAnchor),
             label.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
+        placeholderLabel = label
+    }
+    
+    private func removePlaceholder() {
+        placeholderLabel?.removeFromSuperview()
+        placeholderLabel = nil
     }
 }
