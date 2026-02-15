@@ -6,6 +6,48 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
+		<key>4A9C9F19-78B2-46A4-A2FE-C9CC7B32D52B</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>4A9C9F19-78B2-46A4-A2FE-C9CC7B32D52B.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>1</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>BrainDown project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>BrainDown</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>792853096.77945101</real>
+			<key>timeStoppedRecording</key>
+			<real>792853099.80569506</real>
+			<key>title</key>
+			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>4A9C9F19-78B2-46A4-A2FE-C9CC7B32D52B</string>
+		</dict>
 		<key>9D67DFC2-8524-4784-BAA2-CBF2F5D7D6E8</key>
 		<dict>
 			<key>className</key>
@@ -47,48 +89,6 @@
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
 			<string>9D67DFC2-8524-4784-BAA2-CBF2F5D7D6E8</string>
-		</dict>
-		<key>DF40C0E9-9952-4A89-BC6A-D3A37872BB31</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>DF40C0E9-9952-4A89-BC6A-D3A37872BB31.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-				<key>totalNumberOfAnalyzerIssues</key>
-				<integer>0</integer>
-				<key>totalNumberOfErrors</key>
-				<integer>0</integer>
-				<key>totalNumberOfTestFailures</key>
-				<integer>0</integer>
-				<key>totalNumberOfWarnings</key>
-				<integer>1</integer>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>BrainDown project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>BrainDown</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>792852944.03370798</real>
-			<key>timeStoppedRecording</key>
-			<real>792852948.56842697</real>
-			<key>title</key>
-			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>DF40C0E9-9952-4A89-BC6A-D3A37872BB31</string>
 		</dict>
 	</dict>
 </dict>
