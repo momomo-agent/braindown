@@ -7,14 +7,14 @@ struct FileTreeView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 2) {
                 ForEach(items) { item in
                     FileTreeNodeView(item: item, selectedFile: $selectedFile, isModified: isModified, depth: 0)
                 }
             }
             .padding(.top, 12)
             .padding(.bottom, 16)
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 8)
         }
     }
 }
@@ -41,20 +41,20 @@ struct FileTreeNodeView: View {
                 
                 // Expand arrow (folders)
                 if item.isDirectory {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 10, weight: .semibold))
+                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.system(size: 9, weight: .medium))
                         .foregroundStyle(.tertiary)
-                        .rotationEffect(isExpanded ? .degrees(90) : .zero)
-                        .frame(width: 14, height: 14)
-                        .animation(.easeOut(duration: 0.15), value: isExpanded)
+                        .frame(width: 12, height: 12)
+                        .contentTransition(.symbolEffect(.replace))
                 } else {
-                    Color.clear.frame(width: 14)
+                    Color.clear.frame(width: 12)
                 }
                 
-                // Icon — simple, Notion-style
-                Text(iconEmoji)
-                    .font(.system(size: 13))
-                    .frame(width: 18)
+                // Icon — clean SF Symbols
+                Image(systemName: iconName)
+                    .font(.system(size: 13, weight: .light))
+                    .foregroundStyle(iconColor)
+                    .frame(width: 18, alignment: .center)
                 
                 // Filename
                 Text(item.displayName)
@@ -69,14 +69,14 @@ struct FileTreeNodeView: View {
                 if !item.isDirectory && isSelected && isModified {
                     Circle()
                         .fill(.orange)
-                        .frame(width: 6, height: 6)
+                        .frame(width: 5, height: 5)
                         .padding(.trailing, 4)
                 }
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 8)
             .background(
-                RoundedRectangle(cornerRadius: 6)
+                RoundedRectangle(cornerRadius: 5)
                     .fill(backgroundColor)
             )
             .contentShape(Rectangle())
@@ -111,21 +111,34 @@ struct FileTreeNodeView: View {
         return .clear
     }
     
-    private var iconEmoji: String {
+    private var iconName: String {
         if item.isDirectory {
-            return isExpanded ? "📂" : "📁"
+            return isExpanded ? "folder.fill" : "folder"
         }
         let ext = item.url.pathExtension.lowercased()
         switch ext {
-        case "md": return "📝"
-        case "txt": return "📄"
-        case "json": return "{ }"
-        case "yml", "yaml": return "⚙️"
-        case "png", "jpg", "jpeg", "gif", "svg", "webp": return "🖼"
-        case "swift": return "🔶"
-        case "py": return "🐍"
-        case "js", "ts": return "📜"
-        default: return "📄"
+        case "md": return "doc.richtext"
+        case "txt": return "doc.plaintext"
+        case "json": return "curlybraces"
+        case "yml", "yaml": return "slider.horizontal.3"
+        case "png", "jpg", "jpeg", "gif", "svg", "webp": return "photo"
+        case "swift": return "swift"
+        case "py", "js", "ts", "rb", "go", "rs": return "chevron.left.forwardslash.chevron.right"
+        case "html", "css": return "globe"
+        default: return "doc"
+        }
+    }
+    
+    private var iconColor: Color {
+        if item.isDirectory {
+            return .accentColor.opacity(0.7)
+        }
+        let ext = item.url.pathExtension.lowercased()
+        switch ext {
+        case "md": return .secondary
+        case "swift": return .orange.opacity(0.7)
+        case "png", "jpg", "jpeg", "gif", "svg", "webp": return .purple.opacity(0.6)
+        default: return .secondary.opacity(0.6)
         }
     }
 }

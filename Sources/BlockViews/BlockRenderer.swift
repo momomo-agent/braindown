@@ -20,7 +20,12 @@ class BlockRenderer {
             switch node.type {
             case .heading(let level):
                 let view = HeadingBlockView(node: node, level: level)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp4)
+                // Headings need more space above (visual hierarchy) and moderate space below
+                let spaceBefore: CGFloat = (i == 0) ? 0 : (level <= 2 ? DesignTokens.sp32 : DesignTokens.sp24)
+                if i > 0, let lastView = stackView.arrangedSubviews.last {
+                    stackView.setCustomSpacing(spaceBefore, after: lastView)
+                }
+                addBlock(view, to: stackView, spacing: DesignTokens.sp12)
                 
             case .paragraph:
                 // Check if paragraph contains an image inline

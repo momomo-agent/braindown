@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>D091F083-BB4C-42B7-8C58-E382AB087F06</key>
+		<key>0D245CD8-2133-45F0-8DCC-905D611803D1</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>D091F083-BB4C-42B7-8C58-E382AB087F06.xcactivitylog</string>
+			<string>0D245CD8-2133-45F0-8DCC-905D611803D1.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -40,15 +40,15 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792850689.01237094</real>
+			<real>792852226.70319998</real>
 			<key>timeStoppedRecording</key>
-			<real>792850696.00618804</real>
+			<real>792852236.23723304</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>D091F083-BB4C-42B7-8C58-E382AB087F06</string>
+			<string>0D245CD8-2133-45F0-8DCC-905D611803D1</string>
 		</dict>
-		<key>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA</key>
+		<key>387A5B9D-3AC7-46D6-9044-6863729C5330</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,7 +57,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA.xcactivitylog</string>
+			<string>387A5B9D-3AC7-46D6-9044-6863729C5330.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -82,13 +82,13 @@
 			<key>signature</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>792851007.98995602</real>
+			<real>792852290.84487498</real>
 			<key>timeStoppedRecording</key>
-			<real>792851027.21042395</real>
+			<real>792852308.12606204</real>
 			<key>title</key>
 			<string>Building project BrainDown with scheme BrainDown and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>F385432F-8A1B-4C2F-A1AC-D8F4DA45B0EA</string>
+			<string>387A5B9D-3AC7-46D6-9044-6863729C5330</string>
 		</dict>
 	</dict>
 </dict>
