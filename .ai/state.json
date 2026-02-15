@@ -1,9 +1,9 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "lastUpdated": "2026-02-15",
-  "currentFocus": "Block-based 架构迁移",
+  "currentFocus": "Block-based 架构迁移 — 完成",
   "phase": "一期：阅读器",
-  "completedRounds": 2,
-  "nextFeature": "A001",
-  "notes": "架构升级：从 NSAttributedString 流式渲染迁移到 block-based 独立 NSView。一期纯阅读，二期加编辑。"
+  "completedRounds": 3,
+  "nextFeature": "T001",
+  "notes": "Block-based 架构迁移完成。所有 block view 已创建，BlockRenderer 中间层已实现，MarkdownEditorView 已改造为 NSScrollView+NSStackView 架构。旧的 MarkdownTextStorage 和 BlockBackgroundLayoutManager 已删除。Build 通过。"
 }

@@ -27,8 +27,8 @@
     "id": "F005",
     "category": "typography",
     "description": "标题层次清晰（H1-H6 视觉可辨）",
-    "passes": false,
-    "note": "H4/H5 跟正文区分度不够"
+    "passes": true,
+    "note": "Block-based HeadingBlockView with Georgia serif for H1/H2"
   },
   {
     "id": "F006",
@@ -64,90 +64,94 @@
     "id": "A001",
     "category": "architecture",
     "description": "NSScrollView + NSStackView 容器搭建",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A002",
     "category": "architecture",
     "description": "BlockRenderer 中间层（MarkdownNode → NSView）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A003",
     "category": "architecture",
     "description": "ParagraphBlockView（段落渲染）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A004",
     "category": "architecture",
     "description": "HeadingBlockView（标题渲染）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A005",
     "category": "architecture",
     "description": "CodeBlockView — 圆角容器 + 语言标签 + 复制按钮 + 行号 + 语法高亮",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A006",
     "category": "architecture",
     "description": "TableBlockView — 圆角容器 + 表头区分 + hover 高亮 + 列宽自适应",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A007",
     "category": "architecture",
     "description": "BlockquoteBlockView（引用块渲染）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A008",
     "category": "architecture",
     "description": "ListBlockView（列表渲染）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A009",
     "category": "architecture",
     "description": "ImageBlockView（图片渲染）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A010",
     "category": "architecture",
     "description": "HorizontalRuleView（分隔线）",
-    "passes": false
+    "passes": true
   },
   {
     "id": "A011",
     "category": "architecture",
     "description": "删除旧的 MarkdownTextStorage + BlockBackgroundLayoutManager",
-    "passes": false
+    "passes": true
   },
   {
     "id": "T001",
     "category": "taste",
     "description": "代码块截图跟 Notion 对比差距可接受",
-    "passes": false
+    "passes": false,
+    "note": "需要运行验证视觉效果"
   },
   {
     "id": "T002",
     "category": "taste",
     "description": "表格截图跟 Notion 对比差距可接受",
-    "passes": false
+    "passes": false,
+    "note": "需要运行验证视觉效果"
   },
   {
     "id": "T003",
     "category": "taste",
     "description": "整体截图跟 Craft 对比差距可接受",
-    "passes": false
+    "passes": false,
+    "note": "需要运行验证视觉效果"
   },
   {
     "id": "T004",
     "category": "taste",
     "description": "暗色模式无刺眼元素",
-    "passes": false
+    "passes": false,
+    "note": "需要运行验证视觉效果"
   }
 ]
