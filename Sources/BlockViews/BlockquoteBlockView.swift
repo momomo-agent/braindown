@@ -44,7 +44,7 @@ class BlockquoteBlockView: NSView {
             barView.leadingAnchor.constraint(equalTo: leadingAnchor),
             barView.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             barView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
-            barView.widthAnchor.constraint(equalToConstant: 3),
+            barView.widthAnchor.constraint(equalToConstant: 2.5),
             
             textField.leadingAnchor.constraint(equalTo: barView.trailingAnchor, constant: DesignTokens.sp12),
             textField.topAnchor.constraint(equalTo: topAnchor),

@@ -11,7 +11,7 @@ class CodeBlockView: NSView {
     private let languageLabel = NSTextField(labelWithString: "")
     private let copyButton = NSButton()
     private let separatorLine = NSView()
-    private let lineNumberColumn = NSTextField(wrappingLabelWithString: "")
+    private let lineNumberColumn = NSTextField(labelWithString: "")
     private let codeTextView = NSTextView()
     private let codeScrollView = NSScrollView()
     
