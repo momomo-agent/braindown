@@ -26,7 +26,7 @@ class ImageBlockView: NSView {
         
         // Caption
         captionField.isEditable = false
-        captionField.isSelectable = true
+        captionField.isSelectable = false
         captionField.drawsBackground = false
         captionField.isBordered = false
         captionField.alignment = .center

@@ -36,6 +36,7 @@ struct ContentView: View {
                 }
             }
             .frame(minWidth: 180, idealWidth: 240, maxWidth: 360)
+            .background(Color(nsColor: .controlBackgroundColor))
             
             // Right: Editor / Reader
             VStack(spacing: 0) {
@@ -43,6 +44,7 @@ struct ContentView: View {
                     if appSettings.editorMode == .read {
                         MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .id("reader-\(appSettings.useSerifFont)")
                     } else {
                         RawEditorView(text: $markdownText, isModified: $isModified)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -68,15 +70,34 @@ struct ContentView: View {
         }
         .onAppear {
             restoreLastFolder()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                let testURL = URL(fileURLWithPath: "/tmp/bd-test")
+                if folderURL == nil && FileManager.default.fileExists(atPath: testURL.path) {
+                    setFolder(testURL)
+                    // Auto-select showcase.md for testing
+                    let showcase = URL(fileURLWithPath: "/tmp/bd-test/showcase.md")
+                    if FileManager.default.fileExists(atPath: showcase.path) {
+                        selectedFile = showcase
+                    }
+                }
+            }
         }
         .background(WindowAccessor { window in
             window.title = windowTitle
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
-            window.styleMask.insert(.fullSizeContentView)
+            window.backgroundColor = .white
         })
         .onReceive(NotificationCenter.default.publisher(for: .openFolder)) { _ in
             openFolder()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openFolderURL)) { notification in
+            if let url = notification.object as? URL {
+                setFolder(url)
+                if let selectFile = notification.userInfo?["selectFile"] as? URL {
+                    selectedFile = selectFile
+                }
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .saveFile)) { _ in
             saveCurrentFile()

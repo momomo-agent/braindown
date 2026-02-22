@@ -42,7 +42,7 @@ class ListBlockView: NSView {
             // Content
             let contentField = NSTextField(wrappingLabelWithString: "")
             contentField.isEditable = false
-            contentField.isSelectable = true
+            contentField.isSelectable = false
             contentField.drawsBackground = false
             contentField.isBordered = false
             contentField.lineBreakMode = .byWordWrapping

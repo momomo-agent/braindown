@@ -10,7 +10,6 @@ struct BrainDownApp: App {
         WindowGroup {
             ContentView()
         }
-        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("Open Folder…") {
@@ -27,23 +26,21 @@ struct BrainDownApp: App {
             }
             
             CommandMenu("View") {
-                // Mode toggle
-                Menu("Mode") {
-                    ForEach(EditorMode.allCases, id: \.rawValue) { mode in
-                        Toggle(mode.label, isOn: Binding(
-                            get: { appSettings.editorMode == mode },
-                            set: { if $0 { appSettings.editorMode = mode } }
-                        ))
-                    }
-                }
-                
-                Button(appSettings.editorMode == .read ? "Switch to Write" : "Switch to Read") {
+                // Read/Write toggle
+                Button(appSettings.editorMode == .read ? "Switch to Edit Mode" : "Switch to Read Mode") {
                     appSettings.editorMode = appSettings.editorMode == .read ? .write : .read
                 }
                 .keyboardShortcut("e", modifiers: .command)
                 
                 Divider()
                 
+                // Font
+                Toggle("Serif Font", isOn: $appSettings.useSerifFont)
+                    .keyboardShortcut("f", modifiers: [.command, .shift])
+                
+                Divider()
+                
+                // Theme
                 Menu("Theme") {
                     ForEach(AppTheme.allCases, id: \.rawValue) { theme in
                         Toggle(theme.label, isOn: Binding(
@@ -53,8 +50,7 @@ struct BrainDownApp: App {
                     }
                 }
                 
-                Divider()
-                
+                // File types
                 Menu("Visible File Types") {
                     ForEach(FileTypeSettings.allTypes, id: \.ext) { type in
                         Toggle(type.label, isOn: Binding(
@@ -74,19 +70,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Configure all windows for transparent titlebar
+        // Configure all windows for clean titlebar
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             for window in NSApp.windows {
                 window.titlebarAppearsTransparent = true
                 window.titleVisibility = .hidden
-                window.styleMask.insert(.fullSizeContentView)
                 window.isMovableByWindowBackground = true
+                window.backgroundColor = .white
             }
+        }
+    }
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        guard let url = urls.first else { return }
+        var isDir: ObjCBool = false
+        FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
+        
+        if isDir.boolValue {
+            // Opened a folder — set it as root
+            NotificationCenter.default.post(name: .openFolderURL, object: url)
+        } else {
+            // Opened a file — set parent as root, select this file
+            let folder = url.deletingLastPathComponent()
+            NotificationCenter.default.post(name: .openFolderURL, object: folder, userInfo: ["selectFile": url])
         }
     }
 }
 
 extension Notification.Name {
     static let openFolder = Notification.Name("BrainDown.openFolder")
+    static let openFolderURL = Notification.Name("BrainDown.openFolderURL")
     static let saveFile = Notification.Name("BrainDown.saveFile")
 }

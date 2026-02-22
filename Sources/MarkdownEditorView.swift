@@ -102,7 +102,7 @@ struct MarkdownEditorView: NSViewRepresentable {
         leading.identifier = "stack.leading"
         let trailing = stackView.trailingAnchor.constraint(equalTo: flippedView.trailingAnchor, constant: -insetX)
         trailing.identifier = "stack.trailing"
-        let top = stackView.topAnchor.constraint(equalTo: flippedView.topAnchor, constant: 56)
+        let top = stackView.topAnchor.constraint(equalTo: flippedView.topAnchor, constant: 28)
         top.identifier = "stack.top"
         let bottom = stackView.bottomAnchor.constraint(equalTo: flippedView.bottomAnchor, constant: -40)
         bottom.identifier = "stack.bottom"

@@ -20,35 +20,33 @@ class BlockRenderer {
             switch node.type {
             case .heading(let level):
                 let view = HeadingBlockView(node: node, level: level)
-                // Headings need more space above (visual hierarchy) and moderate space below
-                let spaceBefore: CGFloat = (i == 0) ? 0 : (level <= 2 ? DesignTokens.sp32 : DesignTokens.sp24)
+                let spaceBefore: CGFloat = (i == 0) ? 0 : (level <= 2 ? DesignTokens.sp24 : DesignTokens.sp16)
                 if i > 0, let lastView = stackView.arrangedSubviews.last {
                     stackView.setCustomSpacing(spaceBefore, after: lastView)
                 }
-                addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 
             case .paragraph:
-                // Check if paragraph contains an image inline
                 if let imageElement = node.inlineElements.first(where: { isImage($0) }),
                    case .image(let alt, let url) = imageElement.style {
                     let view = ImageBlockView(alt: alt, urlString: url, currentFileDirectory: currentFileDirectory)
-                    addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                    addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 } else {
                     let view = ParagraphBlockView(node: node)
-                    addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                    addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 }
                 
             case .codeBlock(let language):
                 let view = CodeBlockView(node: node, language: language)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp16)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 
             case .table:
                 let view = TableBlockView(node: node)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp16)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 
             case .blockquote:
                 let view = BlockquoteBlockView(node: node)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 
             case .unorderedList:
                 // Collect following listItem nodes
@@ -63,7 +61,7 @@ class BlockRenderer {
                     }
                 }
                 let view = ListBlockView(items: items, ordered: false)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 i = j
                 continue
                 
@@ -79,7 +77,7 @@ class BlockRenderer {
                     }
                 }
                 let view = ListBlockView(items: items, ordered: true)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp12)
+                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
                 i = j
                 continue
                 

@@ -6,8 +6,8 @@ enum DesignTokens {
     // MARK: - Typography
     static let bodySize: CGFloat = 16
     static let lineHeightMultiple: CGFloat = 1.65
-    static let codeLineHeight: CGFloat = 1.35
-    static let paragraphSpacing: CGFloat = 12
+    static let codeLineHeight: CGFloat = 1.3
+    static let paragraphSpacing: CGFloat = 8
     static let maxContentWidth: CGFloat = 680
     
     // MARK: - Spacing
@@ -24,15 +24,15 @@ enum DesignTokens {
     }
     
     static var bodyColor: NSColor {
-        isDark ? NSColor(white: 0.85, alpha: 1) : NSColor(white: 0.15, alpha: 1)
+        isDark ? NSColor(red: 0.86, green: 0.85, blue: 0.83, alpha: 1) : NSColor(white: 0.15, alpha: 1)
     }
     
     static var headingColor: NSColor {
-        isDark ? NSColor(white: 0.92, alpha: 1) : NSColor(white: 0.08, alpha: 1)
+        isDark ? NSColor(red: 0.93, green: 0.92, blue: 0.90, alpha: 1) : NSColor(white: 0.08, alpha: 1)
     }
     
     static var secondaryColor: NSColor {
-        isDark ? NSColor(white: 0.55, alpha: 1) : NSColor(white: 0.45, alpha: 1)
+        isDark ? NSColor(red: 0.56, green: 0.55, blue: 0.52, alpha: 1) : NSColor(white: 0.45, alpha: 1)
     }
     
     static var codeBackground: NSColor {
@@ -85,11 +85,17 @@ enum DesignTokens {
     
     // MARK: - Fonts
     static var bodyFont: NSFont {
-        NSFont.systemFont(ofSize: bodySize)
+        if AppSettings.shared.useSerifFont {
+            return NSFont(name: "Georgia", size: bodySize) ?? NSFont.systemFont(ofSize: bodySize)
+        }
+        return NSFont.systemFont(ofSize: bodySize)
     }
     
     static var boldFont: NSFont {
-        NSFont.boldSystemFont(ofSize: bodySize)
+        if AppSettings.shared.useSerifFont {
+            if let georgia = NSFont(name: "Georgia-Bold", size: bodySize) { return georgia }
+        }
+        return NSFont.boldSystemFont(ofSize: bodySize)
     }
     
     static var codeFont: NSFont {
@@ -98,22 +104,31 @@ enum DesignTokens {
     
     static func headingFont(level: Int) -> NSFont {
         let size = headingSize(level: level)
+        if AppSettings.shared.useSerifFont {
+            let name: String
+            switch level {
+            case 1, 2: name = "Georgia-Bold"
+            case 3, 4: name = "Georgia-Bold"
+            default: name = "Georgia"
+            }
+            if let font = NSFont(name: name, size: size) { return font }
+        }
         switch level {
-        case 1: return NSFont.systemFont(ofSize: size, weight: .bold)
-        case 2: return NSFont.systemFont(ofSize: size, weight: .bold)
-        case 3: return NSFont.systemFont(ofSize: size, weight: .semibold)
-        case 4: return NSFont.systemFont(ofSize: size, weight: .semibold)
-        default: return NSFont.systemFont(ofSize: size, weight: .medium)
+        case 1: return NSFont.systemFont(ofSize: size, weight: .semibold)
+        case 2: return NSFont.systemFont(ofSize: size, weight: isDark ? .medium : .semibold)
+        case 3: return NSFont.systemFont(ofSize: size, weight: isDark ? .regular : .medium)
+        case 4: return NSFont.systemFont(ofSize: size, weight: isDark ? .regular : .medium)
+        default: return NSFont.systemFont(ofSize: size, weight: .regular)
         }
     }
     
     static func headingSize(level: Int) -> CGFloat {
         switch level {
         case 1: return 28
-        case 2: return 22
-        case 3: return 18
+        case 2: return 21
+        case 3: return 17.5
         case 4: return 16
-        case 5: return 16
+        case 5: return 15
         case 6: return 13
         default: return bodySize
         }

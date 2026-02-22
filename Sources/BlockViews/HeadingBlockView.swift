@@ -14,7 +14,7 @@ class HeadingBlockView: NSView {
     
     private func setupView(node: MarkdownNode, level: Int) {
         textField.isEditable = false
-        textField.isSelectable = true
+        textField.isSelectable = false
         textField.drawsBackground = false
         textField.isBordered = false
         textField.lineBreakMode = .byWordWrapping
@@ -51,10 +51,10 @@ class HeadingBlockView: NSView {
         // Spacing: before ≥ 3× after (proximity principle)
         let topPadding: CGFloat
         switch level {
-        case 1: topPadding = DesignTokens.sp24
-        case 2: topPadding = DesignTokens.sp16
-        case 3: topPadding = DesignTokens.sp12
-        default: topPadding = DesignTokens.sp8
+        case 1: topPadding = DesignTokens.sp16
+        case 2: topPadding = DesignTokens.sp12
+        case 3: topPadding = DesignTokens.sp8
+        default: topPadding = DesignTokens.sp4
         }
         
         NSLayoutConstraint.activate([

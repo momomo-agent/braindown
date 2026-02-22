@@ -51,11 +51,18 @@ class AppSettings: ObservableObject {
         }
     }
     
+    @Published var useSerifFont: Bool {
+        didSet {
+            UserDefaults.standard.set(useSerifFont, forKey: "BrainDown.useSerifFont")
+        }
+    }
+    
     private init() {
         let saved = UserDefaults.standard.string(forKey: "BrainDown.theme") ?? "system"
         self.theme = AppTheme(rawValue: saved) ?? .system
         let savedMode = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
         self.editorMode = EditorMode(rawValue: savedMode) ?? .read
+        self.useSerifFont = UserDefaults.standard.bool(forKey: "BrainDown.useSerifFont")
         DispatchQueue.main.async { [weak self] in
             self?.applyTheme()
         }

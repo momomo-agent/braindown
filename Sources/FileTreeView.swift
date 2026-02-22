@@ -16,6 +16,7 @@ struct FileTreeView: View {
             .padding(.bottom, 16)
             .padding(.horizontal, 8)
         }
+        .scrollIndicators(.hidden)
     }
 }
 
@@ -43,7 +44,7 @@ struct FileTreeNodeView: View {
                 if item.isDirectory {
                     Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
                         .font(.system(size: 9, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(.secondary)
                         .frame(width: 12, height: 12)
                         .contentTransition(.symbolEffect(.replace))
                 } else {
@@ -52,14 +53,14 @@ struct FileTreeNodeView: View {
                 
                 // Icon — clean SF Symbols
                 Image(systemName: iconName)
-                    .font(.system(size: 13, weight: .light))
-                    .foregroundStyle(iconColor)
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(Color(nsColor: .secondaryLabelColor))
                     .frame(width: 18, alignment: .center)
                 
                 // Filename
                 Text(item.displayName)
-                    .font(.system(size: 13, weight: item.isDirectory ? .medium : .regular))
-                    .foregroundStyle(isSelected ? .primary : .secondary)
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(isSelected ? .primary : Color(nsColor: .labelColor))
                     .lineLimit(1)
                     .truncationMode(.middle)
                 
@@ -139,6 +140,10 @@ extension FileTreeItem {
     }
     
     var displayName: String {
+        // Compacted folder: show "parent / child / ..."
+        if isDirectory && !compactSegments.isEmpty {
+            return compactSegments.joined(separator: " / ")
+        }
         if isDirectory { return name }
         if name.hasSuffix(".md") {
             return String(name.dropLast(3))
