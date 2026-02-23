@@ -30,8 +30,8 @@ class FileTypeSettings: ObservableObject {
         if let saved = UserDefaults.standard.array(forKey: key) as? [String] {
             enabledExtensions = Set(saved)
         } else {
-            // 默认只显示 .md
-            enabledExtensions = ["md"]
+            // 默认显示 .md 和 .json
+            enabledExtensions = ["md", "json"]
         }
     }
     

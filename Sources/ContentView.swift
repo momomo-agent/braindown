@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var sidebarWidth: CGFloat = 240
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
     @ObservedObject private var appSettings = AppSettings.shared
+    @State private var fsEventStream: FSEventStreamRef?
     
     private let lastFolderKey = "BrainDown.lastOpenedFolder"
     
@@ -105,6 +106,12 @@ struct ContentView: View {
         .onChange(of: fileTypeSettings.enabledExtensions) { _, _ in
             refreshTree()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .fsChanged)) { _ in
+            refreshTree()
+        }
+        .onDisappear {
+            stopWatching()
+        }
     }
     
     private var windowTitle: String {
@@ -147,14 +154,38 @@ struct ContentView: View {
         selectedFile = nil
         markdownText = ""
         isModified = false
-        
-        // Remember this folder
         UserDefaults.standard.set(url.path, forKey: lastFolderKey)
+        startWatching(url)
     }
     
     private func refreshTree() {
         guard let url = folderURL else { return }
         fileTree = FileManager.default.filteredTree(at: url, settings: fileTypeSettings)
+    }
+    
+    private func startWatching(_ url: URL) {
+        stopWatching()
+        let paths = [url.path] as CFArray
+        var context = FSEventStreamContext()
+        let callback: FSEventStreamCallback = { _, _, _, _, _, _ in
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .fsChanged, object: nil)
+            }
+        }
+        if let stream = FSEventStreamCreate(nil, callback, &context, paths, FSEventStreamEventId(kFSEventStreamEventIdSinceNow), 0.5, UInt32(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)) {
+            FSEventStreamScheduleWithRunLoop(stream, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
+            FSEventStreamStart(stream)
+            fsEventStream = stream
+        }
+    }
+    
+    private func stopWatching() {
+        if let stream = fsEventStream {
+            FSEventStreamStop(stream)
+            FSEventStreamInvalidate(stream)
+            FSEventStreamRelease(stream)
+            fsEventStream = nil
+        }
     }
     
     private func restoreLastFolder() {
