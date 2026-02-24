@@ -486,8 +486,23 @@ struct CourseCardView: View {
 struct FeatureListView: View {
     let items: [[String: Any]]
     
+    private func isPassed(_ item: [String: Any]) -> Bool {
+        // Check boolean fields
+        for k in ["passes", "passed", "done", "completed", "success"] {
+            if let b = item[k] as? Bool { return b }
+            if let n = item[k] as? NSNumber, n.isBool { return n.boolValue }
+        }
+        // Check status string
+        for k in ["status", "state"] {
+            if let s = item[k] as? String {
+                return ["completed", "done", "passed", "released", "resolved", "closed"].contains(s.lowercased())
+            }
+        }
+        return false
+    }
+    
     private var passCount: Int {
-        items.filter { ($0["passes"] as? Bool) == true || ($0["status"] as? String) == "completed" }.count
+        items.filter { isPassed($0) }.count
     }
     
     var body: some View {
@@ -508,30 +523,62 @@ struct FeatureListView: View {
     }
     
     private func featureRow(_ item: [String: Any]) -> some View {
-        let id = item["id"] as? String ?? "?"
-        let desc = item["description"] as? String ?? ""
-        let passes = (item["passes"] as? Bool) == true || (item["status"] as? String) == "completed"
-        let cat = item["category"] as? String ?? ""
-        let note = item["note"] as? String
+        // Flexible field lookup
+        let id = findString(item, keys: ["id", "code", "key"]) ?? ""
+        let title = findString(item, keys: ["title", "name", "label"]) ?? ""
+        let desc = findString(item, keys: ["description", "desc", "summary", "detail"]) ?? ""
+        let passes = isPassed(item)
+        let cat = findString(item, keys: ["category", "type", "group"]) ?? ""
+        let status = findString(item, keys: ["status", "state"]) ?? ""
+        let note = findString(item, keys: ["note", "comment"])
+        
+        // Decide what to show as the main label
+        let mainLabel: String = {
+            if !title.isEmpty { return title }
+            if !desc.isEmpty { return desc }
+            if !id.isEmpty { return id }
+            return "?"
+        }()
+        // Show id as secondary only if title is the main label
+        let showId = !id.isEmpty && !title.isEmpty && id != title
         
         return VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
                 Image(systemName: passes ? "checkmark.circle.fill" : "xmark.circle")
                     .foregroundColor(passes ? .green : .red)
                     .font(.system(size: 13))
-                Text(id)
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
-                Text(desc)
+                if showId {
+                    Text(id)
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                }
+                Text(mainLabel)
                     .font(.system(size: 13))
                     .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
                     .lineLimit(2)
                 Spacer()
-                if !cat.isEmpty {
+                if !status.isEmpty {
+                    Text(status)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(statusColor(status))
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(statusColor(status).opacity(0.12))
+                        .cornerRadius(3)
+                }
+                if !cat.isEmpty && status.isEmpty {
                     Text(cat)
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
                 }
+            }
+            // Show description below title if both exist
+            if !title.isEmpty && !desc.isEmpty {
+                Text(desc)
+                    .font(.system(size: 11))
+                    .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                    .padding(.leading, 21)
+                    .lineLimit(2)
             }
             if let note = note, !note.isEmpty {
                 Text(note)
@@ -541,6 +588,23 @@ struct FeatureListView: View {
             }
         }
         .padding(.vertical, 4)
+    }
+    
+    private func findString(_ dict: [String: Any], keys: [String]) -> String? {
+        for k in keys {
+            if let s = dict[k] as? String, !s.isEmpty { return s }
+        }
+        return nil
+    }
+    
+    private func statusColor(_ status: String) -> Color {
+        switch status.lowercased() {
+        case "completed", "done", "passed", "released": return .green
+        case "active", "in_progress", "current": return .blue
+        case "queued", "planned", "upcoming", "pending": return Color(nsColor: DesignTokens.secondaryColor)
+        case "failed", "error", "blocked": return .red
+        default: return Color(nsColor: DesignTokens.secondaryColor)
+        }
     }
 }
 
