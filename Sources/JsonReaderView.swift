@@ -188,6 +188,22 @@ struct ProgressDashboardView: View {
                 .font(.system(size: 22, weight: .medium))
                 .foregroundColor(Color(nsColor: DesignTokens.headingColor))
             
+            // Extra scalar metadata (version, etc.)
+            if !extraScalars.isEmpty {
+                HStack(spacing: 16) {
+                    ForEach(extraScalars, id: \.0) { key, value in
+                        HStack(spacing: 4) {
+                            Text(key)
+                                .font(.system(size: 11))
+                                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                            Text(value)
+                                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                        }
+                    }
+                }
+            }
+            
             // Summary bar
             summaryBar
             
@@ -227,10 +243,20 @@ struct ProgressDashboardView: View {
         .padding(.vertical, 8)
     }
     
-    /// Extra top-level fields that aren't the main array or title
+    /// Extra scalar fields (version, etc.) shown as metadata below title
+    private var extraScalars: [(String, String)] {
+        let mainKey = JsonAnalyzer.findMainArray(in: data)?.0
+        let titleKeys: Set<String> = ["description", "title", "name", "label"]
+        return data.compactMap { key, val in
+            guard key != mainKey && !titleKeys.contains(key) && JsonAnalyzer.isScalar(val) else { return nil }
+            return (key, String(describing: val))
+        }.sorted(by: { $0.0 < $1.0 })
+    }
+    
+    /// Extra non-scalar fields (schedule dict, rules array, etc.)
     private var extraFields: [String: Any] {
         let mainKey = JsonAnalyzer.findMainArray(in: data)?.0
-        let titleKeys: Set<String> = ["description", "title", "name", "label", "version"]
+        let titleKeys: Set<String> = ["description", "title", "name", "label"]
         return data.filter { key, val in
             key != mainKey && !titleKeys.contains(key) && !JsonAnalyzer.isScalar(val)
         }
@@ -548,6 +574,28 @@ struct FeatureListView: View {
                     .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
                     .padding(.leading, 21)
             }
+            // Show extra scalar fields not already displayed (assignee, priority, etc.)
+            let knownKeys: Set<String> = ["id", "code", "key", "title", "name", "label",
+                "description", "desc", "summary", "detail", "status", "state",
+                "category", "type", "group", "note", "comment",
+                "passes", "passed", "done", "completed", "success"]
+            let extras = item.filter { !knownKeys.contains($0.key) && JsonAnalyzer.isScalar($0.value) }
+                .sorted(by: { $0.key < $1.key })
+            if !extras.isEmpty {
+                HStack(spacing: 12) {
+                    ForEach(extras, id: \.key) { key, value in
+                        HStack(spacing: 3) {
+                            Text(key)
+                                .font(.system(size: 10))
+                                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor).opacity(0.7))
+                            Text(String(describing: value))
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                        }
+                    }
+                }
+                .padding(.leading, 21)
+            }
         }
         .padding(.vertical, 4)
     }
@@ -749,8 +797,30 @@ struct NestedObjectView: View {
         } else if let sub = value as? [String: Any] {
             KeyValueView(dict: sub)
                 .padding(.leading, 8)
+        } else if let arr = value as? [Any], isNumericArray(arr) {
+            // Pure numeric array → sparkline
+            let vals = arr.compactMap { ($0 as? NSNumber)?.doubleValue }
+            SparklineView(values: vals)
+                .frame(maxWidth: 500)
+        } else if let arr = value as? [[Any]], isXYPairArray(arr) {
+            // Array of [x, y] pairs → sparkline
+            SparklineView(pairs: arr)
+                .frame(maxWidth: 500)
         } else {
             GenericTreeView(value: value, label: key, depth: 0)
+        }
+    }
+    
+    private func isNumericArray(_ arr: [Any]) -> Bool {
+        arr.count >= 3 && arr.allSatisfy { $0 is NSNumber && !(($0 as? NSNumber)?.isBool ?? false) }
+    }
+    
+    private func isXYPairArray(_ arr: [[Any]]) -> Bool {
+        guard arr.count >= 3 else { return false }
+        return arr.allSatisfy { pair in
+            pair.count == 2
+            && pair[0] is NSNumber && !(pair[0] as? NSNumber)!.isBool
+            && pair[1] is NSNumber && !(pair[1] as? NSNumber)!.isBool
         }
     }
     
@@ -989,15 +1059,19 @@ struct StructuredDataView: View {
             if let arr = value as? [[String: Any]] {
                 FeatureListView(items: arr)
             } else if let dict = value as? [String: Any],
-                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
-                FeatureListView(items: mainArr)
+                      let (mainKey, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
+                DictWithMainArrayView(dict: dict, mainKey: mainKey) {
+                    FeatureListView(items: mainArr)
+                }
             }
         case .timeline:
             if let arr = value as? [[String: Any]] {
                 TimelineListView(items: arr)
             } else if let dict = value as? [String: Any],
-                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
-                TimelineListView(items: mainArr)
+                      let (mainKey, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
+                DictWithMainArrayView(dict: dict, mainKey: mainKey) {
+                    TimelineListView(items: mainArr)
+                }
             }
         case .keyValuePairs:
             if let dict = value as? [String: Any] {
@@ -1005,7 +1079,11 @@ struct StructuredDataView: View {
             }
         case .arrayOfObjects:
             if let arr = value as? [[String: Any]] {
-                ArrayTableView(items: arr)
+                if hasLongTextField(arr) {
+                    RichCardListView(items: arr)
+                } else {
+                    ArrayTableView(items: arr)
+                }
             } else {
                 GenericTreeView(value: value, label: "root", depth: 0)
             }
@@ -1023,5 +1101,355 @@ struct StructuredDataView: View {
                 .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
                 .textSelection(.enabled)
         }
+    }
+    
+    private func hasLongTextField(_ arr: [[String: Any]]) -> Bool {
+        arr.contains { item in
+            item.values.contains { v in
+                if let s = v as? String { return s.count >= 80 || s.contains("\n") }
+                return false
+            }
+        }
+    }
+}
+
+/// Shows scalar top-level fields as header, then renders the main array content
+struct DictWithMainArrayView<Content: View>: View {
+    let dict: [String: Any]
+    let mainKey: String
+    let content: () -> Content
+    
+    init(dict: [String: Any], mainKey: String, @ViewBuilder content: @escaping () -> Content) {
+        self.dict = dict
+        self.mainKey = mainKey
+        self.content = content
+    }
+    
+    private var headerFields: [(String, String)] {
+        dict.compactMap { key, val in
+            guard key != mainKey && JsonAnalyzer.isScalar(val) else { return nil }
+            return (key, String(describing: val))
+        }.sorted(by: { $0.0 < $1.0 })
+    }
+    
+    private var extraSections: [(String, Any)] {
+        dict.filter { key, val in
+            key != mainKey && !JsonAnalyzer.isScalar(val) && !(val is [[String: Any]])
+        }.sorted(by: { $0.key < $1.key })
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            if !headerFields.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(headerFields, id: \.0) { key, value in
+                        HStack(spacing: 8) {
+                            Text(key)
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                                .frame(width: 100, alignment: .trailing)
+                            Text(value)
+                                .font(.system(size: 13))
+                                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                                .textSelection(.enabled)
+                        }
+                    }
+                }
+                .padding(.bottom, 8)
+            }
+            
+            content()
+            
+            ForEach(extraSections, id: \.0) { key, value in
+                if let subDict = value as? [String: Any] {
+                    KeyValueView(dict: subDict)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Sparkline View for numeric arrays
+
+struct SparklineView: View {
+    let points: [(Double, Double)] // (x, y) pairs
+    let height: CGFloat
+    
+    init(pairs: [[Any]], height: CGFloat = 80) {
+        var pts: [(Double, Double)] = []
+        for pair in pairs {
+            if pair.count >= 2,
+               let x = (pair[0] as? NSNumber)?.doubleValue,
+               let y = (pair[1] as? NSNumber)?.doubleValue {
+                pts.append((x, y))
+            }
+        }
+        self.points = pts.sorted(by: { $0.0 < $1.0 })
+        self.height = height
+    }
+    
+    init(values: [Double], height: CGFloat = 80) {
+        self.points = values.enumerated().map { (Double($0.offset), $0.element) }
+        self.height = height
+    }
+    
+    var body: some View {
+        if points.count < 2 {
+            Text("(insufficient data)")
+                .font(.system(size: 11))
+                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+        } else {
+            VStack(alignment: .leading, spacing: 4) {
+                sparklineShape
+                    .frame(height: height)
+                    .padding(.vertical, 4)
+                // Axis labels
+                HStack {
+                    Text(String(format: "%.1f", points.first!.0))
+                    Spacer()
+                    Text(String(format: "%.1f", points.last!.0))
+                }
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+            }
+        }
+    }
+    
+    private var sparklineShape: some View {
+        GeometryReader { geo in
+            let minX = points.map(\.0).min()!
+            let maxX = points.map(\.0).max()!
+            let minY = points.map(\.1).min()!
+            let maxY = points.map(\.1).max()!
+            let rangeX = max(maxX - minX, 0.001)
+            let rangeY = max(maxY - minY, 0.001)
+            
+            let w = geo.size.width
+            let h = geo.size.height
+            
+            // Fill area
+            Path { path in
+                for (i, pt) in points.enumerated() {
+                    let x = (pt.0 - minX) / rangeX * w
+                    let y = h - (pt.1 - minY) / rangeY * h
+                    if i == 0 { path.move(to: CGPoint(x: x, y: y)) }
+                    else { path.addLine(to: CGPoint(x: x, y: y)) }
+                }
+                path.addLine(to: CGPoint(x: (points.last!.0 - minX) / rangeX * w, y: h))
+                path.addLine(to: CGPoint(x: (points.first!.0 - minX) / rangeX * w, y: h))
+                path.closeSubpath()
+            }
+            .fill(Color.blue.opacity(0.08))
+            
+            // Line
+            Path { path in
+                for (i, pt) in points.enumerated() {
+                    let x = (pt.0 - minX) / rangeX * w
+                    let y = h - (pt.1 - minY) / rangeY * h
+                    if i == 0 { path.move(to: CGPoint(x: x, y: y)) }
+                    else { path.addLine(to: CGPoint(x: x, y: y)) }
+                }
+            }
+            .stroke(Color.blue.opacity(0.6), lineWidth: 1.5)
+            
+            // Y-axis labels
+            VStack {
+                Text(String(format: "%.0f", maxY))
+                Spacer()
+                Text(String(format: "%.0f", minY))
+            }
+            .font(.system(size: 9, design: .monospaced))
+            .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+        }
+    }
+}
+
+// MARK: - Rich Card List (for arrays with long text fields)
+
+struct RichCardListView: View {
+    let items: [[String: Any]]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            ForEach(Array(items.enumerated()), id: \.offset) { i, item in
+                cardView(item, index: i)
+            }
+        }
+    }
+    
+    private func cardView(_ item: [String: Any], index: Int) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Header: short fields as pills
+            let shortFields = item.filter { k, v in
+                if let s = v as? String { return s.count < 80 && !s.contains("\n") }
+                return JsonAnalyzer.isScalar(v)
+            }.sorted(by: { $0.key < $1.key })
+            
+            if !shortFields.isEmpty {
+                HStack(spacing: 10) {
+                    ForEach(shortFields, id: \.key) { key, value in
+                        HStack(spacing: 4) {
+                            Text(key)
+                                .font(.system(size: 10))
+                                .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                            Text(scalarStr(value))
+                                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                        }
+                    }
+                }
+            }
+            
+            // Long text fields: render with basic markdown support
+            let longFields = item.filter { k, v in
+                if let s = v as? String { return s.count >= 80 || s.contains("\n") }
+                return false
+            }.sorted(by: { $0.key < $1.key })
+            
+            ForEach(longFields, id: \.key) { key, value in
+                if let text = value as? String {
+                    SimpleMarkdownText(text: text)
+                }
+            }
+            
+            // Sub-objects/arrays
+            let complexFields = item.filter { k, v in
+                !JsonAnalyzer.isScalar(v) && !(v is String)
+            }.sorted(by: { $0.key < $1.key })
+            
+            ForEach(complexFields, id: \.key) { key, value in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(key)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                    GenericTreeView(value: value, label: key, depth: 0)
+                        .padding(.leading, 8)
+                }
+            }
+        }
+        .padding(12)
+        .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.12, alpha: 1) : NSColor(white: 0.97, alpha: 1)))
+        .cornerRadius(8)
+    }
+    
+    private func scalarStr(_ v: Any) -> String {
+        if let s = v as? String { return s }
+        if let n = v as? NSNumber { return n.stringValue }
+        return String(describing: v)
+    }
+}
+
+// MARK: - Simple Markdown Text (lightweight inline renderer)
+
+struct SimpleMarkdownText: View {
+    let text: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(Array(blocks.enumerated()), id: \.offset) { _, block in
+                blockView(block)
+            }
+        }
+    }
+    
+    private enum MdBlock {
+        case heading(String, Int)
+        case table([[String]])
+        case text(String)
+    }
+    
+    private var blocks: [MdBlock] {
+        var result: [MdBlock] = []
+        let lines = text.components(separatedBy: "\n")
+        var i = 0
+        while i < lines.count {
+            let line = lines[i]
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            
+            // Heading
+            if trimmed.hasPrefix("##") {
+                let level = trimmed.prefix(while: { $0 == "#" }).count
+                let title = String(trimmed.dropFirst(level)).trimmingCharacters(in: .whitespaces)
+                if !title.isEmpty { result.append(.heading(title, level)) }
+                i += 1
+                continue
+            }
+            
+            // Table detection
+            if trimmed.contains("|") && i + 1 < lines.count {
+                let nextTrimmed = lines[i + 1].trimmingCharacters(in: .whitespaces)
+                if nextTrimmed.contains("---") && nextTrimmed.contains("|") {
+                    var rows: [[String]] = []
+                    rows.append(parseTableRow(trimmed))
+                    var j = i + 2 // skip separator
+                    while j < lines.count {
+                        let rowLine = lines[j].trimmingCharacters(in: .whitespaces)
+                        if rowLine.contains("|") && !rowLine.isEmpty {
+                            rows.append(parseTableRow(rowLine))
+                            j += 1
+                        } else { break }
+                    }
+                    result.append(.table(rows))
+                    i = j
+                    continue
+                }
+            }
+            
+            // Plain text
+            if !trimmed.isEmpty {
+                result.append(.text(trimmed))
+            }
+            i += 1
+        }
+        return result
+    }
+    
+    private func parseTableRow(_ line: String) -> [String] {
+        line.split(separator: "|", omittingEmptySubsequences: false)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+    }
+    
+    @ViewBuilder
+    private func blockView(_ block: MdBlock) -> some View {
+        switch block {
+        case .heading(let title, let level):
+            Text(title)
+                .font(.system(size: level <= 2 ? 14 : 12, weight: .medium))
+                .foregroundColor(Color(nsColor: DesignTokens.headingColor))
+                .padding(.top, 6)
+        case .table(let rows):
+            tableView(rows)
+        case .text(let line):
+            Text(line)
+                .font(.system(size: 12))
+                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                .textSelection(.enabled)
+        }
+    }
+    
+    private func tableView(_ rows: [[String]]) -> some View {
+        let maxCols = rows.map(\.count).max() ?? 0
+        return VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { ri, row in
+                HStack(spacing: 0) {
+                    ForEach(0..<maxCols, id: \.self) { ci in
+                        let cell = ci < row.count ? row[ci] : ""
+                        Text(cell)
+                            .font(.system(size: ri == 0 ? 10 : 11, weight: ri == 0 ? .medium : .regular, design: .monospaced))
+                            .foregroundColor(Color(nsColor: ri == 0 ? DesignTokens.secondaryColor : DesignTokens.bodyColor))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
+                    }
+                }
+                .background(Color(nsColor: ri == 0 ? DesignTokens.tableHeaderBackground : (ri % 2 == 0 ? DesignTokens.tableEvenRow : DesignTokens.tableOddRow)))
+            }
+        }
+        .cornerRadius(4)
+        .overlay(
+            RoundedRectangle(cornerRadius: 4)
+                .stroke(Color(nsColor: DesignTokens.tableBorder), lineWidth: 0.5)
+        )
     }
 }

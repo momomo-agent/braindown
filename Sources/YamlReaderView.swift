@@ -8,6 +8,24 @@ struct YamlReaderView: View {
     @State private var parsed: Any?
     @State private var parseError: String?
     
+    /// Extract leading comment block from YAML source
+    private var headerComments: [String] {
+        var comments: [String] = []
+        for line in yamlText.components(separatedBy: "\n") {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("#") {
+                // Strip leading # and optional space
+                let text = String(trimmed.dropFirst()).trimmingCharacters(in: .init(charactersIn: " "))
+                if !text.isEmpty { comments.append(text) }
+            } else if trimmed.isEmpty {
+                continue
+            } else {
+                break
+            }
+        }
+        return comments
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -20,6 +38,17 @@ struct YamlReaderView: View {
                     }
                     .padding()
                 } else if let value = parsed {
+                    // Show YAML header comments if present
+                    if !headerComments.isEmpty {
+                        VStack(alignment: .leading, spacing: 2) {
+                            ForEach(Array(headerComments.enumerated()), id: \.offset) { _, line in
+                                Text(line)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                            }
+                        }
+                        .padding(.bottom, 16)
+                    }
                     StructuredDataView(value: value)
                 }
             }
