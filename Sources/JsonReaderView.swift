@@ -25,12 +25,13 @@ struct JsonAnalyzer {
                 if hasProgressFields(sample) {
                     return .progressCards
                 }
+                // Items have date + title → timeline (check before statusList, more specific)
+                if hasTimelineFields(sample) {
+                    return .timeline
+                }
                 // Items have id + boolean or status → status list
                 if hasStatusFields(sample) {
                     return .statusList
-                }
-                if hasTimelineFields(sample) {
-                    return .timeline
                 }
             }
             let allScalar = dict.values.allSatisfy { isScalar($0) }
@@ -40,8 +41,8 @@ struct JsonAnalyzer {
         if let arr = value as? [Any] {
             if let objects = arr as? [[String: Any]], !objects.isEmpty {
                 if hasProgressFields(objects[0]) { return .progressCards }
-                if hasStatusFields(objects[0]) { return .statusList }
                 if hasTimelineFields(objects[0]) { return .timeline }
+                if hasStatusFields(objects[0]) { return .statusList }
                 return .arrayOfObjects
             }
             if arr.allSatisfy({ isScalar($0) }) { return .arrayOfScalars }
@@ -705,9 +706,18 @@ struct NestedObjectView: View {
             ScalarListView(items: arr)
         } else if let arr = value as? [[String: Any]] {
             let hint = JsonAnalyzer.analyze(arr)
-            if hint == .statusList {
+            switch hint {
+            case .progressCards:
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(Array(arr.enumerated()), id: \.offset) { _, item in
+                        CourseCardView(course: item)
+                    }
+                }
+            case .timeline:
+                TimelineListView(items: arr)
+            case .statusList:
                 FeatureListView(items: arr)
-            } else {
+            default:
                 ArrayTableView(items: arr)
             }
         } else if let sub = value as? [String: Any] {
