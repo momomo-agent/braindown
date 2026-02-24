@@ -50,15 +50,8 @@ class HeadingBlockView: NSView, CopyableBlock {
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
         
-        // Spacing: before ≥ 3× after (proximity principle)
-        let topPadding: CGFloat
-        switch level {
-        case 1: topPadding = DesignTokens.sp16
-        case 2: topPadding = DesignTokens.sp12
-        case 3: topPadding = DesignTokens.sp8
-        default: topPadding = DesignTokens.sp4
-        }
-        
+        // Padding is symmetric — spacing between groups handled by BlockRenderer
+        let topPadding: CGFloat = DesignTokens.sp4
         let bottomPadding: CGFloat = DesignTokens.sp4
         
         NSLayoutConstraint.activate([
