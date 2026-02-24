@@ -24,11 +24,7 @@ enum DesignTokens {
         case .light: return false
         case .dark: return true
         case .system:
-            // Check NSApp first, fall back to UserDefaults for cold start
-            if let app = NSApp, app.effectiveAppearance.name != .aqua {
-                return app.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            }
-            // Fallback: read system appearance directly from defaults
+            // UserDefaults is always reliable, even before NSApp is ready
             let style = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")
             return style?.lowercased() == "dark"
         }

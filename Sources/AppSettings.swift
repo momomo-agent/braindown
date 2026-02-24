@@ -65,13 +65,24 @@ class AppSettings: ObservableObject {
         self.useSerifFont = UserDefaults.standard.bool(forKey: "BrainDown.useSerifFont")
         // Apply theme synchronously so isDark is correct before any views are created
         if let app = NSApp {
-            app.appearance = self.theme.appearance
+            if self.theme == .system {
+                // Explicitly resolve system appearance so all static color lookups work
+                let systemIsDark = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")?.lowercased() == "dark"
+                app.appearance = NSAppearance(named: systemIsDark ? .darkAqua : .aqua)
+            } else {
+                app.appearance = self.theme.appearance
+            }
         }
     }
     
     func applyTheme() {
         guard let app = NSApp else { return }
-        app.appearance = theme.appearance
+        if theme == .system {
+            let systemIsDark = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")?.lowercased() == "dark"
+            app.appearance = NSAppearance(named: systemIsDark ? .darkAqua : .aqua)
+        } else {
+            app.appearance = theme.appearance
+        }
         // Delay to let appearance propagate before re-rendering
         DispatchQueue.main.async {
             for window in app.windows {
