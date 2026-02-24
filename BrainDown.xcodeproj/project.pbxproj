@@ -26,6 +26,7 @@
 		7CC628C9809687D21931C270 /* HorizontalRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC14302ECC1FF8B6DA5C786 /* HorizontalRuleView.swift */; };
 		879459ABB4AA77A01EC467DC /* FileTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C1A29A53721B2F8172624 /* FileTreeView.swift */; };
 		879C0A5FA341EF4B7E74D195 /* ImageBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B418F207AB7E6DE0C2AAE5 /* ImageBlockView.swift */; };
+		88EEE605F95874E15993CBCF /* BlockSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */; };
 		935B0B7120C6E611F99E3886 /* HorizontalRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC14302ECC1FF8B6DA5C786 /* HorizontalRuleView.swift */; };
 		9870EB720AB2887876763EDF /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052CF2A9E65FCBD5A094B479 /* DesignTokens.swift */; };
 		9B85E1B0DBBC35B8B1795AF9 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8647C66DD9D48AF2D789A0AA /* CodeBlockView.swift */; };
@@ -36,6 +37,7 @@
 		B7BA51D572CEB808F8F3A5EC /* RawEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648FE73BF461E46FE4322B41 /* RawEditorView.swift */; };
 		C355910C305BB8DCCD63B412 /* ParagraphBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC9C53AD5B41A9729C30FA1 /* ParagraphBlockView.swift */; };
 		C917746B22F8291C5F5244BF /* BlockRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F76BD80A7F8B372D71B6BD /* BlockRenderer.swift */; };
+		D1EDC138ADEECD0906D12BB6 /* BlockSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */; };
 		D393E68B83BA752FAD1D9A86 /* HeadingBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */; };
 		E42D9EF898C3E32D350C778C /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 0974DCC4EE4C8377414160FC /* Highlightr */; };
 		E65671D662E23FA6596CF2AA /* TableBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AEDB83B20AF9DB169DB37E /* TableBlockView.swift */; };
@@ -53,6 +55,7 @@
 		54FACBE816195E715C5C881E /* FileTypeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeSettings.swift; sourceTree = "<group>"; };
 		56A2D965892591ADA3B03E91 /* ListBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBlockView.swift; sourceTree = "<group>"; };
 		5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockquoteBlockView.swift; sourceTree = "<group>"; };
+		630B2642D2EF0E9C83C28F99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		648FE73BF461E46FE4322B41 /* RawEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawEditorView.swift; sourceTree = "<group>"; };
 		7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingBlockView.swift; sourceTree = "<group>"; };
 		857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 		A18D6D09C761D729714CD674 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A26808E5FF70377296A6B1D7 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
+		B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockSelectionManager.swift; sourceTree = "<group>"; };
 		BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDVerify.swift; sourceTree = "<group>"; };
 		BD79746409FF6D84CE10F519 /* BrainDown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrainDown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC14302ECC1FF8B6DA5C786 /* HorizontalRuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRuleView.swift; sourceTree = "<group>"; };
@@ -97,11 +101,13 @@
 			children = (
 				A26808E5FF70377296A6B1D7 /* AppSettings.swift */,
 				BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */,
+				B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */,
 				023333D8A764B43150E75FBC /* BrainDownApp.swift */,
 				A18D6D09C761D729714CD674 /* ContentView.swift */,
 				AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */,
 				129C1A29A53721B2F8172624 /* FileTreeView.swift */,
 				54FACBE816195E715C5C881E /* FileTypeSettings.swift */,
+				630B2642D2EF0E9C83C28F99 /* Info.plist */,
 				857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */,
 				16F00F5F8B33B85D06204058 /* MarkdownParser.swift */,
 				648FE73BF461E46FE4322B41 /* RawEditorView.swift */,
@@ -256,6 +262,7 @@
 			files = (
 				E6A5CA102559E97AAB297DA8 /* BDVerify.swift in Sources */,
 				C917746B22F8291C5F5244BF /* BlockRenderer.swift in Sources */,
+				D1EDC138ADEECD0906D12BB6 /* BlockSelectionManager.swift in Sources */,
 				49FE9B8EEDB30AE0C703027A /* BlockquoteBlockView.swift in Sources */,
 				AC0B9CD6EA32142046A97AC9 /* CodeBlockView.swift in Sources */,
 				9870EB720AB2887876763EDF /* DesignTokens.swift in Sources */,
@@ -276,6 +283,7 @@
 			files = (
 				7A16F2B83FD9AD0B93A50E58 /* AppSettings.swift in Sources */,
 				A501C17462C1AB2467A7CEE1 /* BlockRenderer.swift in Sources */,
+				88EEE605F95874E15993CBCF /* BlockSelectionManager.swift in Sources */,
 				444572965B2175621DF6DA9D /* BlockquoteBlockView.swift in Sources */,
 				18662173700245054A85DDDB /* BrainDownApp.swift in Sources */,
 				9B85E1B0DBBC35B8B1795AF9 /* CodeBlockView.swift in Sources */,
@@ -357,7 +365,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -379,6 +386,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -392,6 +400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -452,7 +461,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -473,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -486,6 +495,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

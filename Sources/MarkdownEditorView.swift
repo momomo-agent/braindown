@@ -18,6 +18,7 @@ struct MarkdownEditorView: NSViewRepresentable {
         
         let flippedView = FlippedView()
         flippedView.translatesAutoresizingMaskIntoConstraints = false
+        flippedView.wantsLayer = true
         
         let stackView = NSStackView()
         stackView.orientation = .vertical
@@ -32,6 +33,10 @@ struct MarkdownEditorView: NSViewRepresentable {
         coord.scrollView = scrollView
         coord.stackView = stackView
         coord.flippedView = flippedView
+        
+        let selMgr = BlockSelectionManager(scrollView: scrollView, stackView: stackView)
+        coord.selectionManager = selMgr
+        flippedView.selectionManager = selMgr
         
         setupConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView, coord: coord)
         
@@ -104,6 +109,7 @@ struct MarkdownEditorView: NSViewRepresentable {
         var leadingC: NSLayoutConstraint?
         var trailingC: NSLayoutConstraint?
         var widthC: NSLayoutConstraint?
+        var selectionManager: BlockSelectionManager?
         
         init(_ parent: MarkdownEditorView) { self.parent = parent }
         
@@ -134,4 +140,34 @@ struct MarkdownEditorView: NSViewRepresentable {
 
 class FlippedView: NSView {
     override var isFlipped: Bool { true }
+    var selectionManager: BlockSelectionManager?
+    
+    override func mouseDown(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        selectionManager?.mouseDown(at: point)
+        super.mouseDown(with: event)
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        selectionManager?.mouseDragged(to: point)
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        selectionManager?.mouseUp()
+        super.mouseUp(with: event)
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "c" {
+            selectionManager?.copySelection()
+        } else if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "a" {
+            // Select all - not implemented yet
+            super.keyDown(with: event)
+        } else {
+            super.keyDown(with: event)
+        }
+    }
+    
+    override var acceptsFirstResponder: Bool { true }
 }

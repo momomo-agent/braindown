@@ -13,7 +13,7 @@ class ParagraphBlockView: NSView {
     
     private func setupView(node: MarkdownNode) {
         textField.isEditable = false
-        textField.isSelectable = true
+        textField.isSelectable = false
         textField.drawsBackground = false
         textField.isBordered = false
         textField.lineBreakMode = .byWordWrapping
