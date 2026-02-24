@@ -47,9 +47,15 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 if selectedFile != nil {
                     if appSettings.editorMode == .read {
-                        MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .id("reader-\(appSettings.useSerifFont)")
+                        if selectedFile?.pathExtension == "md" {
+                            MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .id("reader-\(appSettings.useSerifFont)")
+                        } else {
+                            // Non-markdown: render as syntax-highlighted code
+                            CodeFileView(text: $markdownText, language: selectedFile?.pathExtension ?? "json")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
                     } else {
                         RawEditorView(text: $markdownText, isModified: $isModified)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)

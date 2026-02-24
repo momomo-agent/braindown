@@ -21,6 +21,7 @@
 		4DBA5F5EEC60BAF78E818EB8 /* FileTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FACBE816195E715C5C881E /* FileTypeSettings.swift */; };
 		53B1BCBC9E55F50D88197EFE /* CopyableBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0309EEEF682EB0C11A3AE8F5 /* CopyableBlock.swift */; };
 		541F7753C26AFF12480ECA81 /* ImageBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B418F207AB7E6DE0C2AAE5 /* ImageBlockView.swift */; };
+		5F1AD6063C1509D2B0173802 /* CodeFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAD01C8131570007C491460 /* CodeFileView.swift */; };
 		697769C1F2F421A3F8996FEF /* ParagraphBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC9C53AD5B41A9729C30FA1 /* ParagraphBlockView.swift */; };
 		6CF42D617B7FCE152731DC8E /* ListBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A2D965892591ADA3B03E91 /* ListBlockView.swift */; };
 		7A16F2B83FD9AD0B93A50E58 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26808E5FF70377296A6B1D7 /* AppSettings.swift */; };
@@ -40,6 +41,7 @@
 		C917746B22F8291C5F5244BF /* BlockRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F76BD80A7F8B372D71B6BD /* BlockRenderer.swift */; };
 		D1EDC138ADEECD0906D12BB6 /* BlockSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */; };
 		D393E68B83BA752FAD1D9A86 /* HeadingBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */; };
+		DA30FEE37E55B3D0D538163D /* CodeFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAD01C8131570007C491460 /* CodeFileView.swift */; };
 		E42D9EF898C3E32D350C778C /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 0974DCC4EE4C8377414160FC /* Highlightr */; };
 		E65671D662E23FA6596CF2AA /* TableBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AEDB83B20AF9DB169DB37E /* TableBlockView.swift */; };
 		E6A5CA102559E97AAB297DA8 /* BDVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */; };
@@ -58,6 +60,7 @@
 		54FACBE816195E715C5C881E /* FileTypeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeSettings.swift; sourceTree = "<group>"; };
 		56A2D965892591ADA3B03E91 /* ListBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBlockView.swift; sourceTree = "<group>"; };
 		5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockquoteBlockView.swift; sourceTree = "<group>"; };
+		5BAD01C8131570007C491460 /* CodeFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeFileView.swift; sourceTree = "<group>"; };
 		630B2642D2EF0E9C83C28F99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		648FE73BF461E46FE4322B41 /* RawEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawEditorView.swift; sourceTree = "<group>"; };
 		7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingBlockView.swift; sourceTree = "<group>"; };
@@ -106,6 +109,7 @@
 				BCBA37E00FAD79EE6EC3DEA5 /* BDVerify.swift */,
 				B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */,
 				023333D8A764B43150E75FBC /* BrainDownApp.swift */,
+				5BAD01C8131570007C491460 /* CodeFileView.swift */,
 				A18D6D09C761D729714CD674 /* ContentView.swift */,
 				0309EEEF682EB0C11A3AE8F5 /* CopyableBlock.swift */,
 				AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */,
@@ -269,6 +273,7 @@
 				D1EDC138ADEECD0906D12BB6 /* BlockSelectionManager.swift in Sources */,
 				49FE9B8EEDB30AE0C703027A /* BlockquoteBlockView.swift in Sources */,
 				AC0B9CD6EA32142046A97AC9 /* CodeBlockView.swift in Sources */,
+				DA30FEE37E55B3D0D538163D /* CodeFileView.swift in Sources */,
 				F6AB5186692364478ACC6B20 /* CopyableBlock.swift in Sources */,
 				9870EB720AB2887876763EDF /* DesignTokens.swift in Sources */,
 				D393E68B83BA752FAD1D9A86 /* HeadingBlockView.swift in Sources */,
@@ -292,6 +297,7 @@
 				444572965B2175621DF6DA9D /* BlockquoteBlockView.swift in Sources */,
 				18662173700245054A85DDDB /* BrainDownApp.swift in Sources */,
 				9B85E1B0DBBC35B8B1795AF9 /* CodeBlockView.swift in Sources */,
+				5F1AD6063C1509D2B0173802 /* CodeFileView.swift in Sources */,
 				0675549E408261B5A47C44F8 /* ContentView.swift in Sources */,
 				53B1BCBC9E55F50D88197EFE /* CopyableBlock.swift in Sources */,
 				FACFA5E3D89A0865048E807A /* DesignTokens.swift in Sources */,
