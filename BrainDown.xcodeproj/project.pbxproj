@@ -10,7 +10,6 @@
 		03DFD04C5D41ACCFD3F7B4A3 /* TableBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AEDB83B20AF9DB169DB37E /* TableBlockView.swift */; };
 		041279712B7B7E5974A656FB /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = CEB21EE9B89CDF0B2369C02F /* Highlightr */; };
 		0675549E408261B5A47C44F8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D6D09C761D729714CD674 /* ContentView.swift */; };
-		0973FD0CBEEC8F0302952C2C /* MarkdownAttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B3E5505A8ADD4926B112F9 /* MarkdownAttributedStringBuilder.swift */; };
 		18662173700245054A85DDDB /* BrainDownApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023333D8A764B43150E75FBC /* BrainDownApp.swift */; };
 		19E8ABCD5D4F74CE2507196B /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F00F5F8B33B85D06204058 /* MarkdownParser.swift */; };
 		263ABA04B9471405622EE41D /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */; };
@@ -18,7 +17,6 @@
 		3D48F8B7AADF8E574197E64C /* HeadingBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */; };
 		40CDB5D273BFD3B236B3FF08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1BBB999FF3441390E05ED41 /* Assets.xcassets */; };
 		444572965B2175621DF6DA9D /* BlockquoteBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */; };
-		44BF3F9C4EA66C473AC64216 /* MarkdownAttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B3E5505A8ADD4926B112F9 /* MarkdownAttributedStringBuilder.swift */; };
 		49FE9B8EEDB30AE0C703027A /* BlockquoteBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */; };
 		4DBA5F5EEC60BAF78E818EB8 /* FileTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FACBE816195E715C5C881E /* FileTypeSettings.swift */; };
 		541F7753C26AFF12480ECA81 /* ImageBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B418F207AB7E6DE0C2AAE5 /* ImageBlockView.swift */; };
@@ -55,7 +53,6 @@
 		54FACBE816195E715C5C881E /* FileTypeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeSettings.swift; sourceTree = "<group>"; };
 		56A2D965892591ADA3B03E91 /* ListBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBlockView.swift; sourceTree = "<group>"; };
 		5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockquoteBlockView.swift; sourceTree = "<group>"; };
-		630B2642D2EF0E9C83C28F99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		648FE73BF461E46FE4322B41 /* RawEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawEditorView.swift; sourceTree = "<group>"; };
 		7CA24D8FF0157682A9442325 /* HeadingBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingBlockView.swift; sourceTree = "<group>"; };
 		857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
@@ -73,7 +70,6 @@
 		F1BBB999FF3441390E05ED41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		F4AEDB83B20AF9DB169DB37E /* TableBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableBlockView.swift; sourceTree = "<group>"; };
-		F8B3E5505A8ADD4926B112F9 /* MarkdownAttributedStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownAttributedStringBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +102,6 @@
 				AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */,
 				129C1A29A53721B2F8172624 /* FileTreeView.swift */,
 				54FACBE816195E715C5C881E /* FileTypeSettings.swift */,
-				630B2642D2EF0E9C83C28F99 /* Info.plist */,
-				F8B3E5505A8ADD4926B112F9 /* MarkdownAttributedStringBuilder.swift */,
 				857975A123C25D1B61ABFAD0 /* MarkdownEditorView.swift */,
 				16F00F5F8B33B85D06204058 /* MarkdownParser.swift */,
 				648FE73BF461E46FE4322B41 /* RawEditorView.swift */,
@@ -269,7 +263,6 @@
 				935B0B7120C6E611F99E3886 /* HorizontalRuleView.swift in Sources */,
 				541F7753C26AFF12480ECA81 /* ImageBlockView.swift in Sources */,
 				6CF42D617B7FCE152731DC8E /* ListBlockView.swift in Sources */,
-				44BF3F9C4EA66C473AC64216 /* MarkdownAttributedStringBuilder.swift in Sources */,
 				19E8ABCD5D4F74CE2507196B /* MarkdownParser.swift in Sources */,
 				697769C1F2F421A3F8996FEF /* ParagraphBlockView.swift in Sources */,
 				B7BA51D572CEB808F8F3A5EC /* RawEditorView.swift in Sources */,
@@ -295,7 +288,6 @@
 				7CC628C9809687D21931C270 /* HorizontalRuleView.swift in Sources */,
 				879C0A5FA341EF4B7E74D195 /* ImageBlockView.swift in Sources */,
 				FB4DA29C719AEFEAF03DF401 /* ListBlockView.swift in Sources */,
-				0973FD0CBEEC8F0302952C2C /* MarkdownAttributedStringBuilder.swift in Sources */,
 				36B106422B8145E2FD45F19D /* MarkdownEditorView.swift in Sources */,
 				ABE9353C13229E9335C9EF7E /* MarkdownParser.swift in Sources */,
 				C355910C305BB8DCCD63B412 /* ParagraphBlockView.swift in Sources */,
@@ -365,6 +357,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -386,7 +379,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -400,7 +392,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -461,6 +452,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BrainDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -481,7 +473,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -495,7 +486,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Sources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

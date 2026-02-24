@@ -16,24 +16,28 @@ struct MarkdownEditorView: NSViewRepresentable {
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
         
-        let textView = NSTextView()
-        textView.isEditable = false
-        textView.isSelectable = true
-        textView.drawsBackground = false
-        textView.isRichText = true
-        textView.textContainerInset = NSSize(width: 0, height: 28)
-        textView.isAutomaticLinkDetectionEnabled = true
+        let flippedView = FlippedView()
+        flippedView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollView.documentView = textView
+        let stackView = NSStackView()
+        stackView.orientation = .vertical
+        stackView.alignment = .leading
+        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        flippedView.addSubview(stackView)
+        scrollView.documentView = flippedView
         
         let coord = context.coordinator
         coord.scrollView = scrollView
-        coord.textView = textView
+        coord.stackView = stackView
+        coord.flippedView = flippedView
         
-        updateTextViewWidth(scrollView: scrollView, textView: textView)
+        setupConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView, coord: coord)
         
         if !markdownText.isEmpty {
-            renderContent(into: textView)
+            let nodes = MarkdownParser.parse(markdownText)
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: currentFileURL?.deletingLastPathComponent())
             coord.lastLoadedMarkdown = markdownText
         }
         
@@ -41,36 +45,52 @@ struct MarkdownEditorView: NSViewRepresentable {
         NotificationCenter.default.addObserver(coord, selector: #selector(Coordinator.frameDidChange(_:)), name: NSView.frameDidChangeNotification, object: scrollView)
         NotificationCenter.default.addObserver(coord, selector: #selector(Coordinator.themeDidChange), name: .themeChanged, object: nil)
         
+        DispatchQueue.main.async { self.updateInsets(scrollView: scrollView, coord: coord) }
         return scrollView
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         let coord = context.coordinator
-        guard let textView = coord.textView else { return }
+        guard let stackView = coord.stackView else { return }
         
         if coord.lastLoadedMarkdown != markdownText {
             coord.lastLoadedMarkdown = markdownText
-            renderContent(into: textView)
+            let nodes = MarkdownParser.parse(markdownText)
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: currentFileURL?.deletingLastPathComponent())
         }
-        updateTextViewWidth(scrollView: scrollView, textView: textView)
+        updateInsets(scrollView: scrollView, coord: coord)
     }
     
-    private func renderContent(into textView: NSTextView) {
-        let nodes = MarkdownParser.parse(markdownText)
-        let attrStr = MarkdownAttributedStringBuilder.build(from: nodes, fileDirectory: currentFileURL?.deletingLastPathComponent())
-        textView.textStorage?.setAttributedString(attrStr)
+    private func setupConstraints(scrollView: NSScrollView, flippedView: FlippedView, stackView: NSStackView, coord: Coordinator) {
+        let scrollWidth = max(scrollView.contentSize.width, 400)
+        let insetX = calcInsetX(scrollWidth)
+        
+        let widthC = flippedView.widthAnchor.constraint(greaterThanOrEqualToConstant: scrollWidth)
+        let leading = stackView.leadingAnchor.constraint(equalTo: flippedView.leadingAnchor, constant: insetX)
+        let trailing = stackView.trailingAnchor.constraint(equalTo: flippedView.trailingAnchor, constant: -insetX)
+        let top = stackView.topAnchor.constraint(equalTo: flippedView.topAnchor, constant: 28)
+        let bottom = stackView.bottomAnchor.constraint(equalTo: flippedView.bottomAnchor, constant: -40)
+        bottom.priority = .defaultHigh
+        NSLayoutConstraint.activate([widthC, leading, trailing, top, bottom])
+        
+        coord.widthC = widthC
+        coord.leadingC = leading
+        coord.trailingC = trailing
     }
     
-    private func updateTextViewWidth(scrollView: NSScrollView, textView: NSTextView) {
+    private func updateInsets(scrollView: NSScrollView, coord: Coordinator) {
         let scrollWidth = scrollView.contentSize.width
         guard scrollWidth > 0 else { return }
+        let insetX = calcInsetX(scrollWidth)
+        coord.widthC?.constant = scrollWidth
+        coord.leadingC?.constant = insetX
+        coord.trailingC?.constant = -insetX
+    }
+    
+    private func calcInsetX(_ scrollWidth: CGFloat) -> CGFloat {
         let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
         let effectiveWidth = max(contentWidth, 300)
-        let insetX = max(40, (scrollWidth - effectiveWidth) / 2)
-        
-        textView.textContainerInset = NSSize(width: insetX, height: 28)
-        textView.textContainer?.size = NSSize(width: scrollWidth - insetX * 2, height: CGFloat.greatestFiniteMagnitude)
-        textView.frame.size.width = scrollWidth
+        return max(40, (scrollWidth - effectiveWidth) / 2)
     }
     
     // MARK: - Coordinator
@@ -78,31 +98,36 @@ struct MarkdownEditorView: NSViewRepresentable {
     class Coordinator: NSObject {
         var parent: MarkdownEditorView
         weak var scrollView: NSScrollView?
-        weak var textView: NSTextView?
+        weak var stackView: NSStackView?
+        weak var flippedView: FlippedView?
         var lastLoadedMarkdown: String = ""
+        var leadingC: NSLayoutConstraint?
+        var trailingC: NSLayoutConstraint?
+        var widthC: NSLayoutConstraint?
         
         init(_ parent: MarkdownEditorView) { self.parent = parent }
         
         @objc func themeDidChange() {
-            guard let textView = textView else { return }
+            guard let stackView = stackView else { return }
+            // Force re-render with new colors
             let text = lastLoadedMarkdown
             guard !text.isEmpty else { return }
             let nodes = MarkdownParser.parse(text)
-            let attrStr = MarkdownAttributedStringBuilder.build(from: nodes, fileDirectory: parent.currentFileURL?.deletingLastPathComponent())
-            textView.textStorage?.setAttributedString(attrStr)
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: parent.currentFileURL?.deletingLastPathComponent())
+            // Update window background
             scrollView?.window?.backgroundColor = DesignTokens.isDark ? .black : .white
         }
         
         @objc func frameDidChange(_ notification: Notification) {
-            guard let scrollView = scrollView, let textView = textView else { return }
+            guard let scrollView = scrollView else { return }
             let scrollWidth = scrollView.contentSize.width
             guard scrollWidth > 0 else { return }
             let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
             let effectiveWidth = max(contentWidth, 300)
             let insetX = max(40, (scrollWidth - effectiveWidth) / 2)
-            textView.textContainerInset = NSSize(width: insetX, height: 28)
-            textView.textContainer?.size = NSSize(width: scrollWidth - insetX * 2, height: CGFloat.greatestFiniteMagnitude)
-            textView.frame.size.width = scrollWidth
+            widthC?.constant = scrollWidth
+            leadingC?.constant = insetX
+            trailingC?.constant = -insetX
         }
     }
 }
