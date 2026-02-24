@@ -17,6 +17,11 @@ struct BrainDownApp: App {
                 }
                 .keyboardShortcut("o", modifiers: .command)
                 
+                Button("Open File…") {
+                    NotificationCenter.default.post(name: .openSingleFile, object: nil)
+                }
+                .keyboardShortcut("o", modifiers: [.command, .shift])
+                
                 Divider()
                 
                 Button("Save") {
@@ -87,12 +92,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
         
         if isDir.boolValue {
-            // Opened a folder — set it as root
             NotificationCenter.default.post(name: .openFolderURL, object: url)
         } else {
-            // Opened a file — set parent as root, select this file
-            let folder = url.deletingLastPathComponent()
-            NotificationCenter.default.post(name: .openFolderURL, object: folder, userInfo: ["selectFile": url])
+            NotificationCenter.default.post(name: .openSingleFile, object: url)
         }
     }
 }
@@ -102,4 +104,5 @@ extension Notification.Name {
     static let openFolderURL = Notification.Name("BrainDown.openFolderURL")
     static let saveFile = Notification.Name("BrainDown.saveFile")
     static let fsChanged = Notification.Name("BrainDown.fsChanged")
+    static let openSingleFile = Notification.Name("BrainDown.openSingleFile")
 }

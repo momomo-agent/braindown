@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var folderURL: URL? = nil
     @State private var fileTree: [FileTreeItem] = []
     @State private var selectedFile: URL? = nil
+    @State private var singleFileMode: Bool = false
     @State private var markdownText: String = ""
     @State private var isModified: Bool = false
     @State private var sidebarWidth: CGFloat = 240
@@ -16,6 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         HSplitView {
+            if !singleFileMode {
             // Left: File Tree
             VStack(spacing: 0) {
                 if folderURL != nil {
@@ -39,6 +41,7 @@ struct ContentView: View {
             }
             .frame(minWidth: 180, idealWidth: 240, maxWidth: 360)
             .background(Color(nsColor: .controlBackgroundColor))
+            }
             
             // Right: Editor / Reader
             VStack(spacing: 0) {
@@ -106,6 +109,14 @@ struct ContentView: View {
             guard controlActiveState == .key else { return }
             saveCurrentFile()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .openSingleFile)) { notification in
+            if let url = notification.object as? URL {
+                openSingleFile(url)
+            } else {
+                guard controlActiveState == .key else { return }
+                openFilePicker()
+            }
+        }
         .onChange(of: fileTypeSettings.enabledExtensions) { _, _ in
             refreshTree()
         }
@@ -140,6 +151,25 @@ struct ContentView: View {
         }
     }
     
+    func openFilePicker() {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = false
+        panel.allowedContentTypes = [.plainText, .json]
+        if panel.runModal() == .OK, let url = panel.url {
+            openSingleFile(url)
+        }
+    }
+    
+    func openSingleFile(_ url: URL) {
+        singleFileMode = true
+        folderURL = nil
+        fileTree = []
+        selectedFile = url
+        stopWatching()
+    }
+    
     func saveCurrentFile() {
         guard let fileURL = selectedFile, isModified else { return }
         
@@ -152,6 +182,7 @@ struct ContentView: View {
     }
     
     private func setFolder(_ url: URL) {
+        singleFileMode = false
         folderURL = url
         fileTree = FileManager.default.filteredTree(at: url, settings: fileTypeSettings)
         selectedFile = nil
