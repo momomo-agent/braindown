@@ -63,8 +63,8 @@ class TableBlockView: NSView {
         containerView.layer?.cornerRadius = 8
         containerView.layer?.masksToBounds = true
         containerView.layer?.borderWidth = 1
-        containerView.layer?.borderColor = DesignTokens.tableBorder.cgColor
-        containerView.layer?.backgroundColor = DesignTokens.tableOddRow.cgColor
+        // Colors set by updateLayer after appearance resolves
+        containerView.needsDisplay = true
         addSubview(containerView)
         
         // Stack of rows
@@ -88,7 +88,7 @@ class TableBlockView: NSView {
         // Header separator
         let sep = NSView()
         sep.wantsLayer = true
-        sep.layer?.backgroundColor = DesignTokens.tableBorder.cgColor
+        // Color set by updateLayer
         stackView.addArrangedSubview(sep)
         sep.translatesAutoresizingMaskIntoConstraints = false
         sep.heightAnchor.constraint(equalToConstant: 1).isActive = true
@@ -112,7 +112,7 @@ class TableBlockView: NSView {
             if idx < rows.count - 1 {
                 let lineSep = NSView()
                 lineSep.wantsLayer = true
-                lineSep.layer?.backgroundColor = DesignTokens.tableBorder.withAlphaComponent(0.5).cgColor
+                // Color set by updateLayer
                 stackView.addArrangedSubview(lineSep)
                 lineSep.translatesAutoresizingMaskIntoConstraints = false
                 lineSep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
@@ -168,7 +168,7 @@ class TableRowView: NSView {
     
     private func setupRow(cells: [String], colCount: Int) {
         wantsLayer = true
-        applyRowBackground()
+        // Don't set background here — defer to updateLayer which runs after appearance is resolved
         
         cellStack.orientation = .horizontal
         cellStack.alignment = .top
