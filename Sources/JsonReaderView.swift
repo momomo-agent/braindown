@@ -128,22 +128,32 @@ struct JsonReaderView: View {
     @State private var parseError: String?
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                if let error = parseError {
-                    errorView(error)
-                } else if let value = parsed {
-                    renderRoot(value)
+        GeometryReader { geo in
+            ScrollView {
+                let insetX = Self.calcInsetX(geo.size.width)
+                VStack(alignment: .leading, spacing: 0) {
+                    if let error = parseError {
+                        errorView(error)
+                    } else if let value = parsed {
+                        renderRoot(value)
+                    }
                 }
+                .padding(.horizontal, insetX)
+                .padding(.vertical, 32)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 48)
-            .padding(.vertical, 32)
-            .frame(maxWidth: DesignTokens.maxContentWidth + 96, alignment: .leading)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.08, alpha: 1) : .white))
         .onAppear { parse() }
         .onChange(of: jsonText) { _, _ in parse() }
+    }
+    
+    /// Same centering logic as MarkdownEditorView.calcInsetX
+    private static func calcInsetX(_ scrollWidth: CGFloat) -> CGFloat {
+        let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
+        let effectiveWidth = max(contentWidth, 300)
+        return max(40, (scrollWidth - effectiveWidth) / 2)
     }
     
     private func parse() {

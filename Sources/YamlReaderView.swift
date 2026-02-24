@@ -27,39 +27,49 @@ struct YamlReaderView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                if let error = parseError {
-                    HStack(spacing: 8) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundColor(.orange)
-                        Text(error)
-                            .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
-                    }
-                    .padding()
-                } else if let value = parsed {
-                    // Show YAML header comments if present
-                    if !headerComments.isEmpty {
-                        VStack(alignment: .leading, spacing: 2) {
-                            ForEach(Array(headerComments.enumerated()), id: \.offset) { _, line in
-                                Text(line)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
-                            }
+        GeometryReader { geo in
+            ScrollView {
+                let insetX = Self.calcInsetX(geo.size.width)
+                VStack(alignment: .leading, spacing: 0) {
+                    if let error = parseError {
+                        HStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundColor(.orange)
+                            Text(error)
+                                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
                         }
-                        .padding(.bottom, 16)
+                        .padding()
+                    } else if let value = parsed {
+                        // Show YAML header comments if present
+                        if !headerComments.isEmpty {
+                            VStack(alignment: .leading, spacing: 2) {
+                                ForEach(Array(headerComments.enumerated()), id: \.offset) { _, line in
+                                    Text(line)
+                                        .font(.system(size: 12))
+                                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                                }
+                            }
+                            .padding(.bottom, 16)
+                        }
+                        StructuredDataView(value: value)
                     }
-                    StructuredDataView(value: value)
                 }
+                .padding(.horizontal, insetX)
+                .padding(.vertical, 32)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 48)
-            .padding(.vertical, 32)
-            .frame(maxWidth: DesignTokens.maxContentWidth + 96, alignment: .leading)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.08, alpha: 1) : .white))
         .onAppear { parse() }
         .onChange(of: yamlText) { _, _ in parse() }
+    }
+    
+    /// Same centering logic as MarkdownEditorView.calcInsetX
+    private static func calcInsetX(_ scrollWidth: CGFloat) -> CGFloat {
+        let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
+        let effectiveWidth = max(contentWidth, 300)
+        return max(40, (scrollWidth - effectiveWidth) / 2)
     }
     
     private func parse() {
