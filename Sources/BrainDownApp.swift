@@ -104,4 +104,5 @@ extension Notification.Name {
     static let saveFile = Notification.Name("BrainDown.saveFile")
     static let fsChanged = Notification.Name("BrainDown.fsChanged")
     static let openSingleFile = Notification.Name("BrainDown.openSingleFile")
+    static let themeChanged = Notification.Name("BrainDown.themeChanged")
 }

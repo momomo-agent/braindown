@@ -72,5 +72,7 @@ class AppSettings: ObservableObject {
     func applyTheme() {
         guard let app = NSApp else { return }
         app.appearance = theme.appearance
+        // Force re-render all markdown views
+        NotificationCenter.default.post(name: .themeChanged, object: nil)
     }
 }

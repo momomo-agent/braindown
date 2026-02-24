@@ -43,6 +43,7 @@ struct MarkdownEditorView: NSViewRepresentable {
         
         scrollView.postsFrameChangedNotifications = true
         NotificationCenter.default.addObserver(coord, selector: #selector(Coordinator.frameDidChange(_:)), name: NSView.frameDidChangeNotification, object: scrollView)
+        NotificationCenter.default.addObserver(coord, selector: #selector(Coordinator.themeDidChange), name: .themeChanged, object: nil)
         
         DispatchQueue.main.async { self.updateInsets(scrollView: scrollView, coord: coord) }
         return scrollView
@@ -105,6 +106,17 @@ struct MarkdownEditorView: NSViewRepresentable {
         var widthC: NSLayoutConstraint?
         
         init(_ parent: MarkdownEditorView) { self.parent = parent }
+        
+        @objc func themeDidChange() {
+            guard let stackView = stackView else { return }
+            // Force re-render with new colors
+            let text = lastLoadedMarkdown
+            guard !text.isEmpty else { return }
+            let nodes = MarkdownParser.parse(text)
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: parent.currentFileURL?.deletingLastPathComponent())
+            // Update window background
+            scrollView?.window?.backgroundColor = DesignTokens.isDark ? .black : .white
+        }
         
         @objc func frameDidChange(_ notification: Notification) {
             guard let scrollView = scrollView else { return }
