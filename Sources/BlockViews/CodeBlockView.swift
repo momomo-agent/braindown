@@ -19,12 +19,6 @@ class CodeBlockView: NSView {
     private var trackingArea: NSTrackingArea?
     private var codeContent: String = ""
     
-    // Shared Highlightr
-    private static let highlightr: Highlightr? = {
-        let h = Highlightr()
-        return h
-    }()
-    
     init(node: MarkdownNode, language: String?) {
         super.init(frame: .zero)
         codeContent = node.content
@@ -112,33 +106,31 @@ class CodeBlockView: NSView {
     
     private func populateCode(_ code: String, language: String?) {
         let isDark = DesignTokens.isDark
-        let themeName = isDark ? "atom-one-dark" : "atom-one-light"
         let codeFont = DesignTokens.codeFont
+        let fallbackColor: NSColor = isDark ? NSColor(white: 0.8, alpha: 1) : NSColor(white: 0.2, alpha: 1)
         
-        Self.highlightr?.setTheme(to: themeName)
-        Self.highlightr?.theme.codeFont = codeFont
-        
-        let langName = language?.lowercased()
-        let highlighted: NSAttributedString
-        if let h = Self.highlightr, let hl = h.highlight(code, as: langName) {
-            highlighted = hl
-        } else {
-            let fallbackColor: NSColor = isDark ? NSColor(white: 0.8, alpha: 1) : NSColor(white: 0.2, alpha: 1)
-            highlighted = NSAttributedString(string: code, attributes: [
-                .font: codeFont,
-                .foregroundColor: fallbackColor
-            ])
-        }
-        
-        // Strip Highlightr background color — we use our own container background
-        let mutable = NSMutableAttributedString(attributedString: highlighted)
-        mutable.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: mutable.length))
-        
+        // Show plain text immediately
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.lineHeightMultiple = DesignTokens.codeLineHeight
-        mutable.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: 0, length: mutable.length))
+        codeLabel.attributedStringValue = NSAttributedString(string: code, attributes: [
+            .font: codeFont, .foregroundColor: fallbackColor, .paragraphStyle: paraStyle
+        ])
         
-        codeLabel.attributedStringValue = mutable
+        // Async syntax highlight
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let h = Highlightr()
+            let themeName = isDark ? "atom-one-dark" : "atom-one-light"
+            h?.setTheme(to: themeName)
+            h?.theme.codeFont = codeFont
+            let langName = language?.lowercased()
+            guard let hl = h?.highlight(code, as: langName) else { return }
+            let mutable = NSMutableAttributedString(attributedString: hl)
+            mutable.removeAttribute(.backgroundColor, range: NSRange(location: 0, length: mutable.length))
+            mutable.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: 0, length: mutable.length))
+            DispatchQueue.main.async {
+                self?.codeLabel.attributedStringValue = mutable
+            }
+        }
         
         // Line numbers
         let lines = code.components(separatedBy: "\n")
