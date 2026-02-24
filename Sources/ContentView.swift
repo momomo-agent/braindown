@@ -41,7 +41,7 @@ struct ContentView: View {
                 }
             }
             .frame(minWidth: 180, idealWidth: 240, maxWidth: 360)
-            .background(Color(nsColor: .controlBackgroundColor))
+            .background(Color(nsColor: DesignTokens.sidebarBackground))
             }
             
             // Right: Editor / Reader

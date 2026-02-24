@@ -48,6 +48,10 @@ enum DesignTokens {
         isDark ? NSColor(white: 0.18, alpha: 1) : NSColor(white: 0.90, alpha: 1)
     }
     
+    static var sidebarBackground: NSColor {
+        isDark ? NSColor(white: 0.11, alpha: 1) : NSColor(white: 0.97, alpha: 1)
+    }
+    
     static var tableHeaderBackground: NSColor {
         isDark ? NSColor(white: 0.16, alpha: 1) : NSColor(white: 0.96, alpha: 1)
     }
