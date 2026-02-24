@@ -184,17 +184,27 @@ struct ContentView: View {
     private func setFolder(_ url: URL) {
         singleFileMode = false
         folderURL = url
-        fileTree = FileManager.default.filteredTree(at: url, settings: fileTypeSettings)
         selectedFile = nil
         markdownText = ""
         isModified = false
         UserDefaults.standard.set(url.path, forKey: lastFolderKey)
-        startWatching(url)
+        let settings = fileTypeSettings
+        DispatchQueue.global(qos: .userInitiated).async {
+            let tree = FileManager.default.filteredTree(at: url, settings: settings)
+            DispatchQueue.main.async {
+                self.fileTree = tree
+                self.startWatching(url)
+            }
+        }
     }
     
     private func refreshTree() {
         guard let url = folderURL else { return }
-        fileTree = FileManager.default.filteredTree(at: url, settings: fileTypeSettings)
+        let settings = fileTypeSettings
+        DispatchQueue.global(qos: .userInitiated).async {
+            let tree = FileManager.default.filteredTree(at: url, settings: settings)
+            DispatchQueue.main.async { self.fileTree = tree }
+        }
     }
     
     private func startWatching(_ url: URL) {
@@ -225,8 +235,15 @@ struct ContentView: View {
     private func restoreLastFolder() {
         if let path = UserDefaults.standard.string(forKey: lastFolderKey) {
             let url = URL(fileURLWithPath: path)
-            if FileManager.default.fileExists(atPath: path) {
-                setFolder(url)
+            guard FileManager.default.fileExists(atPath: path) else { return }
+            let settings = fileTypeSettings
+            DispatchQueue.global(qos: .userInitiated).async {
+                let tree = FileManager.default.filteredTree(at: url, settings: settings)
+                DispatchQueue.main.async {
+                    self.folderURL = url
+                    self.fileTree = tree
+                    self.startWatching(url)
+                }
             }
         }
     }
@@ -234,7 +251,6 @@ struct ContentView: View {
     private func loadFile(_ url: URL?) {
         guard let url = url else { return }
         
-        // Save current file if modified before switching
         if isModified, let currentFile = selectedFile {
             try? markdownText.write(to: currentFile, atomically: true, encoding: .utf8)
         }

@@ -6,9 +6,7 @@ struct MarkdownEditorView: NSViewRepresentable {
     @Binding var isModified: Bool
     var currentFileURL: URL?
     
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
     
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -18,7 +16,6 @@ struct MarkdownEditorView: NSViewRepresentable {
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
         
-        // Flip the document view so stack grows top-down
         let flippedView = FlippedView()
         flippedView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -31,84 +28,68 @@ struct MarkdownEditorView: NSViewRepresentable {
         flippedView.addSubview(stackView)
         scrollView.documentView = flippedView
         
-        context.coordinator.scrollView = scrollView
-        context.coordinator.stackView = stackView
-        context.coordinator.flippedView = flippedView
+        let coord = context.coordinator
+        coord.scrollView = scrollView
+        coord.stackView = stackView
+        coord.flippedView = flippedView
         
-        // Initial layout constraints
-        updateLayoutConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView)
+        setupConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView, coord: coord)
         
-        // Load content
         if !markdownText.isEmpty {
             let nodes = MarkdownParser.parse(markdownText)
-            let fileDir = currentFileURL?.deletingLastPathComponent()
-            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: fileDir)
-            context.coordinator.lastLoadedMarkdown = markdownText
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: currentFileURL?.deletingLastPathComponent())
+            coord.lastLoadedMarkdown = markdownText
         }
         
-        // Monitor frame changes for responsive centering
         scrollView.postsFrameChangedNotifications = true
-        NotificationCenter.default.addObserver(
-            context.coordinator,
-            selector: #selector(Coordinator.frameDidChange(_:)),
-            name: NSView.frameDidChangeNotification,
-            object: scrollView
-        )
+        NotificationCenter.default.addObserver(coord, selector: #selector(Coordinator.frameDidChange(_:)), name: NSView.frameDidChangeNotification, object: scrollView)
         
-        // Delay one frame to ensure correct initial sizing
-        DispatchQueue.main.async {
-            self.updateLayoutConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView)
-        }
-        
+        DispatchQueue.main.async { self.updateInsets(scrollView: scrollView, coord: coord) }
         return scrollView
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let stackView = context.coordinator.stackView,
-              let flippedView = context.coordinator.flippedView else { return }
+        let coord = context.coordinator
+        guard let stackView = coord.stackView else { return }
         
-        // Re-render on content change
-        if context.coordinator.lastLoadedMarkdown != markdownText {
-            context.coordinator.lastLoadedMarkdown = markdownText
+        if coord.lastLoadedMarkdown != markdownText {
+            coord.lastLoadedMarkdown = markdownText
             let nodes = MarkdownParser.parse(markdownText)
-            let fileDir = currentFileURL?.deletingLastPathComponent()
-            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: fileDir)
+            BlockRenderer.render(nodes: nodes, into: stackView, currentFileDirectory: currentFileURL?.deletingLastPathComponent())
         }
-        
-        updateLayoutConstraints(scrollView: scrollView, flippedView: flippedView, stackView: stackView)
+        updateInsets(scrollView: scrollView, coord: coord)
     }
     
-    private func updateLayoutConstraints(scrollView: NSScrollView, flippedView: FlippedView, stackView: NSStackView) {
+    private func setupConstraints(scrollView: NSScrollView, flippedView: FlippedView, stackView: NSStackView, coord: Coordinator) {
+        let scrollWidth = max(scrollView.contentSize.width, 400)
+        let insetX = calcInsetX(scrollWidth)
+        
+        let widthC = flippedView.widthAnchor.constraint(greaterThanOrEqualToConstant: scrollWidth)
+        let leading = stackView.leadingAnchor.constraint(equalTo: flippedView.leadingAnchor, constant: insetX)
+        let trailing = stackView.trailingAnchor.constraint(equalTo: flippedView.trailingAnchor, constant: -insetX)
+        let top = stackView.topAnchor.constraint(equalTo: flippedView.topAnchor, constant: 28)
+        let bottom = stackView.bottomAnchor.constraint(equalTo: flippedView.bottomAnchor, constant: -40)
+        bottom.priority = .defaultHigh
+        NSLayoutConstraint.activate([widthC, leading, trailing, top, bottom])
+        
+        coord.widthC = widthC
+        coord.leadingC = leading
+        coord.trailingC = trailing
+    }
+    
+    private func updateInsets(scrollView: NSScrollView, coord: Coordinator) {
         let scrollWidth = scrollView.contentSize.width
         guard scrollWidth > 0 else { return }
-        
+        let insetX = calcInsetX(scrollWidth)
+        coord.widthC?.constant = scrollWidth
+        coord.leadingC?.constant = insetX
+        coord.trailingC?.constant = -insetX
+    }
+    
+    private func calcInsetX(_ scrollWidth: CGFloat) -> CGFloat {
         let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
         let effectiveWidth = max(contentWidth, 300)
-        let insetX = max(40, (scrollWidth - effectiveWidth) / 2)
-        
-        // Remove old constraints
-        flippedView.removeConstraints(flippedView.constraints.filter { c in
-            c.identifier == "stack.leading" || c.identifier == "stack.trailing" ||
-            c.identifier == "stack.top" || c.identifier == "stack.bottom" ||
-            c.identifier == "flipped.width"
-        })
-        
-        // Flipped view must be at least as wide as scroll view
-        let widthC = flippedView.widthAnchor.constraint(greaterThanOrEqualToConstant: scrollWidth)
-        widthC.identifier = "flipped.width"
-        widthC.isActive = true
-        
-        let leading = stackView.leadingAnchor.constraint(equalTo: flippedView.leadingAnchor, constant: insetX)
-        leading.identifier = "stack.leading"
-        let trailing = stackView.trailingAnchor.constraint(equalTo: flippedView.trailingAnchor, constant: -insetX)
-        trailing.identifier = "stack.trailing"
-        let top = stackView.topAnchor.constraint(equalTo: flippedView.topAnchor, constant: 28)
-        top.identifier = "stack.top"
-        let bottom = stackView.bottomAnchor.constraint(equalTo: flippedView.bottomAnchor, constant: -40)
-        bottom.identifier = "stack.bottom"
-        bottom.priority = .defaultHigh
-        
-        NSLayoutConstraint.activate([leading, trailing, top, bottom])
+        return max(40, (scrollWidth - effectiveWidth) / 2)
     }
     
     // MARK: - Coordinator
@@ -119,38 +100,25 @@ struct MarkdownEditorView: NSViewRepresentable {
         weak var stackView: NSStackView?
         weak var flippedView: FlippedView?
         var lastLoadedMarkdown: String = ""
+        var leadingC: NSLayoutConstraint?
+        var trailingC: NSLayoutConstraint?
+        var widthC: NSLayoutConstraint?
         
-        init(_ parent: MarkdownEditorView) {
-            self.parent = parent
-        }
+        init(_ parent: MarkdownEditorView) { self.parent = parent }
         
         @objc func frameDidChange(_ notification: Notification) {
-            guard let scrollView = scrollView,
-                  let flippedView = flippedView,
-                  let stackView = stackView else { return }
-            
+            guard let scrollView = scrollView else { return }
             let scrollWidth = scrollView.contentSize.width
             guard scrollWidth > 0 else { return }
-            
             let contentWidth = min(DesignTokens.maxContentWidth, scrollWidth - 80)
             let effectiveWidth = max(contentWidth, 300)
             let insetX = max(40, (scrollWidth - effectiveWidth) / 2)
-            
-            // Update constraints
-            for c in flippedView.constraints {
-                if c.identifier == "flipped.width" {
-                    c.constant = scrollWidth
-                }
-            }
-            for c in flippedView.constraints + stackView.superview!.constraints {
-                if c.identifier == "stack.leading" { c.constant = insetX }
-                if c.identifier == "stack.trailing" { c.constant = -insetX }
-            }
+            widthC?.constant = scrollWidth
+            leadingC?.constant = insetX
+            trailingC?.constant = -insetX
         }
     }
 }
-
-// MARK: - Flipped NSView (for top-down layout in scroll view)
 
 class FlippedView: NSView {
     override var isFlipped: Bool { true }

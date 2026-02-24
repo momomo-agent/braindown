@@ -6,31 +6,32 @@ extension FileManager {
     func filteredTree(at url: URL, settings: FileTypeSettings) -> [FileTreeItem] {
         guard let contents = try? contentsOfDirectory(
             at: url,
-            includingPropertiesForKeys: [.isDirectoryKey, .nameKey],
+            includingPropertiesForKeys: [.isDirectoryKey],
             options: [.skipsHiddenFiles]
         ) else { return [] }
         
-        var items: [FileTreeItem] = []
-        
-        let sorted = contents.sorted { a, b in
-            let aDir = (try? a.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
-            let bDir = (try? b.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
-            if aDir != bDir { return aDir }
-            return a.lastPathComponent.localizedCaseInsensitiveCompare(b.lastPathComponent) == .orderedAscending
+        // Batch resource values once
+        var dirs: [(URL, String)] = []
+        var files: [(URL, String)] = []
+        for item in contents {
+            let name = item.lastPathComponent
+            let isDir = (try? item.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
+            if isDir { dirs.append((item, name)) }
+            else if settings.matches(item) { files.append((item, name)) }
         }
         
-        for item in sorted {
-            let isDir = (try? item.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
-            
-            if isDir {
-                // Build compacted folder chain from raw filesystem (not pre-compacted children)
-                let compacted = compactAndBuild(url: item, segments: [item.lastPathComponent], settings: settings)
-                if let compacted = compacted {
-                    items.append(compacted)
-                }
-            } else if settings.matches(item) {
-                items.append(FileTreeItem(url: item, isDirectory: false, children: []))
+        dirs.sort { $0.1.localizedCaseInsensitiveCompare($1.1) == .orderedAscending }
+        files.sort { $0.1.localizedCaseInsensitiveCompare($1.1) == .orderedAscending }
+        
+        var items: [FileTreeItem] = []
+        
+        for (dirURL, _) in dirs {
+            if let compacted = compactAndBuild(url: dirURL, segments: [dirURL.lastPathComponent], settings: settings) {
+                items.append(compacted)
             }
+        }
+        for (fileURL, _) in files {
+            items.append(FileTreeItem(url: fileURL, isDirectory: false, children: []))
         }
         
         return items
@@ -40,43 +41,28 @@ extension FileManager {
     private func compactAndBuild(url: URL, segments: [String], settings: FileTypeSettings) -> FileTreeItem? {
         guard let contents = try? contentsOfDirectory(
             at: url,
-            includingPropertiesForKeys: [.isDirectoryKey, .nameKey],
+            includingPropertiesForKeys: [.isDirectoryKey],
             options: [.skipsHiddenFiles]
         ) else { return nil }
         
-        let sorted = contents.sorted { a, b in
-            let aDir = (try? a.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
-            let bDir = (try? b.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
-            if aDir != bDir { return aDir }
-            return a.lastPathComponent.localizedCaseInsensitiveCompare(b.lastPathComponent) == .orderedAscending
-        }
-        
-        // Separate dirs and files
         var dirs: [URL] = []
-        var files: [URL] = []
-        for item in sorted {
+        var hasFiles = false
+        for item in contents {
             let isDir = (try? item.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory ?? false
             if isDir { dirs.append(item) }
-            else if settings.matches(item) { files.append(item) }
+            else if settings.matches(item) { hasFiles = true }
         }
         
-        // Compact: exactly one subfolder and zero files → merge
-        if dirs.count == 1 && files.isEmpty {
+        // Compact: exactly one subfolder and zero matching files → merge
+        if dirs.count == 1 && !hasFiles {
             let onlyDir = dirs[0]
-            let newSegments = segments + [onlyDir.lastPathComponent]
-            return compactAndBuild(url: onlyDir, segments: newSegments, settings: settings)
+            return compactAndBuild(url: onlyDir, segments: segments + [onlyDir.lastPathComponent], settings: settings)
         }
         
-        // Build children normally from this level
         let children = filteredTree(at: url, settings: settings)
         if children.isEmpty { return nil }
         
         return FileTreeItem(url: url, isDirectory: true, children: children, compactSegments: segments.count > 1 ? segments : [])
-    }
-    
-    /// Legacy: markdown-only tree
-    func markdownTree(at url: URL) -> [FileTreeItem] {
-        filteredTree(at: url, settings: FileTypeSettings.shared)
     }
 }
 
@@ -87,7 +73,6 @@ struct FileTreeItem: Identifiable, Hashable {
     let url: URL
     let isDirectory: Bool
     let children: [FileTreeItem]
-    /// Segments of compacted folder names (e.g. ["models", "params"] → "models / params")
     let compactSegments: [String]
     
     init(url: URL, isDirectory: Bool, children: [FileTreeItem], compactSegments: [String] = []) {
@@ -99,11 +84,6 @@ struct FileTreeItem: Identifiable, Hashable {
     
     var name: String { url.lastPathComponent }
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(url)
-    }
-    
-    static func == (lhs: FileTreeItem, rhs: FileTreeItem) -> Bool {
-        lhs.url == rhs.url
-    }
+    func hash(into hasher: inout Hasher) { hasher.combine(url) }
+    static func == (lhs: FileTreeItem, rhs: FileTreeItem) -> Bool { lhs.url == rhs.url }
 }
