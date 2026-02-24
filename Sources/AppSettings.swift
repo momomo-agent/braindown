@@ -63,8 +63,9 @@ class AppSettings: ObservableObject {
         let savedMode = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
         self.editorMode = EditorMode(rawValue: savedMode) ?? .read
         self.useSerifFont = UserDefaults.standard.bool(forKey: "BrainDown.useSerifFont")
-        DispatchQueue.main.async { [weak self] in
-            self?.applyTheme()
+        // Apply theme synchronously so isDark is correct before any views are created
+        if let app = NSApp {
+            app.appearance = self.theme.appearance
         }
     }
     

@@ -20,7 +20,12 @@ enum DesignTokens {
     
     // MARK: - Colors
     static var isDark: Bool {
-        NSApp?.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        switch AppSettings.shared.theme {
+        case .light: return false
+        case .dark: return true
+        case .system:
+            return NSApp?.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        }
     }
     
     static var bodyColor: NSColor {

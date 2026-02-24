@@ -91,7 +91,7 @@ struct ContentView: View {
             window.title = windowTitle
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
-            window.backgroundColor = .white
+            window.backgroundColor = DesignTokens.isDark ? .black : .white
         })
         .onReceive(NotificationCenter.default.publisher(for: .openFolder)) { _ in
             guard controlActiveState == .key else { return }
