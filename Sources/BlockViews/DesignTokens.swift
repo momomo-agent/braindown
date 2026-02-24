@@ -8,7 +8,7 @@ enum DesignTokens {
     static let lineHeightMultiple: CGFloat = 1.65
     static let codeLineHeight: CGFloat = 1.3
     static let paragraphSpacing: CGFloat = 8
-    static let maxContentWidth: CGFloat = 680
+    static let maxContentWidth: CGFloat = 780
     
     // MARK: - Spacing
     static let sp4: CGFloat = 4
