@@ -1603,9 +1603,7 @@ struct SimpleMarkdownText: View {
                         .frame(width: 14, height: 14)
                         .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color.gray.opacity(0.3), lineWidth: 0.5))
                 }
-                Text(line)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                inlineMarkdown(line, size: 12, color: DesignTokens.bodyColor)
                     .textSelection(.enabled)
             }
         }
@@ -1618,9 +1616,7 @@ struct SimpleMarkdownText: View {
                 HStack(spacing: 0) {
                     ForEach(0..<maxCols, id: \.self) { ci in
                         let cell = ci < row.count ? row[ci] : ""
-                        Text(cell)
-                            .font(.system(size: ri == 0 ? 10 : 11, weight: ri == 0 ? .medium : .regular, design: .monospaced))
-                            .foregroundColor(Color(nsColor: ri == 0 ? DesignTokens.secondaryColor : DesignTokens.bodyColor))
+                        inlineMarkdown(cell, size: ri == 0 ? 10 : 11, weight: ri == 0 ? .medium : .regular, design: .monospaced, color: ri == 0 ? DesignTokens.secondaryColor : DesignTokens.bodyColor)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
@@ -1634,6 +1630,100 @@ struct SimpleMarkdownText: View {
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color(nsColor: DesignTokens.tableBorder), lineWidth: 0.5)
         )
+    }
+    
+    /// Parse inline markdown: **bold**, *italic*, `code`, [link](url)
+    private func inlineMarkdown(_ text: String, size: CGFloat = 12, weight: Font.Weight = .regular, design: Font.Design = .default, color: NSColor = DesignTokens.bodyColor) -> Text {
+        var result = Text("")
+        var remaining = text[text.startIndex...]
+        
+        while !remaining.isEmpty {
+            // Find the next special character
+            guard let specialIdx = remaining.firstIndex(where: { "**`[".contains($0) }) else {
+                result = result + Text(String(remaining))
+                    .font(.system(size: size, weight: weight, design: design))
+                    .foregroundColor(Color(nsColor: color))
+                break
+            }
+            
+            // Add text before the special character
+            if specialIdx > remaining.startIndex {
+                let prefix = String(remaining[remaining.startIndex..<specialIdx])
+                result = result + Text(prefix)
+                    .font(.system(size: size, weight: weight, design: design))
+                    .foregroundColor(Color(nsColor: color))
+            }
+            
+            let ch = remaining[specialIdx]
+            let afterSpecial = remaining.index(after: specialIdx)
+            
+            // **bold**
+            if ch == "*", afterSpecial < remaining.endIndex, remaining[afterSpecial] == "*" {
+                let contentStart = remaining.index(afterSpecial, offsetBy: 1, limitedBy: remaining.endIndex) ?? remaining.endIndex
+                if let closeRange = remaining[contentStart...].range(of: "**") {
+                    let boldText = String(remaining[contentStart..<closeRange.lowerBound])
+                    result = result + Text(boldText)
+                        .font(.system(size: size, weight: .bold, design: design))
+                        .foregroundColor(Color(nsColor: color))
+                    remaining = remaining[closeRange.upperBound...]
+                    continue
+                }
+            }
+            
+            // *italic* (single *)
+            if ch == "*", (specialIdx == remaining.startIndex || remaining[remaining.index(before: specialIdx)] != "*"),
+               afterSpecial < remaining.endIndex, remaining[afterSpecial] != "*" {
+                if let closeIdx = remaining[afterSpecial...].firstIndex(of: "*"),
+                   closeIdx > afterSpecial {
+                    let italicText = String(remaining[afterSpecial..<closeIdx])
+                    result = result + Text(italicText)
+                        .font(.system(size: size, weight: weight, design: design))
+                        .italic()
+                        .foregroundColor(Color(nsColor: color))
+                    remaining = remaining[remaining.index(after: closeIdx)...]
+                    continue
+                }
+            }
+            
+            // `code`
+            if ch == "`" {
+                if let closeIdx = remaining[afterSpecial...].firstIndex(of: "`"), closeIdx > afterSpecial {
+                    let codeText = String(remaining[afterSpecial..<closeIdx])
+                    result = result + Text(codeText)
+                        .font(.system(size: size - 1, weight: .regular, design: .monospaced))
+                        .foregroundColor(Color(nsColor: DesignTokens.isDark ? NSColor(red: 0.9, green: 0.6, blue: 0.4, alpha: 1) : NSColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1)))
+                    remaining = remaining[remaining.index(after: closeIdx)...]
+                    continue
+                }
+            }
+            
+            // [text](url) — render text only, styled
+            if ch == "[" {
+                if let closeBracket = remaining[afterSpecial...].firstIndex(of: "]"),
+                   closeBracket < remaining.endIndex {
+                    let nextIdx = remaining.index(after: closeBracket)
+                    if nextIdx < remaining.endIndex, remaining[nextIdx] == "(" {
+                        if let closeParen = remaining[nextIdx...].firstIndex(of: ")") {
+                            let linkText = String(remaining[afterSpecial..<closeBracket])
+                            result = result + Text(linkText)
+                                .font(.system(size: size, weight: weight, design: design))
+                                .foregroundColor(.blue)
+                                .underline()
+                            remaining = remaining[remaining.index(after: closeParen)...]
+                            continue
+                        }
+                    }
+                }
+            }
+            
+            // No match — emit the character literally
+            result = result + Text(String(ch))
+                .font(.system(size: size, weight: weight, design: design))
+                .foregroundColor(Color(nsColor: color))
+            remaining = remaining[afterSpecial...]
+        }
+        
+        return result
     }
     
     private func extractHexColor(_ line: String) -> NSColor? {
