@@ -28,10 +28,19 @@ class FileTypeSettings: ObservableObject {
     
     private init() {
         if let saved = UserDefaults.standard.array(forKey: key) as? [String] {
-            enabledExtensions = Set(saved)
+            var exts = Set(saved)
+            // Migration: ensure yml is enabled (added in v0.4)
+            if !exts.contains("yml") {
+                let migrationKey = "BrainDown.ymlMigrated"
+                if !UserDefaults.standard.bool(forKey: migrationKey) {
+                    exts.insert("yml")
+                    UserDefaults.standard.set(true, forKey: migrationKey)
+                }
+            }
+            enabledExtensions = exts
         } else {
-            // 默认显示 .md 和 .json
-            enabledExtensions = ["md", "json"]
+            // 默认显示 .md, .json, .yml
+            enabledExtensions = ["md", "json", "yml"]
         }
     }
     
