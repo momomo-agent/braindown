@@ -1247,6 +1247,88 @@ struct DictWithMainArrayView<Content: View>: View {
     }
 }
 
+// MARK: - Compact Analysis View (motion analysis dict with normalized_curve)
+
+struct CompactAnalysisView: View {
+    let dict: [String: Any]
+    let label: String
+    
+    private var isMotionDict: Bool {
+        dict["normalized_curve"] != nil || dict["motion_type"] != nil
+    }
+    
+    private var isRegionsDict: Bool {
+        // dict of dicts, each with normalized_curve
+        dict.values.contains { ($0 as? [String: Any])?["normalized_curve"] != nil }
+    }
+    
+    var body: some View {
+        if isRegionsDict {
+            regionsView
+        } else if isMotionDict {
+            motionSummaryView(dict, title: label)
+        } else {
+            KeyValueView(dict: dict)
+                .padding(.leading, 8)
+        }
+    }
+    
+    private var regionsView: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ForEach(dict.keys.sorted(), id: \.self) { key in
+                if let sub = dict[key] as? [String: Any] {
+                    motionSummaryView(sub, title: key)
+                }
+            }
+        }
+    }
+    
+    private func motionSummaryView(_ d: [String: Any], title: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            // Title + key scalars as pills
+            HStack(spacing: 8) {
+                Text(title)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(Color(nsColor: DesignTokens.headingColor))
+                
+                if let mt = d["motion_type"] as? String {
+                    Text(mt)
+                        .font(.system(size: 9, weight: .medium, design: .monospaced))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.blue.opacity(0.12))
+                        .foregroundColor(Color.blue)
+                        .cornerRadius(4)
+                }
+                if let intensity = d["intensity"] as? NSNumber {
+                    Text("⚡ \(String(format: "%.1f", intensity.doubleValue))")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                }
+                if let peak = d["peak_magnitude"] as? NSNumber {
+                    Text("peak \(String(format: "%.1f", peak.doubleValue))")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                }
+                if let easing = d["easing"] as? String {
+                    Text(easing)
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                }
+            }
+            
+            // Sparkline for normalized_curve
+            if let pairs = d["normalized_curve"] as? [[Any]], pairs.count >= 3 {
+                SparklineView(pairs: pairs, height: 40)
+                    .frame(maxWidth: 400)
+            }
+        }
+        .padding(8)
+        .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.08, alpha: 1) : NSColor(white: 0.94, alpha: 1)))
+        .cornerRadius(6)
+    }
+}
+
 // MARK: - Sparkline View for numeric arrays
 
 struct SparklineView: View {
@@ -1407,6 +1489,9 @@ struct RichCardListView: View {
                         SparklineView(pairs: pairs, height: 60)
                     } else if let nums = value as? [NSNumber], nums.count >= 3 {
                         SparklineView(values: nums.map { $0.doubleValue }, height: 60)
+                    } else if let subDict = value as? [String: Any],
+                              subDict["normalized_curve"] != nil || subDict.values.contains(where: { ($0 as? [String: Any])?["normalized_curve"] != nil }) {
+                        CompactAnalysisView(dict: subDict, label: key)
                     } else if let subDict = value as? [String: Any] {
                         StructuredDataView(value: subDict)
                             .padding(.leading, 8)
