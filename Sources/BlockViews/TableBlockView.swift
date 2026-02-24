@@ -191,7 +191,7 @@ class TableRowView: NSView {
         let container = NSView()
         let label = NSTextField(wrappingLabelWithString: text)
         label.isEditable = false
-        label.isSelectable = false
+        label.isSelectable = true
         label.drawsBackground = false
         label.isBordered = false
         label.lineBreakMode = .byWordWrapping

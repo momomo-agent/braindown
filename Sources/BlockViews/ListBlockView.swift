@@ -25,7 +25,7 @@ class ListBlockView: NSView {
             // Bullet / number
             let bulletLabel = NSTextField(labelWithString: "")
             bulletLabel.isEditable = false
-            bulletLabel.isSelectable = false
+            bulletLabel.isSelectable = true
             bulletLabel.drawsBackground = false
             bulletLabel.isBordered = false
             bulletLabel.textColor = DesignTokens.bulletColor
@@ -42,7 +42,7 @@ class ListBlockView: NSView {
             // Content
             let contentField = NSTextField(wrappingLabelWithString: "")
             contentField.isEditable = false
-            contentField.isSelectable = false
+            contentField.isSelectable = true
             contentField.drawsBackground = false
             contentField.isBordered = false
             contentField.lineBreakMode = .byWordWrapping

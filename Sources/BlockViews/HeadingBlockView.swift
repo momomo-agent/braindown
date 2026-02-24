@@ -14,7 +14,7 @@ class HeadingBlockView: NSView {
     
     private func setupView(node: MarkdownNode, level: Int) {
         textField.isEditable = false
-        textField.isSelectable = false
+        textField.isSelectable = true
         textField.drawsBackground = false
         textField.isBordered = false
         textField.lineBreakMode = .byWordWrapping

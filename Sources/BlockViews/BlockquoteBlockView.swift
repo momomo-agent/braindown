@@ -21,7 +21,7 @@ class BlockquoteBlockView: NSView {
         
         // Text
         textField.isEditable = false
-        textField.isSelectable = false
+        textField.isSelectable = true
         textField.drawsBackground = false
         textField.isBordered = false
         textField.lineBreakMode = .byWordWrapping
