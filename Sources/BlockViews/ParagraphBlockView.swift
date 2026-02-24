@@ -1,8 +1,9 @@
 import AppKit
 
 /// Renders a paragraph block with inline styling (bold, italic, code, links).
-class ParagraphBlockView: NSView {
+class ParagraphBlockView: NSView, CopyableBlock {
     private let textField = NSTextField(wrappingLabelWithString: "")
+    private(set) var copyableText: String = ""
     
     init(node: MarkdownNode) {
         super.init(frame: .zero)
@@ -27,6 +28,7 @@ class ParagraphBlockView: NSView {
             color: DesignTokens.bodyColor
         )
         textField.attributedStringValue = attrStr
+        copyableText = attrStr.string
         
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false

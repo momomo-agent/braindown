@@ -2,8 +2,9 @@ import AppKit
 
 /// Renders heading blocks (H1-H6) with proper typography.
 /// H1/H2 use Georgia serif, H3+ use system sans-serif.
-class HeadingBlockView: NSView {
+class HeadingBlockView: NSView, CopyableBlock {
     private let textField = NSTextField(wrappingLabelWithString: "")
+    private(set) var copyableText: String = ""
     
     init(node: MarkdownNode, level: Int) {
         super.init(frame: .zero)
@@ -44,6 +45,7 @@ class HeadingBlockView: NSView {
             lineHeightMultiple: lineHeight
         )
         textField.attributedStringValue = attrStr
+        copyableText = attrStr.string
         
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false

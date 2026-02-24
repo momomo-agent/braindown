@@ -2,12 +2,13 @@ import AppKit
 
 /// Notion-quality table: rounded container, header distinction, hover row highlight,
 /// auto-sizing columns, alternating row colors.
-class TableBlockView: NSView {
+class TableBlockView: NSView, CopyableBlock {
     
     private let containerView = NSView()
     private let stackView = NSStackView()
     private var rowViews: [TableRowView] = []
     private var separatorViews: [NSView] = []
+    private(set) var copyableText: String = ""
     
     init(node: MarkdownNode) {
         super.init(frame: .zero)
@@ -57,6 +58,11 @@ class TableBlockView: NSView {
         let headers = tableData.headers
         let rows = tableData.rows
         let colCount = headers.count
+        
+        // Store copyable text
+        var lines = [headers.joined(separator: "\t")]
+        for row in rows { lines.append(row.joined(separator: "\t")) }
+        copyableText = lines.joined(separator: "\n")
         
         // Container — rounded with border
         containerView.wantsLayer = true

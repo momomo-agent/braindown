@@ -88,10 +88,8 @@ class BlockSelectionManager {
     }
     
     private func extractText(from view: NSView) -> String? {
-        // Find NSTextField in the view hierarchy
-        if let tf = view as? NSTextField { return tf.stringValue }
-        for sub in view.subviews {
-            if let text = extractText(from: sub) { return text }
+        if let block = view as? CopyableBlock, !block.copyableText.isEmpty {
+            return block.copyableText
         }
         return nil
     }

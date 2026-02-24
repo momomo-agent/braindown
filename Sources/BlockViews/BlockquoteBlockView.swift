@@ -1,9 +1,10 @@
 import AppKit
 
 /// Renders blockquote with a left vertical bar and muted text color.
-class BlockquoteBlockView: NSView {
+class BlockquoteBlockView: NSView, CopyableBlock {
     private let barView = NSView()
     private let textField = NSTextField(wrappingLabelWithString: "")
+    private(set) var copyableText: String = ""
     
     init(node: MarkdownNode) {
         super.init(frame: .zero)
@@ -35,6 +36,7 @@ class BlockquoteBlockView: NSView {
             color: DesignTokens.blockquoteText
         )
         textField.attributedStringValue = attrStr
+        copyableText = attrStr.string
         addSubview(textField)
         
         barView.translatesAutoresizingMaskIntoConstraints = false

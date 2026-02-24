@@ -1,8 +1,9 @@
 import AppKit
 
 /// Renders ordered and unordered list items with proper bullet/number styling.
-class ListBlockView: NSView {
+class ListBlockView: NSView, CopyableBlock {
     private let stackView = NSStackView()
+    private(set) var copyableText: String = ""
     
     init(items: [MarkdownNode], ordered: Bool) {
         super.init(frame: .zero)
@@ -15,6 +16,7 @@ class ListBlockView: NSView {
         stackView.orientation = .vertical
         stackView.alignment = .leading
         stackView.spacing = DesignTokens.sp4
+        var copyableTexts: [String] = []
         
         for item in items {
             let row = NSStackView()
@@ -57,6 +59,9 @@ class ListBlockView: NSView {
             )
             contentField.attributedStringValue = attrStr
             
+            let bullet = bulletLabel.stringValue
+            copyableTexts.append("\(bullet) \(attrStr.string)")
+            
             row.addArrangedSubview(bulletLabel)
             row.addArrangedSubview(contentField)
             
@@ -69,6 +74,7 @@ class ListBlockView: NSView {
         }
         
         addSubview(stackView)
+        copyableText = copyableTexts.joined(separator: "\n")
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),

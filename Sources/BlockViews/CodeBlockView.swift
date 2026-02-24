@@ -3,7 +3,7 @@ import Highlightr
 
 /// Notion-quality code block: rounded container, language label, copy button,
 /// line numbers, and Highlightr syntax highlighting.
-class CodeBlockView: NSView {
+class CodeBlockView: NSView, CopyableBlock {
     
     // MARK: - Subviews
     private let containerView = NSView()
@@ -18,6 +18,7 @@ class CodeBlockView: NSView {
     private var copyResetTimer: Timer?
     private var trackingArea: NSTrackingArea?
     private var codeContent: String = ""
+    var copyableText: String { codeContent }
     
     init(node: MarkdownNode, language: String?) {
         super.init(frame: .zero)

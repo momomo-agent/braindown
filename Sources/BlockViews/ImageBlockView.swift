@@ -1,7 +1,8 @@
 import AppKit
 
 /// Renders an image block with optional alt text caption.
-class ImageBlockView: NSView {
+class ImageBlockView: NSView, CopyableBlock {
+    var copyableText: String { captionField.stringValue }
     private let imageLayer = CALayer()
     private let captionField = NSTextField(wrappingLabelWithString: "")
     private var currentFileDirectory: URL?
