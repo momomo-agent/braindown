@@ -63,27 +63,30 @@ class AppSettings: ObservableObject {
         let savedMode = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
         self.editorMode = EditorMode(rawValue: savedMode) ?? .read
         self.useSerifFont = UserDefaults.standard.bool(forKey: "BrainDown.useSerifFont")
-        // Apply theme synchronously so isDark is correct before any views are created
-        if let app = NSApp {
-            if self.theme == .system {
-                // Explicitly resolve system appearance so all static color lookups work
-                let systemIsDark = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")?.lowercased() == "dark"
-                app.appearance = NSAppearance(named: systemIsDark ? .darkAqua : .aqua)
-            } else {
-                app.appearance = self.theme.appearance
-            }
+        // For non-system themes, apply immediately
+        if self.theme != .system, let app = NSApp {
+            app.appearance = self.theme.appearance
+        }
+    }
+    
+    /// Called from applicationDidFinishLaunching when NSApp.effectiveAppearance is reliable
+    func resolveSystemAppearance() {
+        guard theme == .system, let app = NSApp else { return }
+        let isDark = app.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        app.appearance = NSAppearance(named: isDark ? .darkAqua : .aqua)
+        for window in app.windows {
+            window.backgroundColor = isDark ? .black : .white
         }
     }
     
     func applyTheme() {
         guard let app = NSApp else { return }
         if theme == .system {
-            let systemIsDark = UserDefaults.standard.string(forKey: "AppleInterfaceStyle")?.lowercased() == "dark"
-            app.appearance = NSAppearance(named: systemIsDark ? .darkAqua : .aqua)
+            let isDark = app.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            app.appearance = NSAppearance(named: isDark ? .darkAqua : .aqua)
         } else {
             app.appearance = theme.appearance
         }
-        // Delay to let appearance propagate before re-rendering
         DispatchQueue.main.async {
             for window in app.windows {
                 window.backgroundColor = DesignTokens.isDark ? .black : .white

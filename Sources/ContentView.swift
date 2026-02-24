@@ -13,6 +13,7 @@ struct ContentView: View {
     @ObservedObject private var appSettings = AppSettings.shared
     @State private var fsEventStream: FSEventStreamRef?
     @Environment(\.controlActiveState) private var controlActiveState
+    @Environment(\.colorScheme) private var colorScheme
     
     private let lastFolderKey = "BrainDown.lastOpenedFolder"
     
@@ -140,7 +141,8 @@ struct ContentView: View {
         }
         .background(WindowAccessor { window in
             window.title = windowTitle
-            window.backgroundColor = DesignTokens.isDark ? .black : .white
+            let dark = colorScheme == .dark
+            window.backgroundColor = dark ? .black : .white
         })
         .onReceive(NotificationCenter.default.publisher(for: .openFolder)) { _ in
             guard controlActiveState == .key else { return }

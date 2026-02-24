@@ -75,9 +75,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
     
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        // Set appearance at the earliest possible moment, before any windows are created
+        let theme = AppSettings.shared.theme
+        if theme == .system {
+            let isDark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            NSApp.appearance = NSAppearance(named: isDark ? .darkAqua : .aqua)
+        } else {
+            NSApp.appearance = theme.appearance
+        }
+    }
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Configure all windows for clean titlebar
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        // Re-resolve and set window backgrounds
+        AppSettings.shared.resolveSystemAppearance()
+        for window in NSApp.windows {
+            window.backgroundColor = DesignTokens.isDark ? .black : .white
+        }
+        // Also set after a short delay for any late-created windows
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             for window in NSApp.windows {
                 window.backgroundColor = DesignTokens.isDark ? .black : .white
             }
