@@ -840,7 +840,11 @@ struct NestedObjectView: View {
             case .statusList:
                 FeatureListView(items: arr)
             default:
-                ArrayTableView(items: arr)
+                if hasNestedInArray(arr) {
+                    RichCardListView(items: arr)
+                } else {
+                    ArrayTableView(items: arr)
+                }
             }
         } else if let sub = value as? [String: Any] {
             KeyValueView(dict: sub)
@@ -869,6 +873,14 @@ struct NestedObjectView: View {
             pair.count == 2
             && pair[0] is NSNumber && !(pair[0] as? NSNumber)!.isBool
             && pair[1] is NSNumber && !(pair[1] as? NSNumber)!.isBool
+        }
+    }
+    
+    private func hasNestedInArray(_ arr: [[String: Any]]) -> Bool {
+        arr.contains { item in
+            item.values.contains { v in
+                v is [String: Any] || v is [[String: Any]]
+            }
         }
     }
     
@@ -1499,10 +1511,18 @@ struct SimpleMarkdownText: View {
         case .table(let rows):
             tableView(rows)
         case .text(let line):
-            Text(line)
-                .font(.system(size: 12))
-                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
-                .textSelection(.enabled)
+            HStack(spacing: 6) {
+                if let color = extractHexColor(line) {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color(nsColor: color))
+                        .frame(width: 14, height: 14)
+                        .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color.gray.opacity(0.3), lineWidth: 0.5))
+                }
+                Text(line)
+                    .font(.system(size: 12))
+                    .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                    .textSelection(.enabled)
+            }
         }
     }
     
@@ -1529,5 +1549,24 @@ struct SimpleMarkdownText: View {
             RoundedRectangle(cornerRadius: 4)
                 .stroke(Color(nsColor: DesignTokens.tableBorder), lineWidth: 0.5)
         )
+    }
+    
+    private func extractHexColor(_ line: String) -> NSColor? {
+        // Match #RRGGBB or #RRGGBBAA in the line
+        guard let range = line.range(of: "#[0-9A-Fa-f]{6,8}", options: .regularExpression) else { return nil }
+        let hex = String(line[range].dropFirst())
+        var val: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&val)
+        if hex.count == 6 {
+            return NSColor(red: CGFloat((val >> 16) & 0xFF) / 255,
+                           green: CGFloat((val >> 8) & 0xFF) / 255,
+                           blue: CGFloat(val & 0xFF) / 255, alpha: 1)
+        } else if hex.count == 8 {
+            return NSColor(red: CGFloat((val >> 24) & 0xFF) / 255,
+                           green: CGFloat((val >> 16) & 0xFF) / 255,
+                           blue: CGFloat((val >> 8) & 0xFF) / 255,
+                           alpha: CGFloat(val & 0xFF) / 255)
+        }
+        return nil
     }
 }
