@@ -10,7 +10,7 @@ struct CodeFileView: NSViewRepresentable {
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
         scrollView.hasVerticalScroller = true
-        scrollView.hasHorizontalScroller = true
+        scrollView.hasHorizontalScroller = false
         scrollView.autohidesScrollers = true
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
@@ -23,6 +23,13 @@ struct CodeFileView: NSViewRepresentable {
         textView.font = DesignTokens.codeFont
         textView.textContainerInset = NSSize(width: 40, height: 28)
         textView.isAutomaticLinkDetectionEnabled = false
+        
+        // Key: allow NSTextView to resize vertically, wrap horizontally
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+        textView.autoresizingMask = [.width]
+        textView.textContainer?.widthTracksTextView = true
+        textView.textContainer?.containerSize = NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude)
         
         scrollView.documentView = textView
         context.coordinator.textView = textView
