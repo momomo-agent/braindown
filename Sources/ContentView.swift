@@ -89,7 +89,6 @@ struct ContentView: View {
         }
         .background(WindowAccessor { window in
             window.title = windowTitle
-            window.isMovableByWindowBackground = true
             window.backgroundColor = DesignTokens.isDark ? .black : .white
         })
         .onReceive(NotificationCenter.default.publisher(for: .openFolder)) { _ in
