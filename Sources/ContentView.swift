@@ -10,6 +10,7 @@ struct ContentView: View {
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
     @ObservedObject private var appSettings = AppSettings.shared
     @State private var fsEventStream: FSEventStreamRef?
+    @Environment(\.controlActiveState) private var controlActiveState
     
     private let lastFolderKey = "BrainDown.lastOpenedFolder"
     
@@ -90,6 +91,7 @@ struct ContentView: View {
             window.backgroundColor = .white
         })
         .onReceive(NotificationCenter.default.publisher(for: .openFolder)) { _ in
+            guard controlActiveState == .key else { return }
             openFolder()
         }
         .onReceive(NotificationCenter.default.publisher(for: .openFolderURL)) { notification in
@@ -101,6 +103,7 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .saveFile)) { _ in
+            guard controlActiveState == .key else { return }
             saveCurrentFile()
         }
         .onChange(of: fileTypeSettings.enabledExtensions) { _, _ in
