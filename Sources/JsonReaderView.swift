@@ -54,12 +54,30 @@ struct JsonAnalyzer {
     /// Find the largest array-of-objects field in a dict
     static func findMainArray(in dict: [String: Any]) -> (String, [[String: Any]])? {
         var best: (String, [[String: Any]])? = nil
+        var bestScore = 0
         for (key, val) in dict {
-            if let arr = val as? [[String: Any]], arr.count > (best?.1.count ?? 0) {
-                best = (key, arr)
+            if let arr = val as? [[String: Any]], !arr.isEmpty {
+                // Prefer arrays with richer structure (status/progress fields) over just largest
+                var score = arr.count
+                let sample = arr[0]
+                if hasProgressFields(sample) { score += 1000 }
+                if hasStatusFields(sample) { score += 500 }
+                if hasTimelineFields(sample) { score += 200 }
+                if score > bestScore {
+                    bestScore = score
+                    best = (key, arr)
+                }
             }
         }
         return best
+    }
+    
+    /// Find ALL arrays of objects in a dict (for multi-section rendering)
+    static func findAllArrays(in dict: [String: Any]) -> [(String, [[String: Any]])] {
+        dict.compactMap { key, val in
+            if let arr = val as? [[String: Any]], !arr.isEmpty { return (key, arr) }
+            return nil
+        }.sorted { $0.1.count > $1.1.count }
     }
     
     /// Has progress-like fields: (progress OR completion%) AND (status OR topics/steps)
@@ -85,7 +103,8 @@ struct JsonAnalyzer {
         let keys = Set(obj.keys)
         let hasDate = keys.contains("date") || keys.contains("time") || keys.contains("timestamp")
             || keys.contains("created") || keys.contains("createdAt") || keys.contains("updated")
-            || keys.contains("created_at") || keys.contains("updated_at")
+            || keys.contains("created_at") || keys.contains("updated_at") || keys.contains("completedAt")
+            || keys.contains("completed_at") || keys.contains("startDate") || keys.contains("endDate")
         let hasLabel = keys.contains("title") || keys.contains("name") || keys.contains("description")
             || keys.contains("message") || keys.contains("event") || keys.contains("label")
         return hasDate && hasLabel
@@ -631,7 +650,16 @@ struct KeyValueView: View {
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                         .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
                         .frame(minWidth: 80, alignment: .trailing)
-                    Text(stringValue(dict[key]))
+                    
+                    let str = stringValue(dict[key])
+                    if let color = parseHexColor(str) {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color(nsColor: color))
+                            .frame(width: 14, height: 14)
+                            .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color.gray.opacity(0.3), lineWidth: 0.5))
+                    }
+                    
+                    Text(str)
                         .font(.system(size: 13))
                         .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
                         .textSelection(.enabled)
@@ -647,6 +675,26 @@ struct KeyValueView: View {
         if let n = v as? NSNumber { return n.stringValue }
         if v is NSNull { return "null" }
         return String(describing: v)
+    }
+    
+    private func parseHexColor(_ s: String) -> NSColor? {
+        let hex = s.trimmingCharacters(in: .whitespaces)
+        guard hex.hasPrefix("#") else { return nil }
+        let stripped = String(hex.dropFirst())
+        guard stripped.count == 6 || stripped.count == 8,
+              stripped.allSatisfy({ $0.isHexDigit }) else { return nil }
+        var val: UInt64 = 0
+        Scanner(string: stripped).scanHexInt64(&val)
+        if stripped.count == 6 {
+            return NSColor(red: CGFloat((val >> 16) & 0xFF) / 255,
+                           green: CGFloat((val >> 8) & 0xFF) / 255,
+                           blue: CGFloat(val & 0xFF) / 255, alpha: 1)
+        } else {
+            return NSColor(red: CGFloat((val >> 24) & 0xFF) / 255,
+                           green: CGFloat((val >> 16) & 0xFF) / 255,
+                           blue: CGFloat((val >> 8) & 0xFF) / 255,
+                           alpha: CGFloat(val & 0xFF) / 255)
+        }
     }
 }
 
@@ -1079,7 +1127,7 @@ struct StructuredDataView: View {
             }
         case .arrayOfObjects:
             if let arr = value as? [[String: Any]] {
-                if hasLongTextField(arr) {
+                if hasLongTextField(arr) || hasNestedObjects(arr) {
                     RichCardListView(items: arr)
                 } else {
                     ArrayTableView(items: arr)
@@ -1111,6 +1159,14 @@ struct StructuredDataView: View {
             }
         }
     }
+    
+    private func hasNestedObjects(_ arr: [[String: Any]]) -> Bool {
+        arr.contains { item in
+            item.values.contains { v in
+                v is [String: Any] || v is [[String: Any]]
+            }
+        }
+    }
 }
 
 /// Shows scalar top-level fields as header, then renders the main array content
@@ -1134,7 +1190,7 @@ struct DictWithMainArrayView<Content: View>: View {
     
     private var extraSections: [(String, Any)] {
         dict.filter { key, val in
-            key != mainKey && !JsonAnalyzer.isScalar(val) && !(val is [[String: Any]])
+            key != mainKey && !JsonAnalyzer.isScalar(val)
         }.sorted(by: { $0.key < $1.key })
     }
     
@@ -1161,8 +1217,18 @@ struct DictWithMainArrayView<Content: View>: View {
             content()
             
             ForEach(extraSections, id: \.0) { key, value in
-                if let subDict = value as? [String: Any] {
-                    KeyValueView(dict: subDict)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(key.replacingOccurrences(of: "_", with: " ").capitalized)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color(nsColor: DesignTokens.headingColor))
+                    
+                    if let subDict = value as? [String: Any] {
+                        KeyValueView(dict: subDict)
+                    } else if let arr = value as? [[String: Any]], !arr.isEmpty {
+                        StructuredDataView(value: arr)
+                    } else if let arr = value as? [Any] {
+                        StructuredDataView(value: arr)
+                    }
                 }
             }
         }
@@ -1322,8 +1388,20 @@ struct RichCardListView: View {
                     Text(key)
                         .font(.system(size: 11, weight: .medium))
                         .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
-                    GenericTreeView(value: value, label: key, depth: 0)
-                        .padding(.leading, 8)
+                    
+                    if let pairs = value as? [[Any]], !pairs.isEmpty,
+                       pairs[0].count >= 2,
+                       pairs[0][0] is NSNumber, pairs[0][1] is NSNumber {
+                        SparklineView(pairs: pairs, height: 60)
+                    } else if let nums = value as? [NSNumber], nums.count >= 3 {
+                        SparklineView(values: nums.map { $0.doubleValue }, height: 60)
+                    } else if let subDict = value as? [String: Any] {
+                        StructuredDataView(value: subDict)
+                            .padding(.leading, 8)
+                    } else {
+                        GenericTreeView(value: value, label: key, depth: 0)
+                            .padding(.leading, 8)
+                    }
                 }
             }
         }
