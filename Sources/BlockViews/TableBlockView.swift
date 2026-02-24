@@ -7,6 +7,7 @@ class TableBlockView: NSView {
     private let containerView = NSView()
     private let stackView = NSStackView()
     private var rowViews: [TableRowView] = []
+    private var separatorViews: [NSView] = []
     
     init(node: MarkdownNode) {
         super.init(frame: .zero)
@@ -92,6 +93,7 @@ class TableBlockView: NSView {
         sep.translatesAutoresizingMaskIntoConstraints = false
         sep.heightAnchor.constraint(equalToConstant: 1).isActive = true
         sep.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        separatorViews.append(sep)
         
         // Data rows
         for (idx, row) in rows.enumerated() {
@@ -115,6 +117,7 @@ class TableBlockView: NSView {
                 lineSep.translatesAutoresizingMaskIntoConstraints = false
                 lineSep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
                 lineSep.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+                separatorViews.append(lineSep)
             }
         }
         
@@ -139,6 +142,9 @@ class TableBlockView: NSView {
         super.updateLayer()
         containerView.layer?.borderColor = DesignTokens.tableBorder.cgColor
         containerView.layer?.backgroundColor = DesignTokens.tableOddRow.cgColor
+        for sep in separatorViews {
+            sep.layer?.backgroundColor = DesignTokens.tableBorder.cgColor
+        }
     }
 }
 
