@@ -10,6 +10,7 @@ struct BrainDownApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("Open Folder…") {
@@ -78,8 +79,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Configure all windows for clean titlebar
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             for window in NSApp.windows {
-                window.titlebarAppearsTransparent = true
-                window.titleVisibility = .hidden
                 window.isMovableByWindowBackground = true
                 window.backgroundColor = DesignTokens.isDark ? .black : .white
             }
