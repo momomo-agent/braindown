@@ -10,6 +10,9 @@ packages:
   Highlightr:
     url: https://github.com/raspu/Highlightr
     from: "2.2.1"
+  Yams:
+    url: https://github.com/jpsim/Yams
+    from: "5.1.3"
 
 settings:
   base:
@@ -39,6 +42,7 @@ targets:
         buildPhase: resources
     dependencies:
       - package: Highlightr
+      - package: Yams
     settings:
       base:
         PRODUCT_NAME: BrainDown

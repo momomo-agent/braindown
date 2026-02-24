@@ -32,13 +32,16 @@
 		879C0A5FA341EF4B7E74D195 /* ImageBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B418F207AB7E6DE0C2AAE5 /* ImageBlockView.swift */; };
 		88EEE605F95874E15993CBCF /* BlockSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */; };
 		935B0B7120C6E611F99E3886 /* HorizontalRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC14302ECC1FF8B6DA5C786 /* HorizontalRuleView.swift */; };
+		9772970A7B640583D6F42971 /* YamlReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E6F24AD88A4A1D272154B6 /* YamlReaderView.swift */; };
 		9870EB720AB2887876763EDF /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052CF2A9E65FCBD5A094B479 /* DesignTokens.swift */; };
 		9B85E1B0DBBC35B8B1795AF9 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8647C66DD9D48AF2D789A0AA /* CodeBlockView.swift */; };
 		A501C17462C1AB2467A7CEE1 /* BlockRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F76BD80A7F8B372D71B6BD /* BlockRenderer.swift */; };
+		A953AEA3405CA22C3A00FA9C /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 610C1A0022BBCAB5FB8C7096 /* Yams */; };
 		ABE9353C13229E9335C9EF7E /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F00F5F8B33B85D06204058 /* MarkdownParser.swift */; };
 		AC0B9CD6EA32142046A97AC9 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8647C66DD9D48AF2D789A0AA /* CodeBlockView.swift */; };
 		AD868C61EF3F6DE03F8264D4 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC74EF8A097796235F0DDF99 /* FileManager+Extensions.swift */; };
 		B7BA51D572CEB808F8F3A5EC /* RawEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648FE73BF461E46FE4322B41 /* RawEditorView.swift */; };
+		C1A4B01233E1B8D16FBAA57C /* YamlReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E6F24AD88A4A1D272154B6 /* YamlReaderView.swift */; };
 		C355910C305BB8DCCD63B412 /* ParagraphBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC9C53AD5B41A9729C30FA1 /* ParagraphBlockView.swift */; };
 		C917746B22F8291C5F5244BF /* BlockRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F76BD80A7F8B372D71B6BD /* BlockRenderer.swift */; };
 		D1EDC138ADEECD0906D12BB6 /* BlockSelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDDAEA2E389C81CA90691C /* BlockSelectionManager.swift */; };
@@ -59,6 +62,7 @@
 		052CF2A9E65FCBD5A094B479 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		129C1A29A53721B2F8172624 /* FileTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTreeView.swift; sourceTree = "<group>"; };
 		16F00F5F8B33B85D06204058 /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
+		44E6F24AD88A4A1D272154B6 /* YamlReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlReaderView.swift; sourceTree = "<group>"; };
 		54FACBE816195E715C5C881E /* FileTypeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTypeSettings.swift; sourceTree = "<group>"; };
 		56A2D965892591ADA3B03E91 /* ListBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBlockView.swift; sourceTree = "<group>"; };
 		5802DED28B58DB6F332AD3B4 /* BlockquoteBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockquoteBlockView.swift; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E42D9EF898C3E32D350C778C /* Highlightr in Frameworks */,
+				A953AEA3405CA22C3A00FA9C /* Yams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +129,7 @@
 				16F00F5F8B33B85D06204058 /* MarkdownParser.swift */,
 				648FE73BF461E46FE4322B41 /* RawEditorView.swift */,
 				F279686ADDDB2D1859224143 /* SyntaxHighlighter.swift */,
+				44E6F24AD88A4A1D272154B6 /* YamlReaderView.swift */,
 				CC165A78DA838E620097CE82 /* BlockViews */,
 			);
 			path = Sources;
@@ -190,6 +196,7 @@
 			name = BrainDown;
 			packageProductDependencies = (
 				0974DCC4EE4C8377414160FC /* Highlightr */,
+				610C1A0022BBCAB5FB8C7096 /* Yams */,
 			);
 			productName = BrainDown;
 			productReference = BD79746409FF6D84CE10F519 /* BrainDown.app */;
@@ -245,6 +252,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */,
+				03840B8DED59A6CD7353101A /* XCRemoteSwiftPackageReference "Yams" */,
 			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
@@ -289,6 +297,7 @@
 				697769C1F2F421A3F8996FEF /* ParagraphBlockView.swift in Sources */,
 				B7BA51D572CEB808F8F3A5EC /* RawEditorView.swift in Sources */,
 				E65671D662E23FA6596CF2AA /* TableBlockView.swift in Sources */,
+				C1A4B01233E1B8D16FBAA57C /* YamlReaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +329,7 @@
 				E814764B9E2A850AAE26337A /* RawEditorView.swift in Sources */,
 				263ABA04B9471405622EE41D /* SyntaxHighlighter.swift in Sources */,
 				03DFD04C5D41ACCFD3F7B4A3 /* TableBlockView.swift in Sources */,
+				9772970A7B640583D6F42971 /* YamlReaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +566,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		03840B8DED59A6CD7353101A /* XCRemoteSwiftPackageReference "Yams" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jpsim/Yams";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.3;
+			};
+		};
 		BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/raspu/Highlightr";
@@ -571,6 +589,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BE4CA6D7CA7B13F7A05E43E4 /* XCRemoteSwiftPackageReference "Highlightr" */;
 			productName = Highlightr;
+		};
+		610C1A0022BBCAB5FB8C7096 /* Yams */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 03840B8DED59A6CD7353101A /* XCRemoteSwiftPackageReference "Yams" */;
+			productName = Yams;
 		};
 		CEB21EE9B89CDF0B2369C02F /* Highlightr */ = {
 			isa = XCSwiftPackageProductDependency;

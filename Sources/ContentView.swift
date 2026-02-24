@@ -75,8 +75,29 @@ struct ContentView: View {
                                 .padding(12)
                                 .help(jsonRawMode ? "Reader View" : "Code View")
                             }
+                        } else if ["yaml", "yml"].contains(selectedFile?.pathExtension ?? "") {
+                            // YAML: parse → reuse JSON reader pipeline
+                            ZStack(alignment: .topTrailing) {
+                                if jsonRawMode {
+                                    CodeFileView(text: $markdownText, language: "yaml")
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                } else {
+                                    YamlReaderView(yamlText: markdownText)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                }
+                                Button(action: { jsonRawMode.toggle() }) {
+                                    Image(systemName: jsonRawMode ? "eye" : "curlybraces")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                                        .frame(width: 28, height: 28)
+                                        .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.15, alpha: 0.9) : NSColor(white: 0.93, alpha: 0.9)))
+                                        .cornerRadius(6)
+                                }
+                                .buttonStyle(.plain)
+                                .padding(12)
+                                .help(jsonRawMode ? "Reader View" : "Code View")
+                            }
                         } else {
-                            // Other non-markdown: syntax-highlighted code
                             CodeFileView(text: $markdownText, language: selectedFile?.pathExtension ?? "txt")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }

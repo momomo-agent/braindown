@@ -143,45 +143,7 @@ struct JsonReaderView: View {
     
     @ViewBuilder
     private func renderRoot(_ value: Any) -> some View {
-        let hint = JsonAnalyzer.analyze(value)
-        switch hint {
-        case .progressCards:
-            if let dict = value as? [String: Any] {
-                ProgressDashboardView(data: dict)
-            } else if let arr = value as? [[String: Any]] {
-                ProgressDashboardView(data: ["items": arr])
-            }
-        case .statusList:
-            if let arr = value as? [[String: Any]] {
-                FeatureListView(items: arr)
-            } else if let dict = value as? [String: Any],
-                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
-                FeatureListView(items: mainArr)
-            }
-        case .timeline:
-            if let arr = value as? [[String: Any]] {
-                TimelineListView(items: arr)
-            } else if let dict = value as? [String: Any],
-                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
-                TimelineListView(items: mainArr)
-            }
-        case .keyValuePairs:
-            KeyValueView(dict: value as! [String: Any])
-        case .arrayOfObjects:
-            if let arr = value as? [[String: Any]] {
-                ArrayTableView(items: arr)
-            } else {
-                GenericTreeView(value: value, label: "root", depth: 0)
-            }
-        case .arrayOfScalars:
-            ScalarListView(items: value as! [Any])
-        case .nestedObject:
-            if let dict = value as? [String: Any] {
-                NestedObjectView(dict: dict)
-            }
-        case .scalar:
-            scalarText(value)
-        }
+        StructuredDataView(value: value)
     }
     
     private func errorView(_ msg: String) -> some View {
@@ -1004,6 +966,62 @@ struct TimelineListView: View {
             .padding(.bottom, isLast ? 0 : 16)
             
             Spacer()
+        }
+    }
+}
+
+// MARK: - Shared Structured Data Renderer
+
+/// Reusable view that renders any parsed value (from JSON or YAML) using the appropriate visualization
+struct StructuredDataView: View {
+    let value: Any
+    
+    var body: some View {
+        let hint = JsonAnalyzer.analyze(value)
+        switch hint {
+        case .progressCards:
+            if let dict = value as? [String: Any] {
+                ProgressDashboardView(data: dict)
+            } else if let arr = value as? [[String: Any]] {
+                ProgressDashboardView(data: ["items": arr])
+            }
+        case .statusList:
+            if let arr = value as? [[String: Any]] {
+                FeatureListView(items: arr)
+            } else if let dict = value as? [String: Any],
+                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
+                FeatureListView(items: mainArr)
+            }
+        case .timeline:
+            if let arr = value as? [[String: Any]] {
+                TimelineListView(items: arr)
+            } else if let dict = value as? [String: Any],
+                      let (_, mainArr) = JsonAnalyzer.findMainArray(in: dict) {
+                TimelineListView(items: mainArr)
+            }
+        case .keyValuePairs:
+            if let dict = value as? [String: Any] {
+                KeyValueView(dict: dict)
+            }
+        case .arrayOfObjects:
+            if let arr = value as? [[String: Any]] {
+                ArrayTableView(items: arr)
+            } else {
+                GenericTreeView(value: value, label: "root", depth: 0)
+            }
+        case .arrayOfScalars:
+            if let arr = value as? [Any] {
+                ScalarListView(items: arr)
+            }
+        case .nestedObject:
+            if let dict = value as? [String: Any] {
+                NestedObjectView(dict: dict)
+            }
+        case .scalar:
+            Text(String(describing: value))
+                .font(.system(size: DesignTokens.bodySize))
+                .foregroundColor(Color(nsColor: DesignTokens.bodyColor))
+                .textSelection(.enabled)
         }
     }
 }
