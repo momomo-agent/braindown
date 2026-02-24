@@ -143,9 +143,11 @@ class FlippedView: NSView {
     var selectionManager: BlockSelectionManager?
     
     override func mouseDown(with event: NSEvent) {
+        window?.makeFirstResponder(self)
         let point = convert(event.locationInWindow, from: nil)
         selectionManager?.mouseDown(at: point)
-        super.mouseDown(with: event)
+        // Don't call super — it starts window drag or other default behavior
+        // that prevents mouseDragged from being called
     }
     
     override func mouseDragged(with event: NSEvent) {

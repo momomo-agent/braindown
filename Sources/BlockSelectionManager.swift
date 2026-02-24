@@ -6,7 +6,6 @@ class BlockSelectionManager {
     
     private weak var scrollView: NSScrollView?
     private weak var stackView: NSStackView?
-    private var highlightLayer = CALayer()
     private var selectionStart: NSPoint?
     private var selectionEnd: NSPoint?
     private var selectedText: String = ""
@@ -19,28 +18,24 @@ class BlockSelectionManager {
     
     // MARK: - Mouse Events
     
-    func mouseDown(at point: NSPoint) {
+    func mouseDown(at pointInDoc: NSPoint) {
         clearSelection()
-        selectionStart = point
+        selectionStart = pointInDoc
         selectionEnd = nil
     }
     
-    func mouseDragged(to point: NSPoint) {
-        selectionEnd = point
+    func mouseDragged(to pointInDoc: NSPoint) {
+        selectionEnd = pointInDoc
         updateSelection()
     }
     
-    func mouseUp() {
-        // Keep selection visible
-    }
+    func mouseUp() {}
     
     func clearSelection() {
         selectionStart = nil
         selectionEnd = nil
         selectedText = ""
-        for layer in highlightLayers {
-            layer.removeFromSuperlayer()
-        }
+        for layer in highlightLayers { layer.removeFromSuperlayer() }
         highlightLayers.removeAll()
     }
     
@@ -62,36 +57,28 @@ class BlockSelectionManager {
               let start = selectionStart,
               let end = selectionEnd else { return }
         
-        // Clear old highlights
         for layer in highlightLayers { layer.removeFromSuperlayer() }
         highlightLayers.removeAll()
         
+        // Both start/end are in documentView (FlippedView) coords
         let minY = min(start.y, end.y)
         let maxY = max(start.y, end.y)
         var texts: [String] = []
         
         for view in stackView.arrangedSubviews {
-            let frame = view.convert(view.bounds, to: documentView)
+            // Convert block frame to documentView coords
+            let frameInDoc = view.convert(view.bounds, to: documentView)
             
-            // Check if this block overlaps with selection range
-            if frame.maxY >= minY && frame.minY <= maxY {
-                // This block is in the selection range
-                if let text = extractText(from: view) {
-                    texts.append(text)
-                }
-                // Draw highlight
-                addHighlight(for: frame, in: documentView)
+            // Block overlaps selection range?
+            guard frameInDoc.maxY >= minY && frameInDoc.minY <= maxY else { continue }
+            
+            if let block = view as? CopyableBlock, !block.copyableText.isEmpty {
+                texts.append(block.copyableText)
             }
+            addHighlight(for: frameInDoc, in: documentView)
         }
         
-        selectedText = texts.joined(separator: "\n")
-    }
-    
-    private func extractText(from view: NSView) -> String? {
-        if let block = view as? CopyableBlock, !block.copyableText.isEmpty {
-            return block.copyableText
-        }
-        return nil
+        selectedText = texts.joined(separator: "\n\n")
     }
     
     private func addHighlight(for frame: NSRect, in parentView: NSView) {
@@ -100,7 +87,6 @@ class BlockSelectionManager {
         layer.backgroundColor = (isDark
             ? NSColor(red: 0.2, green: 0.4, blue: 0.8, alpha: 0.3)
             : NSColor(red: 0.4, green: 0.6, blue: 1.0, alpha: 0.2)).cgColor
-        // FlippedView uses flipped coords
         layer.frame = frame
         parentView.layer?.addSublayer(layer)
         highlightLayers.append(layer)
