@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var markdownText: String = ""
     @State private var isModified: Bool = false
     @State private var sidebarWidth: CGFloat = 240
+    @State private var jsonRawMode: Bool = false
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
     @ObservedObject private var appSettings = AppSettings.shared
     @State private var fsEventStream: FSEventStreamRef?
@@ -51,9 +52,32 @@ struct ContentView: View {
                             MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .id("reader-\(appSettings.useSerifFont)")
+                        } else if selectedFile?.pathExtension == "json" {
+                            // JSON: toggle between reader and code view
+                            ZStack(alignment: .topTrailing) {
+                                if jsonRawMode {
+                                    CodeFileView(text: $markdownText, language: "json")
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                } else {
+                                    JsonReaderView(jsonText: markdownText)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                }
+                                // Toggle button
+                                Button(action: { jsonRawMode.toggle() }) {
+                                    Image(systemName: jsonRawMode ? "eye" : "curlybraces")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(Color(nsColor: DesignTokens.secondaryColor))
+                                        .frame(width: 28, height: 28)
+                                        .background(Color(nsColor: DesignTokens.isDark ? NSColor(white: 0.15, alpha: 0.9) : NSColor(white: 0.93, alpha: 0.9)))
+                                        .cornerRadius(6)
+                                }
+                                .buttonStyle(.plain)
+                                .padding(12)
+                                .help(jsonRawMode ? "Reader View" : "Code View")
+                            }
                         } else {
-                            // Non-markdown: render as syntax-highlighted code
-                            CodeFileView(text: $markdownText, language: selectedFile?.pathExtension ?? "json")
+                            // Other non-markdown: syntax-highlighted code
+                            CodeFileView(text: $markdownText, language: selectedFile?.pathExtension ?? "txt")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                     } else {
