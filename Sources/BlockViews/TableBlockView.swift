@@ -132,10 +132,10 @@ class TableBlockView: NSView, CopyableBlock {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
             
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),

@@ -77,10 +77,10 @@ class ListBlockView: NSView, CopyableBlock {
         copyableText = copyableTexts.joined(separator: "\n")
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DesignTokens.sp8),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
         ])
     }
 }

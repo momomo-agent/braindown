@@ -59,11 +59,13 @@ class HeadingBlockView: NSView, CopyableBlock {
         default: topPadding = DesignTokens.sp4
         }
         
+        let bottomPadding: CGFloat = DesignTokens.sp4
+        
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: topAnchor, constant: topPadding),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomPadding),
         ])
     }
 }

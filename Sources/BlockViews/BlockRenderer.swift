@@ -20,33 +20,33 @@ class BlockRenderer {
             switch node.type {
             case .heading(let level):
                 let view = HeadingBlockView(node: node, level: level)
-                let spaceBefore: CGFloat = (i == 0) ? 0 : (level <= 2 ? DesignTokens.sp24 : DesignTokens.sp16)
+                let spaceBefore: CGFloat = (i == 0) ? 0 : (level <= 2 ? DesignTokens.sp12 : DesignTokens.sp8)
                 if i > 0, let lastView = stackView.arrangedSubviews.last {
                     stackView.setCustomSpacing(spaceBefore, after: lastView)
                 }
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 
             case .paragraph:
                 if let imageElement = node.inlineElements.first(where: { isImage($0) }),
                    case .image(let alt, let url) = imageElement.style {
                     let view = ImageBlockView(alt: alt, urlString: url, currentFileDirectory: currentFileDirectory)
-                    addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                    addBlock(view, to: stackView, spacing: 0)
                 } else {
                     let view = ParagraphBlockView(node: node)
-                    addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                    addBlock(view, to: stackView, spacing: 0)
                 }
                 
             case .codeBlock(let language):
                 let view = CodeBlockView(node: node, language: language)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 
             case .table:
                 let view = TableBlockView(node: node)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 
             case .blockquote:
                 let view = BlockquoteBlockView(node: node)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 
             case .unorderedList:
                 // Collect following listItem nodes
@@ -61,7 +61,7 @@ class BlockRenderer {
                     }
                 }
                 let view = ListBlockView(items: items, ordered: false)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 i = j
                 continue
                 
@@ -77,13 +77,13 @@ class BlockRenderer {
                     }
                 }
                 let view = ListBlockView(items: items, ordered: true)
-                addBlock(view, to: stackView, spacing: DesignTokens.sp8)
+                addBlock(view, to: stackView, spacing: 0)
                 i = j
                 continue
                 
             case .horizontalRule:
                 let view = HorizontalRuleView()
-                addBlock(view, to: stackView, spacing: DesignTokens.sp4)
+                addBlock(view, to: stackView, spacing: 0)
                 
             case .listItem, .blank:
                 // Skip — handled by list grouping or ignored

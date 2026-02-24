@@ -49,7 +49,7 @@ class ImageBlockView: NSView, CopyableBlock {
         NSLayoutConstraint.activate([
             captionField.leadingAnchor.constraint(equalTo: leadingAnchor),
             captionField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            captionField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            captionField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
         ])
         
         loadImage(alt: alt, urlString: urlString)
@@ -112,7 +112,7 @@ class ImageBlockView: NSView, CopyableBlock {
         addSubview(iv)
         
         NSLayoutConstraint.activate([
-            iv.topAnchor.constraint(equalTo: topAnchor),
+            iv.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             iv.centerXAnchor.constraint(equalTo: centerXAnchor),
             iv.widthAnchor.constraint(equalToConstant: displayWidth),
             iv.heightAnchor.constraint(equalToConstant: displayHeight),

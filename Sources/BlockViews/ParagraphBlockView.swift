@@ -33,10 +33,10 @@ class ParagraphBlockView: NSView, CopyableBlock {
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            textField.topAnchor.constraint(equalTo: topAnchor),
+            textField.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
         ])
     }
 }

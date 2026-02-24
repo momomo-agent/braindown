@@ -49,9 +49,9 @@ class BlockquoteBlockView: NSView, CopyableBlock {
             barView.widthAnchor.constraint(equalToConstant: 2.5),
             
             textField.leadingAnchor.constraint(equalTo: barView.trailingAnchor, constant: DesignTokens.sp12),
-            textField.topAnchor.constraint(equalTo: topAnchor),
+            textField.topAnchor.constraint(equalTo: topAnchor, constant: DesignTokens.sp4),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DesignTokens.sp4),
         ])
     }
     
