@@ -189,6 +189,10 @@ struct ContentView: View {
             refreshTree()
         }
         .focusedSceneValue(\.editorMode, $editorMode)
+        .onDrop(of: [.fileURL], isTargeted: nil) { providers in
+            handleDrop(providers)
+            return true
+        }
         .onDisappear {
             stopWatching()
         }
@@ -201,6 +205,27 @@ struct ContentView: View {
             if isModified { title += " •" }
         }
         return title
+    }
+    
+    // MARK: - Drag & Drop
+    
+    private func handleDrop(_ providers: [NSItemProvider]) {
+        for provider in providers {
+            provider.loadItem(forTypeIdentifier: "public.file-url", options: nil) { item, _ in
+                guard let data = item as? Data,
+                      let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
+                var isDir: ObjCBool = false
+                guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir) else { return }
+                DispatchQueue.main.async {
+                    if isDir.boolValue {
+                        self.singleFileMode = false
+                        self.setFolder(url)
+                    } else {
+                        self.openSingleFile(url)
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - File Operations
