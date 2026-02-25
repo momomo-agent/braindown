@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrainDown — A Markdown Reader for Thinking</title>
-    <meta name="description" content="Mac-native Markdown reader with block architecture, JSON/YAML visualization, and syntax highlighting. Built for people who think in text.">
+    <title>BrainDown — Markdown Reader for the AI Era</title>
+    <meta name="description" content="Your AI generates mountains of Markdown. BrainDown lets you read it — beautifully. Native macOS, block architecture, JSON/YAML visualization. Focus on what matters.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,9 +26,9 @@
 
     <!-- Hero -->
     <section class="hero">
-        <div class="hero-badge">macOS native · Block architecture</div>
-        <h1>Read Markdown.<br>See structure.</h1>
-        <p class="hero-sub">A reader that understands your files — Markdown rendered with taste, JSON and YAML visualized as human-readable dashboards. No Electron. No bloat.</p>
+        <div class="hero-badge">Built for the AI era</div>
+        <h1>Your AI writes Markdown.<br>Now you can actually <em>read</em> it.</h1>
+        <p class="hero-sub">AI agents generate docs, specs, logs, configs — all in Markdown, JSON, YAML. BrainDown renders them beautifully so you can focus on thinking, not parsing.</p>
         <div class="hero-actions">
             <a href="#download" class="btn-primary">Download for Mac</a>
             <a href="https://github.com/momomo-agent/braindown" class="btn-ghost">View Source</a>
@@ -43,42 +43,78 @@
                 <span class="dot yellow"></span>
                 <span class="dot green"></span>
             </div>
-            <img src="screenshot.png" alt="BrainDown screenshot" class="screenshot-img" onerror="this.parentElement.innerHTML+='<div class=screenshot-placeholder>Screenshot coming soon</div>'">
+            <img src="screenshot.png" alt="BrainDown rendering a Markdown file with sidebar, headings, code blocks, and tables" class="screenshot-img">
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="problem">
+        <div class="problem-inner">
+            <h2>The problem</h2>
+            <p>AI agents produce <strong>Markdown everywhere</strong> — project specs, meeting notes, changelogs, research, configs. You open them in VS Code and see raw syntax. You open them in a browser and lose context. You need a reader that <em>just reads</em>.</p>
         </div>
     </section>
 
     <!-- Features -->
     <section class="features">
+        <div class="section-header">
+            <h2>What BrainDown does</h2>
+        </div>
         <div class="feature-grid">
             <div class="feature-card">
-                <div class="feature-icon">◆</div>
-                <h3>Block Architecture</h3>
-                <p>Every heading, paragraph, code block, and table is an independent block. Cross-block selection, Gestalt proximity grouping, and per-block rendering.</p>
+                <div class="feature-icon">◇</div>
+                <h3>Markdown, focused</h3>
+                <p>Open a folder — only Markdown files show in the sidebar. No node_modules, no .git, no noise. Just the documents that matter.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">{ }</div>
-                <h3>JSON & YAML Reader</h3>
-                <p>Auto-detects structure and renders progress dashboards, status lists, timelines, sparklines, and tables. Your data files become readable without modification.</p>
+                <h3>JSON & YAML, visualized</h3>
+                <p>Auto-detects structure and renders dashboards, status lists, timelines, and tables. Your config files become readable without modification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">◆</div>
+                <h3>Block architecture</h3>
+                <p>Every heading, paragraph, code block, and table is an independent block. Cross-block selection with Gestalt proximity grouping.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">▧</div>
+                <h3>Syntax highlighting</h3>
+                <p>Code blocks with line numbers, language labels, and async rendering. Non-markdown files get full syntax highlighting too.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">◐</div>
                 <h3>Dark & Light</h3>
-                <p>Follows system appearance or set manually. Every pixel considered in both modes — no lazy inversions.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">▧</div>
-                <h3>Syntax Highlighting</h3>
-                <p>Code blocks with line numbers, language labels, and async Highlightr rendering. Non-markdown files get full syntax highlighting too.</p>
+                <p>Follows system appearance or set manually. Every pixel considered in both modes.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">⌘</div>
                 <h3>Native macOS</h3>
-                <p>SwiftUI + AppKit. NSTextView for text, real NSScrollView, proper keyboard shortcuts. No web views, no Electron, no compromise.</p>
+                <p>SwiftUI + AppKit. Real NSTextView, real scroll views, real keyboard shortcuts. No Electron. No web views. No compromise.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">↕</div>
-                <h3>Drag & Drop</h3>
-                <p>Drop files or folders onto the window. Folder mode with sidebar tree, or single-file mode without distraction.</p>
+        </div>
+    </section>
+
+    <!-- Workflow -->
+    <section class="workflow">
+        <div class="workflow-inner">
+            <h2>Fits your workflow</h2>
+            <div class="workflow-grid">
+                <div class="workflow-item">
+                    <span class="workflow-key">⌘O</span>
+                    <span class="workflow-desc">Open folder — sidebar with file tree</span>
+                </div>
+                <div class="workflow-item">
+                    <span class="workflow-key">⇧⌘O</span>
+                    <span class="workflow-desc">Open single file — no sidebar, no distraction</span>
+                </div>
+                <div class="workflow-item">
+                    <span class="workflow-key">⌘E</span>
+                    <span class="workflow-desc">Toggle read / edit mode</span>
+                </div>
+                <div class="workflow-item">
+                    <span class="workflow-key">Drop</span>
+                    <span class="workflow-desc">Drag files or folders onto the window</span>
+                </div>
             </div>
         </div>
     </section>
@@ -99,4 +135,3 @@
     <script src="main.js"></script>
 </body>
 </html>
-

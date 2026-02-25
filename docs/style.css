@@ -130,6 +130,11 @@ nav {
     margin-bottom: 24px;
 }
 
+.hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+}
+
 .hero-sub {
     font-size: 17px;
     line-height: 1.65;
@@ -265,6 +270,100 @@ nav {
     color: var(--text-secondary);
 }
 
+/* === Problem === */
+.problem {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 80px 40px;
+    border-top: 1px solid var(--border);
+}
+
+.problem-inner {
+    max-width: 640px;
+}
+
+.problem h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -0.8px;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+.problem p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+}
+
+.problem strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.problem em {
+    color: var(--accent);
+    font-style: normal;
+}
+
+/* === Section Header === */
+.section-header {
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    letter-spacing: -1px;
+}
+
+/* === Workflow === */
+.workflow {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 80px 40px 100px;
+    border-top: 1px solid var(--border);
+}
+
+.workflow-inner h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    letter-spacing: -1px;
+    margin-bottom: 40px;
+}
+
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.workflow-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.workflow-key {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.workflow-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
 /* === Download === */
 .download {
     max-width: var(--max-w);
@@ -336,8 +435,11 @@ footer a:hover { color: var(--text); }
     .hero { padding: 120px 24px 40px; }
     .hero-sub { font-size: 15px; }
     .screenshot-section { padding: 20px 20px 60px; }
+    .problem { padding: 60px 24px; }
     .features { padding: 20px 20px 60px; }
     .feature-grid { grid-template-columns: 1fr; gap: 14px; }
+    .workflow { padding: 60px 24px 80px; }
+    .workflow-grid { grid-template-columns: 1fr; }
     .download { padding: 60px 24px 80px; }
     footer { padding: 30px 20px; }
 }
