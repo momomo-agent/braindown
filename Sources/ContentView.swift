@@ -1,5 +1,18 @@
 import SwiftUI
 
+// MARK: - FocusedValue for per-window editorMode
+
+struct EditorModeKey: FocusedValueKey {
+    typealias Value = Binding<EditorMode>
+}
+
+extension FocusedValues {
+    var editorMode: Binding<EditorMode>? {
+        get { self[EditorModeKey.self] }
+        set { self[EditorModeKey.self] = newValue }
+    }
+}
+
 struct ContentView: View {
     @State private var folderURL: URL? = nil
     @State private var fileTree: [FileTreeItem] = []
@@ -9,6 +22,7 @@ struct ContentView: View {
     @State private var isModified: Bool = false
     @State private var sidebarWidth: CGFloat = 240
     @State private var jsonRawMode: Bool = false
+    @State private var editorMode: EditorMode = AppSettings.shared.defaultEditorMode
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
     @ObservedObject private var appSettings = AppSettings.shared
     @State private var fsEventStream: FSEventStreamRef?
@@ -48,7 +62,7 @@ struct ContentView: View {
             // Right: Editor / Reader
             VStack(spacing: 0) {
                 if selectedFile != nil {
-                    if appSettings.editorMode == .read {
+                    if editorMode == .read {
                         if selectedFile?.pathExtension == "md" {
                             MarkdownEditorView(markdownText: $markdownText, isModified: $isModified, currentFileURL: selectedFile)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -174,6 +188,7 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .fsChanged)) { _ in
             refreshTree()
         }
+        .focusedSceneValue(\.editorMode, $editorMode)
         .onDisappear {
             stopWatching()
         }

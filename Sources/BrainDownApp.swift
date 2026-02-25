@@ -5,6 +5,7 @@ struct BrainDownApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @ObservedObject private var fileTypeSettings = FileTypeSettings.shared
     @ObservedObject private var appSettings = AppSettings.shared
+    @FocusedBinding(\.editorMode) private var editorMode
     
     var body: some Scene {
         WindowGroup {
@@ -32,11 +33,14 @@ struct BrainDownApp: App {
             }
             
             CommandMenu("View") {
-                // Read/Write toggle
-                Button(appSettings.editorMode == .read ? "Switch to Edit Mode" : "Switch to Read Mode") {
-                    appSettings.editorMode = appSettings.editorMode == .read ? .write : .read
+                // Read/Write toggle (per-window)
+                Button((editorMode ?? .read) == .read ? "Switch to Edit Mode" : "Switch to Read Mode") {
+                    if let mode = editorMode {
+                        editorMode = mode == .read ? .write : .read
+                    }
                 }
                 .keyboardShortcut("e", modifiers: .command)
+                .disabled(editorMode == nil)
                 
                 Divider()
                 

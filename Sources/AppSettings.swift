@@ -45,10 +45,11 @@ class AppSettings: ObservableObject {
         }
     }
     
-    @Published var editorMode: EditorMode {
-        didSet {
-            UserDefaults.standard.set(editorMode.rawValue, forKey: "BrainDown.editorMode")
-        }
+    /// editorMode is now per-window (in ContentView @State), not global.
+    /// This property is kept only for reading the initial default from UserDefaults.
+    var defaultEditorMode: EditorMode {
+        let saved = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
+        return EditorMode(rawValue: saved) ?? .read
     }
     
     @Published var useSerifFont: Bool {
@@ -60,8 +61,6 @@ class AppSettings: ObservableObject {
     private init() {
         let saved = UserDefaults.standard.string(forKey: "BrainDown.theme") ?? "system"
         self.theme = AppTheme(rawValue: saved) ?? .system
-        let savedMode = UserDefaults.standard.string(forKey: "BrainDown.editorMode") ?? "read"
-        self.editorMode = EditorMode(rawValue: savedMode) ?? .read
         self.useSerifFont = UserDefaults.standard.bool(forKey: "BrainDown.useSerifFont")
         // For non-system themes, apply immediately
         if self.theme != .system, let app = NSApp {
