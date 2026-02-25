@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainDown — A Markdown Reader for Thinking</title>
+    <meta name="description" content="Mac-native Markdown reader with block architecture, JSON/YAML visualization, and syntax highlighting. Built for people who think in text.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="grain"></div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="nav-left">
+            <span class="logo">BrainDown</span>
+        </div>
+        <div class="nav-right">
+            <a href="https://github.com/momomo-agent/braindown" class="nav-link">GitHub</a>
+            <a href="#download" class="nav-cta">Download</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">macOS native · Block architecture</div>
+        <h1>Read Markdown.<br>See structure.</h1>
+        <p class="hero-sub">A reader that understands your files — Markdown rendered with taste, JSON and YAML visualized as human-readable dashboards. No Electron. No bloat.</p>
+        <div class="hero-actions">
+            <a href="#download" class="btn-primary">Download for Mac</a>
+            <a href="https://github.com/momomo-agent/braindown" class="btn-ghost">View Source</a>
+        </div>
+    </section>
+
+    <!-- Screenshot -->
+    <section class="screenshot-section">
+        <div class="screenshot-frame">
+            <div class="window-chrome">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <img src="screenshot.png" alt="BrainDown screenshot" class="screenshot-img" onerror="this.parentElement.innerHTML+='<div class=screenshot-placeholder>Screenshot coming soon</div>'">
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">◆</div>
+                <h3>Block Architecture</h3>
+                <p>Every heading, paragraph, code block, and table is an independent block. Cross-block selection, Gestalt proximity grouping, and per-block rendering.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">{ }</div>
+                <h3>JSON & YAML Reader</h3>
+                <p>Auto-detects structure and renders progress dashboards, status lists, timelines, sparklines, and tables. Your data files become readable without modification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">◐</div>
+                <h3>Dark & Light</h3>
+                <p>Follows system appearance or set manually. Every pixel considered in both modes — no lazy inversions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">▧</div>
+                <h3>Syntax Highlighting</h3>
+                <p>Code blocks with line numbers, language labels, and async Highlightr rendering. Non-markdown files get full syntax highlighting too.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⌘</div>
+                <h3>Native macOS</h3>
+                <p>SwiftUI + AppKit. NSTextView for text, real NSScrollView, proper keyboard shortcuts. No web views, no Electron, no compromise.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">↕</div>
+                <h3>Drag & Drop</h3>
+                <p>Drop files or folders onto the window. Folder mode with sidebar tree, or single-file mode without distraction.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section class="download" id="download">
+        <h2>Get BrainDown</h2>
+        <p class="download-sub">macOS 14.0+ · Apple Silicon & Intel · Free and open source</p>
+        <a href="https://github.com/momomo-agent/braindown/releases" class="btn-primary btn-large">Download Latest Release</a>
+        <p class="download-note">Or build from source: <code>git clone</code> → <code>xcodegen generate</code> → <code>xcodebuild</code></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Built by <a href="https://github.com/momomo-agent">momo</a> · <a href="https://github.com/momomo-agent/braindown">Source on GitHub</a></p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
