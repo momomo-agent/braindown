@@ -1,6 +1,13 @@
 import AppKit
 import Highlightr
 
+/// Non-selectable NSTextField that won't activate field editor on click.
+/// Text selection is handled by the parent CodeBlockView's CopyableBlock protocol.
+private class CodeTextField: NSTextField {
+    override var acceptsFirstResponder: Bool { false }
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { false }
+}
+
 /// Notion-quality code block: rounded container, language label, copy button,
 /// line numbers, and Highlightr syntax highlighting.
 class CodeBlockView: NSView, CopyableBlock {
@@ -12,7 +19,7 @@ class CodeBlockView: NSView, CopyableBlock {
     private let copyButton = NSButton()
     private let separatorLine = NSView()
     private let lineNumberLabel = NSTextField(wrappingLabelWithString: "")
-    private let codeLabel = NSTextField(wrappingLabelWithString: "")
+    private let codeLabel = CodeTextField(wrappingLabelWithString: "")
     
     // MARK: - State
     private var copyResetTimer: Timer?
@@ -73,7 +80,7 @@ class CodeBlockView: NSView, CopyableBlock {
         separatorLine.isHidden = (language ?? "").isEmpty
         containerView.addSubview(separatorLine)
         
-        // Line numbers — NSTextField wrapping label
+        // Line numbers
         lineNumberLabel.isEditable = false
         lineNumberLabel.isSelectable = false
         lineNumberLabel.drawsBackground = false
@@ -84,9 +91,9 @@ class CodeBlockView: NSView, CopyableBlock {
         lineNumberLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         containerView.addSubview(lineNumberLabel)
         
-        // Code content — NSTextField wrapping label (supports attributed string + Auto Layout)
+        // Code content — CodeTextField (no field editor, no click style change)
         codeLabel.isEditable = false
-        codeLabel.isSelectable = true
+        codeLabel.isSelectable = false
         codeLabel.drawsBackground = false
         codeLabel.isBordered = false
         codeLabel.maximumNumberOfLines = 0
@@ -94,12 +101,8 @@ class CodeBlockView: NSView, CopyableBlock {
         codeLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         containerView.addSubview(codeLabel)
         
-        // Populate content
         populateCode(node.content, language: language)
-        
         layoutSubviews(hasLanguage: !(language ?? "").isEmpty)
-        
-        // Tracking area for hover
         updateTrackingAreas()
     }
     
@@ -110,7 +113,6 @@ class CodeBlockView: NSView, CopyableBlock {
         let codeFont = DesignTokens.codeFont
         let fallbackColor: NSColor = isDark ? NSColor(white: 0.8, alpha: 1) : NSColor(white: 0.2, alpha: 1)
         
-        // Show plain text immediately
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.lineHeightMultiple = DesignTokens.codeLineHeight
         codeLabel.attributedStringValue = NSAttributedString(string: code, attributes: [
@@ -136,17 +138,14 @@ class CodeBlockView: NSView, CopyableBlock {
         // Line numbers
         let lines = code.components(separatedBy: "\n")
         let lineNumbers = (1...max(lines.count, 1)).map { String($0) }.joined(separator: "\n")
-        
         let lineNumStyle = NSMutableParagraphStyle()
         lineNumStyle.lineHeightMultiple = DesignTokens.codeLineHeight
         lineNumStyle.alignment = .right
-        
-        let lineNumAttr = NSAttributedString(string: lineNumbers, attributes: [
+        lineNumberLabel.attributedStringValue = NSAttributedString(string: lineNumbers, attributes: [
             .font: codeFont,
             .foregroundColor: DesignTokens.secondaryColor.withAlphaComponent(0.5),
             .paragraphStyle: lineNumStyle
         ])
-        lineNumberLabel.attributedStringValue = lineNumAttr
     }
     
     // MARK: - Layout
